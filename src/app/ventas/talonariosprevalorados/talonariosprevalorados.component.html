@@ -1,0 +1,72 @@
+    
+      <label> Talonarios Prevalorados</label>
+      <input
+        type="number"
+        [(ngModel)]="numberOfFormss"
+        (ngModelChange)="onNumberOfFormsChange2()"/>
+
+    <div *ngFor="let form2 of formArray2; let i = index" class="form-container">
+        <form [formGroup]="form2">
+            <tr>
+              <td colspan="2">
+                <select id="selectOption" name="selectOption">
+                  <option value="opcion1">Casa Matriz</option>
+                  <option value="opcion2">Alquiler</option>
+                  <option value="opcion3">Restaurante</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="campo1">Nº Talonario:</label>
+              </td>
+              <td>
+                <input type="text" id="campo2" name="campo2" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="campo3">Factura Inicial:</label>
+              </td>
+              <td>
+                <input type="text" id="campo4" name="campo4" />
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <label for="campo5">Factura Final:</label>
+              </td>
+              <td>
+                <input type="text" id="campo6" name="campo6" />
+              </td>
+            </tr>
+
+            <tr>
+              <td class="checkbox">
+                <label for="campo7">Monto:</label>
+              </td>
+              <td>
+                <p-checkbox [binary]="true" inputId="binary"></p-checkbox>
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="2" class="ventasprevaloradas">
+                <label for="suma">Suma Ventas Prevaloradas</label>
+              </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div id="sumatoria">
+                        <hot-table [settings]="hotSettings"></hot-table>
+                    </div>
+                   
+                </td>
+            </tr>
+        </form>
+        </div>
+      
+
+

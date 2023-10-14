@@ -1,0 +1,19 @@
+.selc-mes{
+    display: flex; /* Utiliza flexbox para centrar verticalmente y horizontalmente */
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    margin-bottom: 20px;
+}
+.anio{
+    display: flex; /* Utiliza flexbox para centrar verticalmente y horizontalmente */
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    margin-bottom: 20px;
+}
+
+.buttons{
+    display: flex;
+    justify-content:space-evenly;
+    
+      
+}

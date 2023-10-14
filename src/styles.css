@@ -1,1 +1,67 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeng/resources/themes/md-light-indigo/theme.css";
+/*@import "../node_modules/primeng/resources/themes/md-dark-indigo/theme.css";*/
+
+@import "../node_modules/primeicons/primeicons.css";
+@import "../node_modules/primeflex/primeflex.css";
+
+
+@import 'handsontable/dist/handsontable.full.min.css';
+
+.p-datatable .p-datatable-thead > tr > th {
+    background-color: #CD4040 !important;
+    color: rgb(241, 237, 232) !important;  
+  }
+  
+  .p-datatable .p-datatable-thead > tr>th.menu {
+    background-color: #d8d7d7 !important;
+    color: rgb(29, 29, 28) !important;
+    text-align: center;
+  }
+  .p-datatable .p-datatable-thead > tr>td>li.mes {
+    background-color: #CD4040 !important;
+    color: rgb(241, 237, 232) !important;
+    text-align: center;
+  }
+  .botonpeque1 .p-button{
+    font-size: 1px !important; /* Ajusta el tamaño de la fuente */
+    padding: 1px 2px !important;
+    background-color: greenyellow;
+  }
+  .botonpeque2 .p-button{
+    font-size: 5px !important; /* Ajusta el tamaño de la fuente */
+    padding: 1px 2px !important;
+    background-color: rgb(80, 90, 175);
+    
+   
+  }
+  .botonpeque3 .p-button{
+    font-size: 1px !important; /* Ajusta el tamaño de la fuente */
+    padding: 1px 2px !important;
+    background-color: rgb(24, 218, 111);
+  }
+  probado .p-button{
+    font-size: 10px !important; /* Ajusta el tamaño de la fuente */
+    padding: 4px 8px !important;
+    background-color: rgb(145, 133, 212);
+  }
+  .p-datatable .p-datatable-thead > tr>td.fecha {
+    text-align: right;
+  }
+  .p-datatable .p-datatable-thead > tr>td.centrar {
+    text-align: center;
+  }
+  .crear-mes .p-button{
+    background-color: #0000006c !important;
+    text-align: right !important; /* Alinea el contenido a la derecha */
+    
+  }
+
+  
+  
+  #tipoPago {
+    font-size: 14px; /* Tamaño de fuente más pequeño */
+    padding: 5px; /* Espacio interno más pequeño */
+    width: 150px; /* Ancho personalizado, ajusta según tus necesidades */
+  }

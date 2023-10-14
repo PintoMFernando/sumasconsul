@@ -1,0 +1,29 @@
+
+
+    <h2>Lista de Observaciones</h2>
+    
+    <div class="form-group">
+      <label for="nuevoElemento">Nueva Observacion:</label>
+      <textarea rows="3"   [(ngModel)]="nuevoElemento" id="nuevoElemento"  name ="nuevoElemento" required></textarea>
+      <button type="button"  class="btn btn-primary" (click)="agregarElemento()" [disabled]="!nuevoElemento">Agregar</button> 
+    </div>
+    
+    <!-- Lista de elementos -->
+<!-- Lista de elementos -->
+<ul class="list-group">
+  
+   
+    <li class="list-group-item" *ngFor="let obs of nuevasobservaciones">
+      <span  *ngIf="!obs.editando">{{ obs.observacion }}</span>
+      <input *ngIf="obs.editando" [(ngModel)]="obs.observacion"  class="form-control" name="elementoEditandoTexto" />
+      <button class="btn btn-secondary btn-sm" (click)="editarElemento(obs)">Editar</button>
+      <button class="btn btn-danger btn-sm" (click)="eliminarElemento(obs.idobservaciones)">Eliminar</button>
+      <button *ngIf="obs.editando" class="btn btn-primary btn-sm" (click)="guardarEdicion(obs,obs.observacion,obs.idobservaciones)">Guardar</button>
+      <button *ngIf="obs.editando" class="btn btn-secondary btn-sm" (click)="cancelarEdicion(obs)">Cancelar</button>
+    </li>
+  </ul>
+  <button type="button"  class="btn btn-danger btn-sm" (click)="cerrarModal()">Cerrar</button> 
+
+
+
+  

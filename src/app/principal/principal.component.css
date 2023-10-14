@@ -1,0 +1,98 @@
+
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: flex-start;
+    height: 100vh;
+    padding: 20px;
+  }
+  
+  .left-panel {
+    background-color: #DA3838;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .center-form {
+    background-color: #b7db34;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: absolute;
+    height: 150px;
+  }
+  
+  .bottom-form {
+    background-color: #e0e0e0;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  /* Estilos para el panel */
+.ui-panel {
+    width: 400px; /* Ancho del panel */
+    padding: 20px;
+    background-color: #f0f0f0; /* Color de fondo */
+    border: 1px solid #ccc; /* Borde del panel */
+  }
+  
+  /* Estilos para el encabezado del panel */
+  .ui-panel .ui-panel-titlebar {
+    background-color: #333; /* Color de fondo del encabezado */
+    color: #fff; /* Color del texto del encabezado */
+    padding: 10px;
+  }
+  
+  /* Estilos para el contenido dentro del panel */
+  .ui-panel .ui-panel-content {
+    background-color: #fff; /* Color de fondo del contenido */
+    padding: 10px;
+    border-top: 1px solid #ccc; /* Borde superior del contenido */
+  }
+  
+  /* Estilos para los elementos de la lista */
+  .ui-panel ul {
+    list-style: none; /* Elimina los marcadores de lista */
+    padding: 0;
+  }
+  
+  /* Estilos para los elementos de la lista */
+  .ui-panel ul li {
+    margin-bottom: 10px;
+    font-size: 16px; /* Tamaño de fuente */
+    color: #333; /* Color del texto */
+  }
+  button {
+    font-size: 20px;
+    line-height: 50px;
+    text-align: center;
+    width: 100px;
+    height: 50px;
+  }
+
+  /* tamanio del input de iva impuestos*/
+.custom-input {
+    width: 80px; /* Define el ancho personalizado */
+    height: 18px; /* Define la altura personalizada */
+    font-size: 13px; /* Define el tamaño de fuente personalizado */
+  }
+  
+  
+  .banner-itemm{
+    width: 450px;
+  }
+
+
+  .panel-content {
+    max-height: 300px; /* Establece la altura máxima del contenido del panel */
+    overflow: auto; /* Agrega una barra de desplazamiento si es necesario */
+}
+
+.panelprincipal {
+    width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
+}

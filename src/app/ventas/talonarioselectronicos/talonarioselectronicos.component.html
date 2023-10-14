@@ -1,0 +1,63 @@
+<div class="opciones">
+    
+<label> Facturas Electronicas </label>
+
+<input
+    type="number"
+    [(ngModel)]="numberOfForms"
+    (ngModelChange)="onNumberOfFormsChange()"/>
+
+    
+ 
+
+
+
+<div *ngFor="let form of formArray; let i = index" class="form-container">
+    <form [formGroup]="form">
+        <tr>
+            <td colspan="2">
+              <select id="selectOption" name="selectOption">
+                <option value="opcion1">Casa Matriz</option>
+                <option value="opcion2">Alquiler</option>
+                <option value="opcion3">Restaurante</option>
+              </select>
+            </td>
+          </tr>
+        <tr>
+          <td class="electronicas">
+            <label for="campo1">Monto Importe:</label>
+          </td>
+          <td>
+            <input type="text" id="campo2" name="campo2" />
+          </td>
+        </tr>
+        <tr>
+          <td  class="electronicas">
+            <label for="campo3">Subir Archivo:</label>
+          </td>
+          <td>
+            
+<p-fileUpload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload()" [multiple]="true" accept="image/*" >
+    <ng-template pTemplate="content">
+    </ng-template>
+</p-fileUpload>
+             
+          </td>
+         
+        </tr>
+
+        <tr>
+          <td  class="electronicas">
+            <label for="campo5">Observaciones:</label>
+          </td>
+          <td>
+            <textarea rows="3"></textarea>
+          </td>
+        </tr>
+
+       
+
+             
+    </form>
+    </div>
+</div>

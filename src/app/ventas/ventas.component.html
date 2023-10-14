@@ -1,0 +1,23 @@
+<div class="formulario1">
+    
+  <p-tabView>
+    <button pButton type="button" icon="pi pi-plus" class="p-button-text" (click)="observaciones()">Observaciones</button>
+    <p-tabPanel header="Casa Matriz" >
+        <tr> 
+         <td><app-talonariosventas ></app-talonariosventas></td>
+         <td><app-talonariosprevalorados ></app-talonariosprevalorados></td>
+         <td><app-talonarioselectronicos ></app-talonarioselectronicos></td>
+        
+        </tr>
+    </p-tabPanel>
+
+    <p-tabPanel header="Sucursal 1 "> </p-tabPanel>
+
+           
+
+    <p-tabPanel header="Sucursal 2"> </p-tabPanel>
+     //esto tiene que ser dinamico
+       
+
+  </p-tabView>
+</div>

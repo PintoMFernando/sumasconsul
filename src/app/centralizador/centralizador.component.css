@@ -1,0 +1,22 @@
+.crear-mes{
+    
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    
+}
+
+.crear-mes i {
+    margin-right: 5px; /* Espacio entre los íconos */
+  }
+  
+.p-button{
+    background-color: #161b2944 !important;
+     margin-right: 10px !important ;
+    
+  }
+
+ 
