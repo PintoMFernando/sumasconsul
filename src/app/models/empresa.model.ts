@@ -8,7 +8,7 @@ export class Empresa{
     nit?:number
     num_empresa?: number
     ter_cliente?: number
-    mescierre?: number
+    mescierre?: any
     direccionfiscal?: string
     telefonofiscal?: number
     idresponsable?: number

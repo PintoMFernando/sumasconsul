@@ -68,6 +68,20 @@ export class CentralizadormesService {
   
   }
 
+  async patchmescentralizadorcomision(idcentralizadormes: string, comision:string ) {
+    const datos={
+      comision: Number(comision),
+    } 
+    try{
+     return  await firstValueFrom(this.http.patch(`${this.baseUrl}/centralizadormes/${idcentralizadormes}`, datos, { headers: this.headers }))
+    }catch(e){
+      return e
+    }
+  
+  
+  }
+
+
  
   
 

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, Validators,FormBuilder } from '@angular/forms';
+import Handsontable from 'handsontable';
 
 @Component({
   selector: 'app-talonarioselectronicos',
@@ -36,4 +37,5 @@ export class TalonarioselectronicosComponent {
   }
 
 
+ 
 }

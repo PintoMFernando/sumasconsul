@@ -2,8 +2,8 @@
 form {
     border: 2px solid #ccc; /* Cambia el color y el grosor del borde según tus preferencias */
     padding: 10px; /* Agrega relleno para separar el contenido del borde */
-    width: 75%;
-    height: 75%;
+    width: 90%;
+    height: 90%;
   }
   
   /* Estilo para las filas (row) en el formulario */
@@ -40,3 +40,12 @@ form {
     display: inline-block;
   }
  
+
+  .handsontable .lightblue-bg {
+    background-color: lightblue;
+  }
+
+  .negative-cell {
+    background-color: red; /* Cambia el fondo de las celdas a rojo */
+    color: white; /* Cambia el color del texto a blanco (opcional) */
+  }

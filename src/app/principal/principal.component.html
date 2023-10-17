@@ -21,7 +21,11 @@
       </tr>
       
       <tr>
-          <th colspan="2">BALANCE:{{empresadatos.balance}}</th>
+          <th colspan="2">BALANCE: {{empresadatos.balance}}
+            <input type="number" class="custom-input" [disabled]="!checkboxbalanceinput" value="{{empresadatos.balance}}"  [(ngModel)]="balancecontenido" (ngModelChange)="onBalanceChange()">
+            <p-checkbox  [binary]="true" inputId="binary" [binary]="true" inputId="binary" [(ngModel)]="checkboxbalanceinput" (ngModelChange)="onbalanceChange()"></p-checkbox>
+
+          </th>
           <th colspan="2">TRABAJO:{{empresadatos.trabajo}}</th>
           <th colspan="3">DOMICILIO: {{empresadatos.direccionfiscal}}</th>
           <th colspan="4">TELEFONO: {{empresadatos.telefonofiscal}}</th>
@@ -42,7 +46,7 @@
            
       <tr  >
         <th>Saldo IVA :
-          <input type="number" class="custom-input" [disabled]="!checkboxsaldoivainput" value="{{centralizadormes.saldoiva}}"  [(ngModel)]="saldoivacontenido" >
+          <input type="number" class="custom-input" [disabled]="!checkboxsaldoivainput" value="{{centralizadormes.saldoiva}}"  [(ngModel)]="saldoivacontenido" (ngModelChange)="onsaldoIvaChange()">
           <p-checkbox  [binary]="true" inputId="binary" [binary]="true" inputId="binary" [(ngModel)]="checkboxsaldoivainput" (ngModelChange)="onsaldoivaChange()"></p-checkbox>
           <p-button icon="pi pi-eye" (click)="showDialogIVA()"  [style]="{'width':'2px','height':'2px','background-color': '#DA3838'}" ></p-button>
         </th>
@@ -52,12 +56,12 @@
           <p-button icon="pi pi-eye" (click)="showDialogIUE()"  [style]="{'width':'2px','height':'2px','background-color': '#DA3838'}" ></p-button>
       </th>
       <th>Comision 
-          <input type="number" class="custom-input" [disabled]="!checkboxcomisioninput" value="{{empresadatos.comision}}" [(ngModel)]="comisioncontenido">
+          <input type="number" class="custom-input" [disabled]="!checkboxcomisioninput" value="{{centralizadormes.comision}}" [(ngModel)]="comisioncontenido" (ngModelChange)="onComisionChange()">
           <p-checkbox  [binary]="true" inputId="binary" [(ngModel)]="checkboxcomisioninput" (ngModelChange)="oncomisionChange()" ></p-checkbox>
           <p-button icon="pi pi-eye" (click)="showDialogComision()"  [style]="{'width':'2px','height':'2px','background-color': '#DA3838'}" ></p-button>
       </th>
         <th colspan="6"> IVA (Impuestos Nacionales)
-          <input type="number" class="custom-input" [disabled]="!checkboxivaimpuestosnainput"value="{{centralizadormes.ivaimpuestos}}" [(ngModel)]="ivaimpuestoscontenido">
+          <input type="number" class="custom-input" [disabled]="!checkboxivaimpuestosnainput"value="{{centralizadormes.ivaimpuestos}}" [(ngModel)]="ivaimpuestoscontenido"  (ngModelChange)="onivaImpuestosnChange()">
           <p-checkbox  [binary]="true" inputId="binary" [(ngModel)]="checkboxivaimpuestosnainput" (ngModelChange)="onivaimpuestosnChange()"></p-checkbox>
       </th>
       <th>

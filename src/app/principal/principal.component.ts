@@ -29,14 +29,22 @@ export class PrincipalComponent implements OnInit {
   checkboxsaldoiuenput: boolean = false;
   checkboxcomisioninput: boolean = false;
   checkboxivaimpuestosnainput: boolean = false;
+  checkboxbalanceinput: boolean = false;
   centralizadormes: Centralizadormes = new Centralizadormes();
   empresadatos: Empresa = new Empresa(); //aqui estan los datos del backend
   saldoivacontenido: string ="";
   ivaimpuestoscontenido: string ="";
   comisioncontenido: string ="";
+  balancecontenido:string ="";
   textoEditable: string="";
   editable: boolean = false; 
   datoscentralizadormes:any;
+  inputcambio: boolean = false;
+  inputiva:boolean = false;
+  inputivaimpuestos: boolean = false;
+  inputbalance: boolean = false;
+
+mesletra:string= '';
  
   
 
@@ -52,7 +60,7 @@ export class PrincipalComponent implements OnInit {
   
   ngOnInit() {                  //aqui llega los parametros enviados desde el centralizador mes e idempresa
     this.mes = this.route.snapshot.params['mes'];
-    this.idempresa = this.route.snapshot.params['idempresa'];
+    //this.idempresa = this.route.snapshot.params['idempresa'];
     this.idcentralizadormes = this.route.snapshot.params['idcentralizadormes'];
     this.centralizadormesCall();
     this.empresaCall();
@@ -60,25 +68,59 @@ export class PrincipalComponent implements OnInit {
 
   }
 
+  onBalanceChange(){
+    console.log("asdasda");
+    this.inputbalance=true;
+   }
+ 
+   onbalanceChange() {    ///desde aqui se cambia el valor de saldoiva y manda el ptach
+     if (this.checkboxbalanceinput == false  &&  this.inputbalance==true) {
+       this.inputbalance=false;
+       //this.centralzadormesservice.patchmescentraliador(this.idcentralizadormes,this.saldoivacontenido);
+       console.log('Valor actual del input comision:', this.balancecontenido);
+     }
+   }
+ 
+
+
+
+  onsaldoIvaChange(){
+   this.inputiva=true;
+  }
+
   onsaldoivaChange() {    ///desde aqui se cambia el valor de saldoiva y manda el ptach
-    if (this.checkboxsaldoivainput == false) {
+    if (this.checkboxsaldoivainput == false  &&  this.inputiva==true) {
+      this.inputiva=false;
       this.centralzadormesservice.patchmescentraliador(this.idcentralizadormes,this.saldoivacontenido);
-      
+      console.log('Valor actual del input comision:', this.saldoivacontenido);
     }
+  }
+
+
+  onivaImpuestosnChange(){
+    this.inputivaimpuestos=true;
   }
 
   onivaimpuestosnChange(){
-    if (this.checkboxivaimpuestosnainput == false) {
+    if (this.checkboxivaimpuestosnainput == false  && this.inputivaimpuestos==true) {
+      this.inputivaimpuestos = false;
       this.centralzadormesservice.patchmescentraliadorivaimpuestos(this.idcentralizadormes,this.ivaimpuestoscontenido);
-     
+      console.log('Valor actual del input comision:', this.ivaimpuestoscontenido);
     }
     
 
   }
+
+
+
+  onComisionChange(){
+    this.inputcambio = true; //esta funcion detecta si hubo un cambio en el imput
+
+  }
   oncomisionChange(){
-    if (this.checkboxcomisioninput == false) {
-    
-      this.empresaService.patchmescentralizadorcomision(this.idempresa,this.comisioncontenido);
+    if (this.checkboxcomisioninput == false && this.inputcambio ==true) {
+      this.inputcambio = false;
+      this.centralzadormesservice.patchmescentralizadorcomision(this.idcentralizadormes,this.comisioncontenido);
       console.log('Valor actual del input comision:', this.comisioncontenido);
      
     }
@@ -99,21 +141,28 @@ export class PrincipalComponent implements OnInit {
   empresaCall(){
       
 
-      this.empresaService.getEmpresa(this.idempresa).subscribe(
-        (data: any) => {
-         
-          this.empresadatos=data;
-          const nombreDelMes = Fecha.getMesesArray().find((mescierre) => mescierre.value === Number(data.mescierre))?.label; //esto combierte el numero del json a mes con nombre
-          data.mescierre = nombreDelMes || 'Mes no válido';
-
-          if(data.planillas == true){
-            data.planillas = 'Si'
+     
+      
+      this.empresadatos = this.dblocal.GetDatosEmpresa();
+      this.empresadatos.mescierre;
+         // this.empresadatos=data;
+         console.log('nomnre del mssses', this.empresadatos.mescierre); 
+          const nombreDelMes = Fecha.getMesesArray().find((mescierre) => mescierre.value === Number(this.empresadatos.mescierre))?.label; //esto combierte el numero del json a mes con nombre
+          console.log('nomnre del mes',nombreDelMes); 
+          if (nombreDelMes) {
+            this.empresadatos.mescierre = nombreDelMes;
+          } else {
+            this.empresadatos.mescierre = 'Mes no válido';
+          }
+    
+          if(this.empresadatos.planillas == true){
+            //String(this.empresadatos.planillas) = 'Si'
           }else{
-            data.planillas = 'No';
+            //data.planillas = 'No';
           }
           
-        }    
-       );
+          
+          
       console.log('son los datos de empresa',this.empresadatos);    
   }
 

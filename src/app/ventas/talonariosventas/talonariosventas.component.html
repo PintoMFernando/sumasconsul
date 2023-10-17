@@ -23,10 +23,10 @@
         </tr>
         <tr>
           <td>
-            <label for="campo1">Nº Talonario:</label>
+            <label for="campo1" >Nº Talonario:</label>
           </td>
           <td>
-            <input type="text" id="campo2" name="campo2" />
+            <input type="text" id="campo2" name="campo2" [value]="i + 1" />
           </td>
         </tr>
         <tr>
@@ -40,7 +40,7 @@
 
         <tr>
           <td>
-            <label for="campo5">Factura Final:</label>
+            <label for="campo5" >Factura Final:</label>
           </td>
           <td>
             <input type="text" id="campo6" name="campo6" />
@@ -65,10 +65,12 @@
         <tr>
             <td colspan="2">
                 <div id="sumatoria">
-                    <hot-table [settings]="hotSettings"></hot-table>
+                    <hot-table [settings]="hotSettings" #hotTable ></hot-table>
+                    <button (click)="guardarDatos()">Guardar</button>
                 </div>
                
-            </td>
+              </td>
         </tr>
+        
     </form>
     </div>

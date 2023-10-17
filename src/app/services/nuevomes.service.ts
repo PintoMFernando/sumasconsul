@@ -8,7 +8,8 @@ import { Subject } from 'rxjs';
 export class NuevomesService {
   public crearFilaEvent: EventEmitter<number> = new EventEmitter<number>();
 
-
+  numero:any=[];
+  datos={};
   constructor() {}
 
   // Llamar a este método cuando se quiera ejecutar la función crearFila en Centralizador
@@ -17,11 +18,21 @@ export class NuevomesService {
     
   }
 
-  
   nuevoMes(mesSeleccionado:number) { //dato: any
     
     this.ejecutarCrearFila(mesSeleccionado);
   }
+
+  talonarios(numeros:any){
+    this.datos={
+      numeros:numeros
+    };
+
+    this.numero.push(this.datos);
+    console.log("Aquie estan los datos",this.numero);
+
+  }
+  
 
 
 }
