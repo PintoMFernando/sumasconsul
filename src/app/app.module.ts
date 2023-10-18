@@ -79,6 +79,8 @@ registerAllModules();
     ComprasgasolinaComponent,
     Ice100Component,
     ModalResumenmesContentComponent,
+    
+    
    
   ],
   imports: [
@@ -109,6 +111,7 @@ registerAllModules();
     ReactiveFormsModule,
     FileUploadModule,
     ListboxModule,
+
 
     
   ],

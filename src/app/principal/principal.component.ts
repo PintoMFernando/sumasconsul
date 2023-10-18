@@ -90,9 +90,9 @@ mesletra:string= '';
 
   onsaldoivaChange() {    ///desde aqui se cambia el valor de saldoiva y manda el ptach
     if (this.checkboxsaldoivainput == false  &&  this.inputiva==true) {
-      this.inputiva=false;
-      this.centralzadormesservice.patchmescentraliador(this.idcentralizadormes,this.saldoivacontenido);
-      console.log('Valor actual del input comision:', this.saldoivacontenido);
+        this.inputiva=false;
+        this.centralzadormesservice.patchmescentraliador(this.idcentralizadormes,this.saldoivacontenido);
+        console.log('Valor actual del input comision:', this.saldoivacontenido);
     }
   }
 

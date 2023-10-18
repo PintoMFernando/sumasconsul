@@ -65,3 +65,23 @@
     padding: 5px; /* Espacio interno más pequeño */
     width: 150px; /* Ancho personalizado, ajusta según tus necesidades */
   }
+
+
+  
+  .handsontable  .colornegro {
+    background-color: #000000d5; /* Cambia esto al color que desees */
+    color: #edecf1; /* Cambia esto al color del texto que desees */
+  }
+  .handsontable  .colorrojo {
+    background-color: #ff0000; /* Cambia esto al color que desees */
+    color: #edecf1; /* Cambia esto al color del texto que desees */
+  }
+  .handsontable  .colorazul {
+    background-color: #1923b3; /* Cambia esto al color que desees */
+    color: #edecf1; /* Cambia esto al color del texto que desees */
+  }
+
+  .handsontable  .colorblanco {
+    background-color: #ffffff; /* Cambia esto al color que desees */
+    color: #0c0c0c; /* Cambia esto al color del texto que desees */
+  }
