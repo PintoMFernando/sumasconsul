@@ -3,9 +3,9 @@
   <p-tabView >
     <button pButton type="button" icon="pi pi-plus" class="p-button-text" (click)="observaciones()">Observaciones</button>
     
-    <p-tabPanel header="Nombre: {{sucursal.nombre}} Nº{{sucursal.num_sucursall}}" *ngFor="let sucursal of puntoventa"  >
+    <p-tabPanel header="Nombre: {{sucursal.nombre}} Nº{{sucursal.num_sucursall}}  " *ngFor="let sucursal of puntoventa"  >
         <tr> 
-         <td><app-talonariosventas ></app-talonariosventas></td>
+         <td><app-talonariosventas [idpuntoventa]=sucursal.idpuntoventa></app-talonariosventas></td>
          <td><app-talonariosprevalorados ></app-talonariosprevalorados></td>
          <td><app-talonarioselectronicos ></app-talonarioselectronicos></td>
         

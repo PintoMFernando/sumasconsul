@@ -5,12 +5,9 @@
     [(ngModel)]="numberOfForms"
     (ngModelChange)="onNumberOfFormsChange()"/>
 
-    
- 
-    
 </div>
 
-  <div *ngFor="let form of formArray; let i = index" class="form-container">
+  <div *ngFor="let tablas of hotSettingsArray; let i = index" class="form-container">
    
         <tr>
           <td colspan="2">
@@ -26,7 +23,7 @@
             <label for="campo1" >Nº Talonario:</label>
           </td>
           <td>
-            <input type="text" id="campo2" name="campo2" [value]="i + 1" />
+            <input type="text" id="campo2" name="campo2" [value]="i + 1" [disabled]="tablas.bloqueada" />
           </td>
         </tr>
         <tr>
@@ -34,7 +31,7 @@
             <label for="campo3">Factura Inicial:</label>
           </td>
           <td>
-            <input type="number" id="campo4" name="campo4" [(ngModel)]="factinicial"/>
+            <input type="number" id="campo4" name="campo4" [(ngModel)]="factinicial" [value] ="0" required="true" [disabled]="tablas.bloqueada"/>
           </td>
         </tr>
 
@@ -43,7 +40,7 @@
             <label for="campo5" >Factura Final:</label>
           </td>
           <td>
-            <input type="number" id="campo6" name="campo6" [(ngModel)]="factfinal" />
+            <input type="number" id="campo6" name="campo6" [(ngModel)]="factfinal" [disabled]="tablas.bloqueada"/>
           </td>
         </tr>
 
@@ -69,10 +66,10 @@
 
         <tr>
             <td colspan="2">
-                <div id="sumatoria">
-                    <hot-table [settings]="hotSettings" #hotTable [hotId]="id"  ></hot-table>
-                    <button (click)="guardarDatos()">Guardar</button>
-                </div>
+                
+                    <hot-table [settings]="tablas" [hotId]="idtalonario"  ></hot-table>
+                    <button (click)="guardarDatos(i)" [disabled]="tablas.bloqueada">Guardar</button>
+
                
               </td>
         </tr>
