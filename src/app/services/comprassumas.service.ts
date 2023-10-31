@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
-import { Observable, firstValueFrom } from 'rxjs';
+import { Observable, catchError, firstValueFrom, throwError } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { Comprassumas } from '../models/comprassumas';
 import { Comprassumasdetalle } from '../models/comprassumasdetalle';
@@ -31,7 +31,17 @@ return e
 
 
 }
-
+/*getComprassumasdetalle(idcomprasumadetalle:string): Observable<Comprassumasdetalle>{    corregir
+  
+  return this.http.get<Comprassumasdetalle>(`${this.baseUrl}/comprassumas/comprassumas/${idcomprasumadetalle}`).pipe(
+   catchError((error)=>{
+     console.log('Error desde el servicio',error)
+     return throwError(() => error);
+   })
+ )
+ 
+}
+*/
 getComprassumas(idcentralizadormes:string): Observable<Comprassumas> {
   return this.http.get<Comprassumas>(`${this.baseUrl}/centralizadormes/tablacentralizadorgato/${idcentralizadormes}`);
 

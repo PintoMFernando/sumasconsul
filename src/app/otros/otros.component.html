@@ -1,7 +1,20 @@
 
 
-<label for="field1-1">Otros </label>
-<div id="sumatoria">
-    <hot-table [settings]="hotSettings">
-    </hot-table>
+<div *ngFor="let tablas of hotSettingsArray; let i = index" class="form-container">
+  <!-- Encabezado de la sección de compras -->
+  <div class="section-header">
+    <span class="section-title"> Total  Servicios </span>
+    <input class="sum-input" [value]="sumatotalotros" />
+
   </div>
+  
+
+  <!-- Tabla Compras -->
+  <div class="table-container">
+    <label>Tabla Otros Servicios</label>
+    <hot-table [settings]="tablas" [hotId]="idtalonario" ></hot-table>
+    
+  </div>
+  <button (click)="guardar()"> ACEPTAR</button>
+</div>
+

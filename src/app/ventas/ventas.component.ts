@@ -14,7 +14,11 @@ import { Puntoventa } from '../models/puntoventa.model';
   styleUrls: ['./ventas.component.css']
 })
 export class VentasComponent {
+  
   @Input() parametroDelPadreidcentralizadormes: string='';
+
+
+  
   idempresaglobal:number=0;
   puntoventa: Puntoventa[]=[];
 

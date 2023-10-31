@@ -14,7 +14,7 @@ const routes: Routes = [{
   children:[
   { path: '', redirectTo: '/centralizador', pathMatch: 'full' }, // Redireccionar a la página de inicio
   { path: 'centralizador/:id', component: CentralizadorComponent },
-  { path: 'principal/:idempresa/:mes/:idcentralizadormes', component: PrincipalComponent },
+  { path: 'principal/:idempresa/:anioActual/:mes/:idcentralizadormes', component: PrincipalComponent },
   
   
  

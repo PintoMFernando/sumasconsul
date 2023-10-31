@@ -1,7 +1,24 @@
+<div *ngFor="let tablas of hotSettingsArray; let i = index" class="form-container">
+  <!-- Encabezado de la sección de compras -->
+  <div class="section-header">
+    <span class="section-title">Compras</span>
+    <input class="sum-input" [value]="sumacompra100" />
 
+    <span class="section-title">Gasolina</span>
+    <input class="sum-input" [value]="sumacompragasolina" />
 
-<label for="field1-1">ICE 100%</label>
-<div id="sumatoria">
-    <hot-table [settings]="hotSettings">
-    </hot-table>
+    <span class="section-title">ICE-CreditoFiscal</span>
+    <input class="sum-input" [value]="sumacompratotal" />
+
   </div>
+  
+  
+  <!-- Tabla Compras -->
+  <div class="table-container">
+    <label>Tabla Compras</label>
+    <hot-table [settings]="tablas" [hotId]="'tabla3'" ></hot-table>
+    
+  </div>
+  <button (click)="guardar()"> ACEPTAR</button>
+</div>
+

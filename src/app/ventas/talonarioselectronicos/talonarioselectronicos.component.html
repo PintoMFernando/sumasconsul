@@ -10,10 +10,11 @@
     
  
 
+  
 
-
-<div *ngFor="let form of formArray; let i = index" class="form-container">
-    <form [formGroup]="form">
+<div *ngFor="let form of Arraydetabla; let i = index" class="form-container">
+ 
+ 
         <tr>
             <td colspan="2">
               <select id="selectOption" name="selectOption">
@@ -23,24 +24,63 @@
               </select>
             </td>
           </tr>
+
+          <tr>
+            <td>
+              <label for="factinicial">Numero de Talonario:</label>
+            </td>
+            <td>
+              <input type="number" id="numtalonario"  [value]="i+1" />
+            </td>
+
+          </tr>
+
+          <tr>
+            <td>
+              <label for="factinicial">Factura Inicial:</label>
+            </td>
+            <td>
+              <input type="number" id="factinicial" [(ngModel)]="factinicial"  />
+            </td>
+
+          </tr>
+
+          <tr>
+            <td>
+              <label for="factfinal" >Factura Final:</label>
+            </td>
+            <td>
+              <input type="number" id="factfinal" [(ngModel)]="factfinal"  />
+            </td>
+          </tr>
+
         <tr>
           <td class="electronicas">
-            <label for="campo1">Monto Importe:</label>
+            <label for="monto">Monto Importe:</label>
           </td>
           <td>
-            <input type="text" id="campo2" name="campo2" />
+            <input type="number" id="monto" [(ngModel)]="monto"   />
           </td>
         </tr>
         <tr>
           <td  class="electronicas">
-            <label for="campo3">Subir Archivo:</label>
+            <label for="archivo">Subir Archivo:</label>
           </td>
           <td>
             
-<p-fileUpload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload()" [multiple]="true" accept="image/*" >
-    <ng-template pTemplate="content">
-    </ng-template>
-</p-fileUpload>
+        
+        
+        <p-fileUpload mode="basic"
+           chooseLabel="Subir"
+           name="demo[]" 
+           url="https://www.primefaces.org/cdn/api/upload.php" 
+           accept=".pdf,.xls,.xlsx" 
+           (onUpload)="onUpload($event)"
+           [disabled]="botonClickeado">
+        </p-fileUpload>
+          
+
+        
              
           </td>
          
@@ -48,17 +88,18 @@
 
         <tr>
           <td  class="electronicas">
-            <label for="campo5">Observacion:</label>
+            <label for="observacion">Observacion:</label>
           </td>
           <td>
-            <textarea rows="3"></textarea>
+            <textarea rows="3" type="text" id="observacion" [(ngModel)]="observacion"  ></textarea>
           </td>
         </tr>
 
        
 
-             
-    </form>
-    </div>
+        <button type="submit" class="btn btn-primary" (click)="guardar()" [disabled]="botonguardar">Guardar</button>
+      </div>
+    
+   
 </div>
 

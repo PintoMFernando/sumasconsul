@@ -38,3 +38,9 @@ form {
   }
   
  
+  .form-container{
+    border: 2px solid #000; /* Borde sólido de 2px de ancho en color negro (#000) */
+    padding: 10px; /* Espacio entre el contenido y el borde */
+    /* Puedes agregar más estilos según tus necesidades */
+  }
+  

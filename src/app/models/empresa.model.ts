@@ -2,9 +2,8 @@ export class Empresa{
   id?: number;
 
 
-  idempresa?: number;
-
-      razonsocial?:string
+    idempresa?: number;
+    razonsocial?:string
     nit?:number
     num_empresa?: number
     ter_cliente?: number
@@ -21,9 +20,5 @@ export class Empresa{
     comision?: number
     estado?: number
     obs?: string
-    balance?: string
-    total?: string
-    trabajo?: number
-    planillas?: boolean
-
+   
 }

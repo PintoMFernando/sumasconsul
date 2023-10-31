@@ -1,7 +1,19 @@
 
+<div>
 
-<label for="field1-1">Compras Netas 100%</label>
-<div id="sumatoria">
-    <hot-table [settings]="hotSettings">
-    </hot-table>
+<div *ngFor="let tablas of hotSettingsArray1; let i = index" class="form-container">
+  <tr>
+  <td colspan="3" class="compras">
+  <label for="field1-1" >Compras Netas 100%</label>
+</td>
+</tr>
+<tr>
+  <td>
+<hot-table [settings]="tablas" [hotId]="'tabla1'"  ></hot-table>
+</td>
+</tr>
+
+
   </div>
+
+</div>

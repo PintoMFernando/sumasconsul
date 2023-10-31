@@ -1,41 +1,9 @@
 <div class="formulario2">
-    <h1>COMPRAS</h1>
-
+ 
+ 
+  
+  <div class="formulario-container">
     
-    <div>
-        <input type="checkbox" [(ngModel)]="showForm1">Compras Netas 100%
-      </div>
-      <div *ngIf="showForm1">
-        <!-- Mostrar el formulario 1 cuando showForm1 sea verdadero -->
-        <form (ngSubmit)="submitForm(1)">
-          <app-comprasnetas></app-comprasnetas>
-        </form>
-      </div>
-      
-      <div>
-        <input type="checkbox" [(ngModel)]="showForm2"> Compras Gasolina
-      </div>
-      <div *ngIf="showForm2">
-        <!-- Mostrar el formulario 2 cuando showForm2 sea verdadero -->
-        <form (ngSubmit)="submitForm(2)">
-          <!-- Campos del formulario 2 -->
-         <app-comprasgasolina></app-comprasgasolina>
-        </form>
-      </div>
-      
-      <div>
-        <input type="checkbox" [(ngModel)]="showForm3"> Ice 100%
-      </div>
-      <div *ngIf="showForm3">
-        <!-- Mostrar el formulario 3 cuando showForm3 sea verdadero -->
-        <form (ngSubmit)="submitForm(3)">
-          <!-- Campos del formulario 3 -->
-          <app-ice100></app-ice100>
-        </form>
-      </div>
-      
-      
-
-
-
-    </div>
+        <app-ice100 [parametroDelPadreidcentralizadormes]="parametroDelPadreidcentralizadormes"></app-ice100>
+     
+</div>

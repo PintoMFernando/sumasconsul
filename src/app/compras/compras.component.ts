@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Handsontable from 'handsontable';
 import { ContextMenu } from 'handsontable/plugins';
@@ -11,14 +11,11 @@ import HyperFormula from 'hyperformula';
 })
 export class ComprasComponent { 
   
-  
-  showForm1 = false;
-  showForm2 = false;
-  showForm3 = false;
+  @Input() parametroDelPadreidcentralizadormes: string='';
 
-  submitForm(formNumber: number) {
-    // Lógica para enviar el formulario según el número (1, 2 o 3) seleccionado
-    console.log(`Formulario ${formNumber} enviado`);
+ 
+  ngOnInit(){
+   console.log("aquie sta el idecentrlaizadores",this.parametroDelPadreidcentralizadormes);
   }
 
   

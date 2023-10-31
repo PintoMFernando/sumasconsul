@@ -20,6 +20,8 @@ import { ModalObservacionesContentComponent } from '../modal-observaciones-conte
 import { ModalcrearmesContentComponent } from '../modalcrearmes-content/modalcrearmes-content.component';
 import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
+import { EmpresadatosinicialesService } from '../services/empresadatosiniciales.service';
+import { Empresadatosiniciales } from '../models/empresadatosiniciales.model';
 
 
 @Component({
@@ -31,12 +33,13 @@ import { User } from '../models/user.model';
 export class CentralizadorComponent implements OnInit{  
   @ViewChild('datosTable') datosTable!: Table;
   item: Empresa = new Empresa(); //aqui estan los datos del backend
+  datosinicalesempresa: Empresadatosiniciales = new Empresadatosiniciales(); 
   itemuser: User = new User();
   filasTabla: any[] = []; //con esto se crea la nueva fila
   mesSeleccionado: number= 0;
   visible: boolean = false; ///modal de observaciones
   anios: number []=[];
-  anioActual: number=2023;
+  anioActual: number=0;
   anioSeleccionado: number = 0
   centralizador: Centralizador = new Centralizador(); 
   filasmes: Centralizadormes[]=[];
@@ -58,7 +61,8 @@ export class CentralizadorComponent implements OnInit{
               private centralizadorService: CentralizadorService,
               private centralizadormesService :CentralizadormesService,
               private cdRef: ChangeDetectorRef,   
-              private userService: UserService,     
+              private userService: UserService,
+              private empresadatosiniciales: EmpresadatosinicialesService,     
     ) { 
       this.generarAnios();
 
@@ -77,18 +81,12 @@ export class CentralizadorComponent implements OnInit{
 
   ngOnInit(): void {
     let id = Number(this.route.snapshot.paramMap.get('id'));  //este es el id global
+    
+    this.empresadetalles(id);
     this.empresaService.getEmpresa(id).subscribe(data => {
        
       const nombreDelMes = Fecha.getMesesArray().find((mescierre) => mescierre.value === data.mescierre)?.label; //esto combierte el numero del json a mes con nombre
       //data.mescierre = nombreDelMes || 'Mes';
-
-      if(data.planillas == true){
-         data.planillas=this.planillas; 
-      }else{
-        this.planillas= 'No'
-        data.planillas = this.planillas;
-      }
-
 
     this.dbLocal.SetDatosEmpresa(data);
     this.item = this.dbLocal.GetDatosEmpresa();
@@ -236,4 +234,25 @@ openObservaciones(idcentralizadormes:string){
   }
   this.modalService.openModal(data, ModalObservacionesContentComponent);
 }
+
+
+ empresadetalles(id:number){
+
+  this.empresadatosiniciales.getEmpresadatosiniciales(id)
+      .subscribe(
+        (data: any) => {
+
+          this.datosinicalesempresa=data[0];
+          if(data[0].planillas == true){
+            data[0].planillas=this.planillas; 
+         }else{
+           this.planillas= 'No'
+           data[0].planillas = this.planillas;
+         }
+    
+   console.log("aqui esta le data", data);
+   console.log("datosempresa inicialse", this.datosinicalesempresa);
+        }    
+       );
+ }
 }

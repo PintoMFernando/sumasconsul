@@ -10,7 +10,7 @@
       <ng-template pTemplate="header"  >
           <tr>
           <th colspan="5" >NOMBRE:{{empresadatos.razonsocial}} </th>
-          <th colspan="2" >GESTION: </th>
+          <th colspan="2" >GESTION: {{anioactual}}</th>
           <th colspan="4">Nº:{{empresadatos.num_empresa}}</th>
       </tr>
       <tr >
@@ -21,18 +21,22 @@
       </tr>
       
       <tr>
-          <th colspan="2">BALANCE: {{empresadatos.balance}}
-            <input type="number" class="custom-input" [disabled]="!checkboxbalanceinput" value="{{empresadatos.balance}}"  [(ngModel)]="balancecontenido" (ngModelChange)="onBalanceChange()">
+          <th colspan="2">BALANCE:
+            <input type="number" class="custom-input" [disabled]="!checkboxbalanceinput" value="{{datosinicalesempresa.balance}}"  [(ngModel)]="balancecontenido" (ngModelChange)="onBalanceChange()">
             <p-checkbox  [binary]="true" inputId="binary" [binary]="true" inputId="binary" [(ngModel)]="checkboxbalanceinput" (ngModelChange)="onbalanceChange()"></p-checkbox>
 
           </th>
-          <th colspan="2">TRABAJO:{{empresadatos.trabajo}}</th>
+          <th colspan="2">TRABAJO:
+            <input type="number" class="custom-input" [disabled]="!checkboxtrabajoinput" value="{{datosinicalesempresa.trabajo}}"  [(ngModel)]="trabajocontenido" (ngModelChange)="onTrabajoChange()">
+            <p-checkbox  [binary]="true" inputId="binary" [binary]="true" inputId="binary" [(ngModel)]="checkboxtrabajoinput" (ngModelChange)="ontrabajoChange()"></p-checkbox>
+
+          </th>
           <th colspan="3">DOMICILIO: {{empresadatos.direccionfiscal}}</th>
           <th colspan="4">TELEFONO: {{empresadatos.telefonofiscal}}</th>
       </tr>
       <tr>
-          <th colspan="2">TOTAL:{{empresadatos.total}}</th>
-          <th colspan="2">PLANILLAS:{{empresadatos.planillas}}</th>
+          <th colspan="2">TOTAL:{{total}}</th>
+          <th colspan="2">PLANILLAS:{{datosinicalesempresa.planillas}}</th>
           <th colspan="3">USUARIO:{{empresadatos.usuario_ofv}}</th>
           <th colspan="3">CONTRASEÑA:{{empresadatos.pass_ofv}}</th>  
       </tr>
@@ -91,7 +95,7 @@
       </p-tabPanel>
      
       <p-tabPanel header="Compras">
-          <app-compras></app-compras>  
+          <app-compras [parametroDelPadreidcentralizadormes]="idcentralizadormes"></app-compras>  
       </p-tabPanel>
 
       <p-tabPanel header="Otros">

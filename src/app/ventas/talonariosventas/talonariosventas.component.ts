@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, SimpleChanges, ViewChild} from '@angular/core';
 import { FormGroup, Validators,FormBuilder } from '@angular/forms';
 //import Handsontable from 'handsontable';
 import { ContextMenu } from 'handsontable/plugins';
@@ -10,7 +10,9 @@ import { ObservacionesService } from 'src/app/services/observaciones.service';
 import Handsontable from 'handsontable/base';
 import { HotTableRegisterer } from '@handsontable/angular';
 import { ConfirmationService, ConfirmEventType,MessageService } from 'primeng/api';
-
+import { VentatalonarioService } from 'src/app/services/ventatalonario.service';
+import { SumatalonarioService } from 'src/app/services/sumatalonario.service';
+import { v4 as uuidv4 } from 'uuid';
 //import * as Handsontable from 'handsontable';
 
 
@@ -31,8 +33,8 @@ export class TalonariosventasComponent   {
   constructor(private formBuilder: FormBuilder,
               public talonarios: NuevomesService, 
               private hotRegisterer: HotTableRegisterer,
-              private confirmationService: ConfirmationService, 
-              private messageService: MessageService,
+              public ventastalonarioService: VentatalonarioService,
+              public sumatalonarioService: SumatalonarioService,
               //private hot: Handsontable,
              
              )
@@ -53,18 +55,18 @@ export class TalonariosventasComponent   {
   inputInicial: number = 0; 
   valorsuma: any;
   valorcasillas:any;
-   botonPresionado: boolean = false;
+  botonPresionado: boolean = false;
   factinicial: number=0;
   factfinal: number=0;
-   idtalonario = 'hotInstance';
-   agregarFilas: boolean = false;
+  idtalonario = 'hotInstance';
+  agregarFilas: boolean = false;
   rango: number=0;
   montodinamico: number=0;
- numerotalonario: number =0;
- postArray: any[] =[];
- contador:number =0;
- contadorfilas:number =0;
- tipotalonario:number = 1; 
+  numerotalonario: number =0;
+  postArray: any[] =[];
+  contador:number =0;
+  contadorfilas:number =0;
+  tipotalonario:number = 1; 
   botonBloqueado: boolean = false;
   habilitarinicio:boolean=false;
   habilitarfin:boolean=false;
@@ -72,12 +74,17 @@ export class TalonariosventasComponent   {
  //talonario: talonarioventa={};
   jsonDatosArray:any = [];
   jsonDatossumasArray:any = [];
+  estado:number=0;
+  talonario: any[] =[];
+
   
   ngOnInit(){
     //const resultadoFormula = this.handsontable.getDataAtCell(0, 1); // Obtiene el valor de la celda con la fórmula
     //console.log("aquii",resultadoFormula); // Muestra el resultado en la consola
-   
+     console.log("aqui esta el id de punto venta", this.idpuntoventa);
+     
   }
+
 
   hyperformulaInstance = HyperFormula.buildEmpty({
     licenseKey: 'internal-use-in-handsontable',
@@ -121,10 +128,8 @@ export class TalonariosventasComponent   {
         field1: ['', Validators.required],
         field2: ['']
       });
-      this.formArray.push(form);
-      const  isHotReadOnly: boolean = false;
+      const  isHotReadOnly: boolean = false;//ver esto para bloquear la tabla
       const hotSettings: Handsontable.GridSettings = {
-     
         formulas: {
           engine: this.hyperformulaInstance,       //con esto funciona las formulas
         },
@@ -134,11 +139,7 @@ export class TalonariosventasComponent   {
           
         ],
        
-       
-      
         afterChange : (changes,source) =>{
-       
-          
         if (changes || source === 'edit') {
           //console.log("Changes:", changes[3]);
           changes!.forEach((changes, index, array) => {
@@ -186,35 +187,6 @@ export class TalonariosventasComponent   {
       },  
     
       
-       afterFormulasValuesUpdate : (changes) => {
-        changes.forEach((change) => {
-          if ('newValue' in change) {
-            //console.log('Nuevo valor (newValue):', change.newValue);  //aqui esta el valor de suma
-            this.valorsuma=change.newValue;
-          }
-          //console.log('aqui va change',change);
-    
-          const address = (change as any)['address'];
-    
-        if (address && typeof address.row === 'number'&& address && typeof address.col === 'number' ) {
-          const valorRow = address.row;    //esto contiene el valor de la fila
-          const valorCol = address.col;    //esto contiene el valor de la columna
-          //console.log('Valor de row:', valorRow);
-          //console.log('Valor de col:', valorCol);
-          
-        }
-        
-         //this.obs.createObservacion(this.valorsuma,this.valorsuma);
-        //talonario.monto = ;
-          ///console.log("aqui esta el valor de la suma",this.valorsuma);
-          
-          //this.datostalonarios.push(this.valorsuma);
-    
-        })
-      },
-       
-    
-      
         colHeaders: ['Nº Factura', 'Monto Bs','SUMA TOTAL'], //aqui se coloca lo nombres de columnas
         rowHeaders: false, //Aqui se coloca la numeracion de filas
         minSpareRows: 1,  //esto crea automaticamente las filas
@@ -248,7 +220,6 @@ export class TalonariosventasComponent   {
           {
             data: 'Monto Bs',
             
-            
           },
           {
             data: 'SUMA TOTAL',
@@ -264,83 +235,114 @@ export class TalonariosventasComponent   {
       this.hotSettingsArray.push(hotSettings);
       console.log("aqui esta mi array de tablas", this.hotSettingsArray);
       console.log("aqui esta el id de cada tabla",this.idtalonario );
+      
     };
-     
+    console.log("numero de talonario",this.talonario)
+  }
+
+  onidChange(index: number){
+    //const newValue = this.talonario[index];
+    for (let i = 0; i < this.talonario.length; i++) {
+      if( index === this.talonario[i]){
+        this.talonario.pop();
+      }
+    }
+   
+    console.log("mi index",index)
+    console.log("mi talonario",this.talonario)
+    this.talonario.push(index);
+
   }
    
   
 
-  guardarDatos(index:number){
+ async guardarDatos(index:number){
     this.bloqueartabla(index);
-    let estado=0;
+    const iduuid =uuidv4();
+   
     //console.log("aqui estan los datos en JSON",this.valorestalonario);
     //console.log("aqui estan los datos",this.datostalonarios);
     //console.log("aqui esta la suma", this.valorsuma);
     const matriz=this.hotRegisterer.getInstance(this.idtalonario).getData();
+    //const jsonData = JSON.stringify(matriz);
+      // console.log("esta convertido en json???",jsonData);
     //const matrizFiltrada = matriz.filter((valor) => valor !== null);
     console.log("AQUI ESTA TODO MI DATA", this.hotRegisterer.getInstance(this.idtalonario).getData());
    // console.log("SERA QUE TRAe todo data sin junll", matrizFiltrada);
-   // console.log("tamanio",matriz.length)
+    //console.log("tamanio",matriz.length)
+   // console.log("Matriz",matriz)
+
+    const jsontalonario = {
+      idventatalonario: iduuid,
+      numtalonario: Number(this.talonario),
+      factinicial: Number(this.factinicial),
+      factfinal: Number(this.factfinal),
+      tipo: Number(this.tipotalonario),
+      montototal: Number(matriz[0][2])|| 0, //o this.valorsuma
+      archivo:'',
+      idpuntoventa:Number(this.idpuntoventa),
+      observacion: '',
+    };
+    
+    this.jsonDatosArray.push(jsontalonario);//AQUI ESTA MIS DATOS DE LA TABLA EN FORMATO JSON
    // console.log("tamanio matriz sin null",matrizFiltrada.length)
+   //map()
    for (const fila of matriz) {
      if (fila[0] !== null ) {
-  
-      const jsontalonario = {
-        numtalonario: this.contador,
-        factinicial: this.factinicial,
-        factfinal: this.factfinal,
-        tipo: this.tipotalonario,
-        montototal: fila[2]||'', //o this.valorsuma
-        archivo:'',
-        idpuntoventa: this.idpuntoventa,
-      };
-      if(fila[1]=== 'a' || 'A' ){
-             estado= 1;
-       }
-       if(fila[1]=== 'e'|| 'E'){
-        estado= 2;
-       }
-      if(fila[1]=== 'i'|| 'I' ){
-         estado= 3;
+     
+      switch (fila[1]) {
+        case 'A':
+        case 'a':
+          console.log("entra a A??", fila[1], this.estado);
+          this.estado = 1;
+          fila[1]=0;
+          break;
+        case 'E':
+        case 'e':
+          console.log("entra a E??", fila[1]);
+          this.estado = 2;
+          fila[1]=0;
+          break;
+        case 'I':
+        case 'i':
+          console.log("entra a I??", fila[1]);
+          this.estado = 3;
+          fila[1]=0;
+          break;
+        default:
+          this.estado=0;
+          break;
       }
-      const jsonsumatalonario ={
 
-        numfactura: fila[0],
-        monto: fila[1],
-        estado: '',
+      const jsonsumatalonario ={
+        idsumatalonario:uuidv4(),
+        numfactura: Number(fila[0]),
+        monto: Number(fila[1]),
+        estado: Number(this.estado),
+        idventatalonario:String(iduuid),
        
       }
-      console.log("AQUI ESTA MI JSON DE TALONARIO",jsontalonario);
-      console.log("AQUI ESTA MI JSON DE SUMATALONARIO",jsonsumatalonario);
-      // Agrega el objeto JSON al arreglo
-      
-      this.jsonDatosArray.push(jsontalonario);//AQUI ESTA MIS DATOS DE LA TABLA EN FORMATO JSON
-      this.jsonDatossumasArray.push(jsonsumatalonario)
+       this.jsonDatossumasArray.push(jsonsumatalonario)
     }
     console.log("mi talonario id??",this.contador)
+   
   }
+ 
    console.log("Aqui esta todo mi array con json TALONARIO",this.jsonDatosArray);
    console.log("Aqui esta todo mi array con json SUMAS TALONARIO",this.jsonDatossumasArray);
- 
-    this.valorsuma={};
-    this.rango=0
-    this.factfinal=0;
-    this.factinicial=0;
-    this.montodinamico=0;
-    //console.log("estos son todos los datos de talonarioa",this.talonario); //aqui esta todos mi datos
-   // for (let i = 0; i <= this.postArray.length; i++) {
-    //  if(this.postArray[i].talonario.numtalonario == this.contador){
-     //     console.log("Este dato ya esta guardado");
-    //  }else{
-       // this.postArray.push(this.talonario);
-    //  }
+   //this.ventastalonarioService.createVentatalonario(this.jsonDatosArray[0]);
+   //this.sumatalonarioService.createSumatalonario(this.jsonDatossumasArray);
+    
+   this.valorsuma={};
+   this.rango=0
+   this.factfinal=0;
+   this.factinicial=0;
+   this.montodinamico=0; 
+   await this.ventastalonarioService.createVentatalonario(this.jsonDatosArray);
+   await this.sumatalonarioService.createSumatalonario(this.jsonDatossumasArray);
 
-   // }
-   //console.log("SERA QUE TRAE TODO EL DATA?", this.hotRegisterer.getInstance(this.idtalonario).getData() );
-   //console.log("SERA QUE TRAE TODO 666?", this.hotRegisterer.getInstance(this.idtalonario).getData()[0][0] ); //esto trae todo el data en una matriz
-    //console.log("estos son todos los datos de talonarios ara meter",this.postArray); //para empujar
-    //this.talonario={};
   }
+
 
   anulacionChange(){
      //nos quedamos aqui

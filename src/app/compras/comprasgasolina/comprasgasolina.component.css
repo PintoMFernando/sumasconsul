@@ -1,0 +1,21 @@
+.compras {
+    text-align: center; /* Centra horizontalmente el contenido del TD */
+    background-color: #3b3da3;
+    color: #fff;
+  }
+  
+  .form-container{
+    border: 2px solid #000; 
+    padding: 10px; 
+    
+    align-items: center;
+  
+  }
+  
+ 
+  .columnasfondo {
+    background-color: #3498db; /* Cambia este color al que desees */
+    color: #fff; /* Cambia el color del texto si es necesario */
+    font-weight: bold; /* Puedes cambiar otros estilos de fuente si lo deseas */
+    text-align: center; /* Centra el texto horizontalmente en el encabezado de la columna */
+  }

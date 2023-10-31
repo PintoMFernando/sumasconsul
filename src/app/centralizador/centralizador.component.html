@@ -14,18 +14,18 @@
             <th colspan="3">NIT:{{item.nit}}</th>
             <th colspan="2">CIERRE:{{item.mescierre}}</th>
             <th colspan="3">RESP.LEGAL:</th>
-            <th colspan="3">CI: {{item.nit}}</th>
+            <th colspan="3">CI: {{item.nit}}</th> 
         </tr>
         
         <tr>
-            <th colspan="2">BALANCE:{{item.balance}}</th>
-            <th colspan="2">TRABAJO:{{item.trabajo}}</th>
+            <th colspan="2">BALANCE:{{datosinicalesempresa.balance}}</th>
+            <th colspan="2">TRABAJO:{{datosinicalesempresa.trabajo}}</th>
             <th colspan="3">DOMICILIO: {{item.direccionfiscal}}</th>
             <th colspan="4">TELEFONO: {{item.telefonofiscal}}</th>
         </tr>
         <tr>
-            <th colspan="2">TOTAL:{{item.total}}</th>
-            <th colspan="2">PLANILLAS:{{item.planillas}}</th>
+            <th colspan="2">TOTAL:{{datosinicalesempresa.total}}</th>
+            <th colspan="2">PLANILLAS:{{datosinicalesempresa.planillas}}</th>
             <th colspan="3">USUARIO:{{item.usuario_ofv}}</th>
             <th colspan="3">CONTRASEÑA:{{item.pass_ofv}}</th>
             
@@ -93,7 +93,7 @@
 
             <td style="list-style-type: none;" class="centrar" [style.background-color]="backgroundColorPago">
                 <li class="mes" style="margin-bottom: 2px;">Opciones{{fila.opciones }}</li>
-                 <li style="margin-bottom: 2px;"><p-button icon="pi pi-plus" class="botonpeque2" label="Suma"  [routerLink]="['/principal',item.idempresa, fila.mes, fila.idcentralizadormes]"></p-button></li>
+                 <li style="margin-bottom: 2px;"><p-button icon="pi pi-plus" class="botonpeque2" label="Suma"  [routerLink]="['/principal',item.idempresa,anioActual,fila.mes, fila.idcentralizadormes]"></p-button></li>
                 <li style="margin-bottom: 2px;" >
                     <p-button (click)="openModalDetalleCentralizador()"icon="pi pi-eye" class="botonpeque2" label="Detalles"> </p-button>
                 <li><p-button (click)="openObservaciones(fila.idcentralizadormes)"icon="pi pi-pencil" class="botonpeque2" label="Observaciones"> </p-button></li>

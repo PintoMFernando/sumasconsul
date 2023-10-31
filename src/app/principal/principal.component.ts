@@ -10,6 +10,9 @@ import { LocalStorageService } from '../services/local-storage.service';
 import { Empresa } from '../models/empresa.model';
 import { ModalResumenmesContentComponent } from '../modal-resumenmes-content/modal-resumenmes-content.component';
 import { Fecha } from '../infraestructura/fecha';
+import { EmpresadatosinicialesService } from '../services/empresadatosiniciales.service';
+import { Empresadatosiniciales } from '../models/empresadatosiniciales.model';
+import { Observable, combineLatest } from 'rxjs';
 
 
 
@@ -30,12 +33,14 @@ export class PrincipalComponent implements OnInit {
   checkboxcomisioninput: boolean = false;
   checkboxivaimpuestosnainput: boolean = false;
   checkboxbalanceinput: boolean = false;
+  checkboxtrabajoinput: boolean = false;
   centralizadormes: Centralizadormes = new Centralizadormes();
   empresadatos: Empresa = new Empresa(); //aqui estan los datos del backend
   saldoivacontenido: string ="";
   ivaimpuestoscontenido: string ="";
   comisioncontenido: string ="";
   balancecontenido:string ="";
+  trabajocontenido:string ="";
   textoEditable: string="";
   editable: boolean = false; 
   datoscentralizadormes:any;
@@ -43,30 +48,65 @@ export class PrincipalComponent implements OnInit {
   inputiva:boolean = false;
   inputivaimpuestos: boolean = false;
   inputbalance: boolean = false;
-
+  inputtrabajo: boolean = false;
+  planillas: any='Si';
 mesletra:string= '';
- 
-  
+datosinicalesempresa: Empresadatosiniciales = new Empresadatosiniciales();
+idempresadatosiniciales: string="";
+trabajo2:number=0;
+balance2:number=0;
+ total:number=0;
+ anioactual :string ='';
+
 
    constructor(public dialogService: DialogService,
                private route: ActivatedRoute,
                public centralzadormesservice: CentralizadormesService,
                public dblocal: LocalStorageService,
                public empresaService: EmpresaService,
+               public empresadetallee : EmpresadatosinicialesService,
     
-    ) { }
+    ) {
+          
+     }
    
    
-  
+   
   ngOnInit() {                  //aqui llega los parametros enviados desde el centralizador mes e idempresa
+    this.anioactual = this.route.snapshot.params['anioActual'];
+    console.log("es el anio actual", this.anioactual);
     this.mes = this.route.snapshot.params['mes'];
     //this.idempresa = this.route.snapshot.params['idempresa'];
     this.idcentralizadormes = this.route.snapshot.params['idcentralizadormes'];
     this.centralizadormesCall();
     this.empresaCall();
+    this.empresadetalle();
     console.log("este es el ide",this.idempresa,this.mes,this.idempresa);
-
+    console.log('Valor actual del input trabajo:', this.balancecontenido);
+    console.log('Valor actual del input trabajo:', this.trabajocontenido);
   }
+
+
+  onTrabajoChange(){
+    console.log("asdasda");
+    this.inputtrabajo=true;
+    
+   }
+ 
+   ontrabajoChange() {    ///desde aqui se cambia el valor de saldoiva y manda el ptach
+     if (this.checkboxtrabajoinput == false  &&  this.inputtrabajo==true) {
+      
+         
+      this.total=Number(this.balance2)+Number(this.trabajocontenido)
+       this.inputtrabajo=false;
+       this.empresadetallee.patchEmpresadatosinicialtrabajo(this.idempresadatosiniciales,this.trabajocontenido);
+       //this.centralzadormesservice.patchmescentraliador(this.idcentralizadormes,this.saldoivacontenido);
+       console.log('Valor actual del input comision:', this.trabajocontenido);
+     }
+   }
+ 
+
+
 
   onBalanceChange(){
     console.log("asdasda");
@@ -75,7 +115,9 @@ mesletra:string= '';
  
    onbalanceChange() {    ///desde aqui se cambia el valor de saldoiva y manda el ptach
      if (this.checkboxbalanceinput == false  &&  this.inputbalance==true) {
+       this.total=Number(this.balancecontenido)+Number(this.trabajo2)
        this.inputbalance=false;
+       this.empresadetallee.patchEmpresadatosinicialbalance(this.idempresadatosiniciales,this.balancecontenido);
        //this.centralzadormesservice.patchmescentraliador(this.idcentralizadormes,this.saldoivacontenido);
        console.log('Valor actual del input comision:', this.balancecontenido);
      }
@@ -91,6 +133,7 @@ mesletra:string= '';
   onsaldoivaChange() {    ///desde aqui se cambia el valor de saldoiva y manda el ptach
     if (this.checkboxsaldoivainput == false  &&  this.inputiva==true) {
         this.inputiva=false;
+      
         this.centralzadormesservice.patchmescentraliador(this.idcentralizadormes,this.saldoivacontenido);
         console.log('Valor actual del input comision:', this.saldoivacontenido);
     }
@@ -155,11 +198,7 @@ mesletra:string= '';
             this.empresadatos.mescierre = 'Mes no válido';
           }
     
-          if(this.empresadatos.planillas == true){
-            //String(this.empresadatos.planillas) = 'Si'
-          }else{
-            //data.planillas = 'No';
-          }
+         
           
           
           
@@ -200,7 +239,32 @@ mesletra:string= '';
     });
 
   }
-
+  
+  empresadetalle(){
+    
+    let id=Number(this.dblocal.GetDatosEmpresa().idempresa)
+    console.log("HOLOS EMWETRA A EMPRESA DETALLE",id);
+  this.empresadetallee.getEmpresadatosiniciales(id)
+  .subscribe(
+    (data: any) => {
+      this.total=data[0].total;
+      this.idempresadatosiniciales=data[0].idempresadatosiniciales;
+    
+      this.datosinicalesempresa=data[0];
+      if(data[0].planillas == true){
+        data[0].planillas=this.planillas; 
+     }else{
+       this.planillas= 'No'
+       data[0].planillas = this.planillas;
+     }
+     this.trabajo2=data[0].trabajo;
+     this.balance2=data[0].balance;
+     console.log("aqui esta le data", data);
+    
+     console.log("datosempresa inicialse", this.datosinicalesempresa);
+    }    
+   );
+}
  
 
 

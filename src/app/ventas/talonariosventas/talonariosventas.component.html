@@ -23,9 +23,9 @@
             <label for="campo1" >Nº Talonario:</label>
           </td>
           <td>
-            <input type="text" id="campo2" name="campo2" [value]="i + 1" [disabled]="tablas.bloqueada" />
+            <input type="number" id="talonario" name="talonario" [value]="talonario[i]" [disabled]="tablas.bloqueada" [(ngModel)]="talonario[i]"(ngModelChange)="onidChange(i)"/>{{talonario}}
           </td>
-        </tr>
+        </tr>ue
         <tr>
           <td>
             <label for="campo3">Factura Inicial:</label>

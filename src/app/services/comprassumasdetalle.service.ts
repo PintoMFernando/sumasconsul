@@ -23,7 +23,7 @@ export class ComprassumasdetalleService {
 
      getComprassumasdetalle(idcomprasumadetalle:string): Observable<Comprassumasdetalle>{
   
-       return this.http.get<Comprassumasdetalle>(`${this.baseUrl}/comprassumas/comprassumas/${idcomprasumadetalle}`).pipe(
+       return this.http.get<Comprassumasdetalle>(`${this.baseUrl}/comprassumasdetalle/${idcomprasumadetalle}`).pipe(
         catchError((error)=>{
           console.log('Error desde el servicio',error)
           return throwError(() => error);
@@ -31,6 +31,32 @@ export class ComprassumasdetalleService {
       )
       
     }
+
+      getComprassumassolodetalles(idcomprasuma:string): Observable<Comprassumasdetalle>{
+        console.log("aqui esta el ID",idcomprasuma)
+      return this.http.get<Comprassumasdetalle>(`${this.baseUrl}/comprassumasdetalle/solodetalles/${idcomprasuma}`).pipe(
+       catchError((error)=>{
+         console.log('Error desde el servicio',error)
+         return throwError(() => error);
+       })
+     )
+     
+   }
+
+
+
+    async postComprasumadetalles(jsondatosarray:any) {
+      
+    
+      try{
+       return  await firstValueFrom(this.http.post(`${this.baseUrl}/comprassumasdetalle/`, jsondatosarray, { headers: this.headers }))
+      }catch(e){
+        return e
+      }
+      
+    
+    }
+
 
     async patchComprasumadetalles(idcentralizadormes: string, jsondatosarray:any) {
       
@@ -43,6 +69,20 @@ export class ComprassumasdetalleService {
     
     
     }
+
+    async deleteComprasumadetalles(idcomprasumadetalle:string){
+      //importante manejar el subscribe para eliminar
+      console.log(idcomprasumadetalle);
+   return await this.http.delete(`${this.baseUrl}/comprassumasdetalle/${idcomprasumadetalle}`).subscribe(
+     () => {
+       console.log('Observación eliminada correctamente');
+     },
+     (error) => {
+       console.error('Error al eliminar la observación', error);
+     }
+   );;
+
+  }
 
     
  

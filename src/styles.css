@@ -85,3 +85,12 @@
     background-color: #ffffff; /* Cambia esto al color que desees */
     color: #0c0c0c; /* Cambia esto al color del texto que desees */
   }
+
+
+  .custom-header{
+    text-align: center; /* Centra horizontalmente el contenido del TD */
+    background-color: #3b3da3;
+    color: #fff;
+  }
+
+ 
