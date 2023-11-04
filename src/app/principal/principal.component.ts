@@ -13,7 +13,9 @@ import { Fecha } from '../infraestructura/fecha';
 import { EmpresadatosinicialesService } from '../services/empresadatosiniciales.service';
 import { Empresadatosiniciales } from '../models/empresadatosiniciales.model';
 import { Observable, combineLatest } from 'rxjs';
-
+import { CentralizadorService } from '../services/centralizador.service';
+import { lastValueFrom, take } from 'rxjs';
+import { MespuntoventasumaService } from '../services/mespuntoventasuma.service';
 
 
 @Component({
@@ -57,6 +59,10 @@ trabajo2:number=0;
 balance2:number=0;
  total:number=0;
  anioactual :string ='';
+ idcentralizador :string ="";
+ planillasvalor: boolean = false;
+ planillascontenido:boolean =false;
+ 
 
 
    constructor(public dialogService: DialogService,
@@ -65,6 +71,8 @@ balance2:number=0;
                public dblocal: LocalStorageService,
                public empresaService: EmpresaService,
                public empresadetallee : EmpresadatosinicialesService,
+               public centralizadorService: CentralizadorService,
+               public mespuntoventasumaService: MespuntoventasumaService,
     
     ) {
           
@@ -73,17 +81,25 @@ balance2:number=0;
    
    
   ngOnInit() {                  //aqui llega los parametros enviados desde el centralizador mes e idempresa
+    this.idcentralizadormes = this.route.snapshot.params['idcentralizadormes'];
+    
     this.anioactual = this.route.snapshot.params['anioActual'];
     console.log("es el anio actual", this.anioactual);
     this.mes = this.route.snapshot.params['mes'];
     //this.idempresa = this.route.snapshot.params['idempresa'];
-    this.idcentralizadormes = this.route.snapshot.params['idcentralizadormes'];
+    
     this.centralizadormesCall();
     this.empresaCall();
     this.empresadetalle();
     console.log("este es el ide",this.idempresa,this.mes,this.idempresa);
+    console.log("este es el id de CENTRALIZADOR?????",this.idcentralizadormes);
     console.log('Valor actual del input trabajo:', this.balancecontenido);
     console.log('Valor actual del input trabajo:', this.trabajocontenido);
+  }
+
+  valorPlanillas(){
+    this.planillasvalor = !this.planillasvalor; // Cambiar el valor true/false
+  
   }
 
 
@@ -240,13 +256,19 @@ balance2:number=0;
 
   }
   
-  empresadetalle(){
-    
+  async empresadetalle(){
+     
     let id=Number(this.dblocal.GetDatosEmpresa().idempresa)
     console.log("HOLOS EMWETRA A EMPRESA DETALLE",id);
-  this.empresadetallee.getEmpresadatosiniciales(id)
+
+    const source$ = this.centralizadorService.getCentralizadormesbuscar(id,Number(this.anioactual)); //con esto traigo el id
+  const data:any = await lastValueFrom(source$);
+  this.idcentralizador=data.idcentralizador;
+
+  this.empresadetallee.getEmpresadatosiniciales(this.idcentralizador)
   .subscribe(
     (data: any) => {
+      
       this.total=data[0].total;
       this.idempresadatosiniciales=data[0].idempresadatosiniciales;
     
@@ -266,6 +288,8 @@ balance2:number=0;
    );
 }
  
+
+
 
 
 }

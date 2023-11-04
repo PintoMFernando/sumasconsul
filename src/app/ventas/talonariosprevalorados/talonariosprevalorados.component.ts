@@ -19,7 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
   providers: [ HotTableRegisterer ]
 })
 export class TalonariosprevaloradosComponent {
-  @Input() idpuntoventa: any;  
+  @Input() idmespuntoventasuma: any;  
 
   
   numberOfFormss: number = 0;
@@ -70,7 +70,7 @@ export class TalonariosprevaloradosComponent {
     ngOnInit(){
       //const resultadoFormula = this.handsontable.getDataAtCell(0, 1); // Obtiene el valor de la celda con la fórmula
       //console.log("aquii",resultadoFormula); // Muestra el resultado en la consola
-       console.log("aqui esta el id de punto venta", this.idpuntoventa);
+       console.log("aqui esta el id de punto venta", this.idmespuntoventasuma);
     }
   
     hyperformulaInstance = HyperFormula.buildEmpty({
@@ -251,9 +251,9 @@ export class TalonariosprevaloradosComponent {
         factfinal: Number(this.factfinal),
         tipo: Number(this.tipotalonario),
         montototal: Number(matriz[0][2]) || 0, //o this.valorsuma
-        archivo:'',
-        idpuntoventa:Number(this.idpuntoventa),
-        observacion: '',
+        
+        idmespuntoventasuma:String(this.idmespuntoventasuma),
+        
       };
       
       this.jsonDatosArray.push(jsontalonario);//AQUI ESTA MIS DATOS DE LA TABLA EN FORMATO JSON
@@ -308,7 +308,6 @@ export class TalonariosprevaloradosComponent {
      await this.sumatalonarioService.createSumatalonario(this.jsonDatossumasArray);
   
     }
-  
   
     anulacionChange(){
        //nos quedamos aqui

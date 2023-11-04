@@ -5,8 +5,10 @@ import { PuntoventaService } from '../services/puntoventa.service';
 import { LocalStorageService } from '../services/local-storage.service';
 import { error } from 'jquery';
 import { Puntoventa } from '../models/puntoventa.model';
-
-
+import { MespuntoventasumaService } from '../services/mespuntoventasuma.service';
+import { lastValueFrom, take } from 'rxjs';
+import { mespuntoventasuma } from '../models/mespuntoventasuma.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-ventas',
@@ -21,23 +23,30 @@ export class VentasComponent {
   
   idempresaglobal:number=0;
   puntoventa: Puntoventa[]=[];
-
+  puntoventa2:mespuntoventasuma[] = [];
+  jsonarraypuntoventa:any = [];
+ 
  
 
    
   constructor(private modalService:ModalserviceService,
               private puntoventaService: PuntoventaService,  
-              private dblocal: LocalStorageService    
+              private dblocal: LocalStorageService ,
+              private mespuntoventasumaService: MespuntoventasumaService,   
     ) { }
 
 
   ngOnInit(){
-    console.log("holos datos aqui",this.dblocal.GetDatosEmpresa().idempresa);
+    this.mespuntoventasuma();
+    console.log("holos mi id emeprsa???",this.dblocal.GetDatosEmpresa().idempresa);
+    this.idempresaglobal=Number(this.dblocal.GetDatosEmpresa().idempresa);
+    
     this.getPuntoVenta();
   }
 
   getPuntoVenta(){
-  this.puntoventaService.getPuntoVenta(1593)
+    ///de aqui tengo que jalar las sucursales 
+  this.puntoventaService.getPuntoVenta(this.idempresaglobal)
   .subscribe(
     (data: any) => {
       this.puntoventa=data;
@@ -67,6 +76,55 @@ export class VentasComponent {
   }
   this.modalService.openModal(data, ModalObservacionesContentComponent);
 }
+
+
+async mespuntoventasuma(){
+    
+  //this.mespuntoventasumaService.createmespuntoventasuma(this.idcentralizadormes);
+
+console.log("HOLSOOOOOOOOOOOOOOOOOOOOOOOOOO ES EL MI idcentralizadormes",this.parametroDelPadreidcentralizadormes)
+const source$ = this.mespuntoventasumaService.getmespuntoventasuma(this.parametroDelPadreidcentralizadormes); //con esto traigo el id
+const data:any = await lastValueFrom(source$);
+console.log("mis datos data de mespuntiventasumaAAAAA",data)
+
+
+
+if(data.length !=0){ 
+      console.log("HOLOS HAaaaaY DATOS"); //mostramos
+    this.puntoventa2=data;
+    console.log("aquiest ami puntoventaaaasuma",this.puntoventa2);
+    console.log("mi prueba de que esta dando o no mis datos GATO PATOOO", this.puntoventa2[0].puntoventa?.nombre);
+}else{
+  this.jsonarraypuntoventa=[];
+    console.log("HOLOS NO HAaaaaY DATOS"); //creamos
+    const source$ = this.puntoventaService.getPuntoVenta(this.idempresaglobal);
+    const data:any = await lastValueFrom(source$);
+    for (const item of data) {
+      const idpuntoventa = item.idpuntoventa;
+      const jsonpuntoventa ={
+      idmespuntoventasuma: uuidv4(),
+      idcentralizadormes:  this.parametroDelPadreidcentralizadormes,
+      idpuntoventa: idpuntoventa 
+      }
+      this.jsonarraypuntoventa.push(jsonpuntoventa);
+    }
+   this.puntoventa2=[];
+    await this.mespuntoventasumaService.createMespuntoventa(this.jsonarraypuntoventa);
+    const sources$ = this.mespuntoventasumaService.getmespuntoventasuma(this.parametroDelPadreidcentralizadormes); //con esto traigo el id
+    const dataa:any = await lastValueFrom(sources$);
+    this.puntoventa2=dataa;
+   
+    console.log("este es mi JSONARRAY PARA MANADAR ",this.jsonarraypuntoventa);
+    //const resultado = data.find((item: any) => item.idempresa === this.idempresaglobal); //buiscando si hay datos en mi tabla
+    //console.log("resultadodemi busqueda en puntoventa",resultado);
+    //await this.comprassumasdetalleService.postComprasumadetalles(this.jsonComprassArray);
+    //this.jsonComprassArray=[];
+  }
+
+
+
+}
+
   }
 
   

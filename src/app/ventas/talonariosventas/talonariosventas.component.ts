@@ -23,7 +23,7 @@ import { v4 as uuidv4 } from 'uuid';
   providers: [ HotTableRegisterer ]
 })
 export class TalonariosventasComponent   {
-  @Input() idpuntoventa: any;  
+  @Input() idmespuntoventasuma: any;  
 
   
   valorCelda: any; 
@@ -81,7 +81,7 @@ export class TalonariosventasComponent   {
   ngOnInit(){
     //const resultadoFormula = this.handsontable.getDataAtCell(0, 1); // Obtiene el valor de la celda con la fórmula
     //console.log("aquii",resultadoFormula); // Muestra el resultado en la consola
-     console.log("aqui esta el id de punto venta", this.idpuntoventa);
+     console.log("aqui esta el id de punto venta", this.idmespuntoventasuma);
      
   }
 
@@ -213,9 +213,9 @@ export class TalonariosventasComponent   {
         columns: [
           {
             data: 'NºFactura',
-            readOnly: false,    //esto bloquea la celda para que solo sea de lectura
-           
-            editor: false,
+            //readOnly: false,    //esto bloquea la celda para que solo sea de lectura
+            //editor: false,
+            type: 'numeric',
           },
           {
             data: 'Monto Bs',
@@ -279,9 +279,7 @@ export class TalonariosventasComponent   {
       factfinal: Number(this.factfinal),
       tipo: Number(this.tipotalonario),
       montototal: Number(matriz[0][2])|| 0, //o this.valorsuma
-      archivo:'',
-      idpuntoventa:Number(this.idpuntoventa),
-      observacion: '',
+      idmespuntoventasuma:String(this.idmespuntoventasuma),
     };
     
     this.jsonDatosArray.push(jsontalonario);//AQUI ESTA MIS DATOS DE LA TABLA EN FORMATO JSON

@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Handsontable from 'handsontable';
 import { ContextMenu } from 'handsontable/plugins';
 import HyperFormula from 'hyperformula';
 
 import { HotTableRegisterer } from '@handsontable/angular';
-
-
+import { OtrossumasService } from '../services/otrossumas.service';
+import { lastValueFrom, take } from 'rxjs';
+import { otrossumas } from '../models/otrossumas.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-otros',
@@ -15,10 +17,13 @@ import { HotTableRegisterer } from '@handsontable/angular';
   providers: [ HotTableRegisterer ]
 })
 export class OtrosComponent {
-
+  @Input() parametroDelPadreidcentralizadormes: string='';
   constructor(private formBuilder: FormBuilder,
+              
     
     private hotRegistererotros: HotTableRegisterer,
+    private sumasotrosService:  OtrossumasService,
+    private cdr: ChangeDetectorRef,
     ) { }  
     
     idtalonario = 'hotInstance';
@@ -31,7 +36,8 @@ export class OtrosComponent {
      observaciones: string ="";
      sumatotalotros: number =0;
      sumaotros: number =0;
-
+     idcentralizadormes:string ="";
+     otrosarray: otrossumas= new otrossumas;
     
   
   //PRUEBA Handsontable, DA
@@ -40,7 +46,39 @@ export class OtrosComponent {
   });
 
   ngOnInit(){
+    
+    this.traermisdatos();
+    //this.iniciarIntervalo();
+  }
+  
+  ngOnDestroy() {
+    // Detén el intervalo cuando el componente se destruye para evitar fugas de memoria
+    this.detenerIntervalo();
+  }
+
+  iniciarIntervalo() {
+    this.intervaloID = setInterval(() => {
+      this.guardar(); 
+    }, 61000);
+  }
+  detenerIntervalo() {
+    // Detén el intervalo utilizando el ID del intervalo almacenado
+    if (this.intervaloID) {
+      clearInterval(this.intervaloID);
+    }
+  }
+  
+  async traermisdatos(){
+    this.idcentralizadormes="";
+    const source$ = this.sumasotrosService.getOtrossumas(this.parametroDelPadreidcentralizadormes); //con esto traigo el id
+    const data:any = await lastValueFrom(source$);
+    this.otrosarray=data[0].otrossumas;
+
+    console.log("aqui esta mi dataaaaaaaaa", data);
+    console.log("aqui estan mis otros array", this.otrosarray);
+    //this.idcentralizadormes = data[0].comprassumas.idcomprasuma;
     this.crearmitabla();
+    this.cdr.detectChanges();
   }
 
 
@@ -65,7 +103,6 @@ export class OtrosComponent {
     if (!this.settingFormula) {
       this.settingFormula = true;
       this.hotRegistererotros.getInstance(this.idtalonario).setDataAtCell(0, 1,'=SUM(A:A)');
-
       this.settingFormula = false;
     }
     
@@ -105,10 +142,10 @@ export class OtrosComponent {
       }    
     },
     columns: [
-      { data: 'MontoBs',},
+      { data: 'montootros',},
       { data: 'Total',
         readOnly: true,},
-      { data: 'Observaciones',},
+      { data: 'observaciones',},
     ], 
     hiddenColumns:{
        columns:[1],
@@ -116,32 +153,68 @@ export class OtrosComponent {
     
     licenseKey: 'non-commercial-and-evaluation'
   };
+  /*const pruebaMatriz = [
+    {MontoBs:20, observaciones: "dasdjadasdasdadasdasd"}, 
+    
+    
+   ];*/
   this.hotSettingsArray.push(hotSettings);
+  console.log("dada", this.otrosarray);
+  this.hotSettingsArray[0].data = this.otrosarray;
+  //this.hotSettingsArray[0].data =pruebaMatriz;
+  console.log("AQUI ESTAN MIS DATOS PARA LA TABLA otros xdxd",this.hotSettingsArray[0].data);
+  
 
 }
  
 guardar(){
-  this.bloqeuarboton= true;
+  /*this.bloqeuarboton= true;
   var readOnly= this.hotRegistererotros.getInstance(this.idtalonario).getSettings().readOnly;
    this.hotRegistererotros.getInstance(this.idtalonario).updateSettings({                         //esto bloquea la tabla
     readOnly: !readOnly
-  });
+  });*/
 
-  console.log("HOLSO ES EL DATA",  this.hotRegistererotros.getInstance(this.idtalonario).getData());
-  
+  //console.log("HOLSO ES EL DATA",  this.hotRegistererotros.getInstance(this.idtalonario).getData());
   const matrizdata =this.hotRegistererotros.getInstance(this.idtalonario).getData()
   for (const fila of matrizdata) {
-    if (fila[0] !== null ) {
+    if (fila[0] !== null || fila[2] !== null ) {
       const jsondata ={
-      monto: fila[0],
-      total:fila[1],
+      idotrossumas:uuidv4(),
+      montootros: fila[0] || 0,
       observaciones:fila[2]||"",
+      idcentralizadormes: this.parametroDelPadreidcentralizadormes
       }
       this.jsonComprassArray.push(jsondata)
     }
   
 }
 console.log("holos es el json",this.jsonComprassArray);
+this.enviardatos();
  
+}
+
+async enviardatos(){
+  const source$ = this.sumasotrosService.getsolodetallesOtrossumas(this.parametroDelPadreidcentralizadormes); //con esto traigo el id
+  const data:any = await lastValueFrom(source$);
+  console.log("mis datos data",data)
+  const resultado = data.find((item: any) => item.idcentralizadormes === this.parametroDelPadreidcentralizadormes); //buiscando si hay datos en mi tabla
+  console.log("resultado",resultado);
+  if(!resultado){ 
+        // creamos
+        console.log("HOLOS NO HAY DATOS");
+       await this.sumasotrosService.createotrossuma(this.jsonComprassArray);
+       this.jsonComprassArray=[];
+  }else{
+      //BORRAMOS Y creamos
+      await this.sumasotrosService.deleteOtrossumasdetalles(this.parametroDelPadreidcentralizadormes);
+      await this.sumasotrosService.createotrossuma(this.jsonComprassArray);
+      this.jsonComprassArray=[];
+    }
+
+ 
+  
+
+
+
 }
 }

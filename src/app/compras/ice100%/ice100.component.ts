@@ -77,12 +77,13 @@ export class Ice100Component {
   }
 
   async miid(){
+  
     this.idcomprasuma="";
     const source$ = this.mesconcomprasumasservice.getComprassumas(this.parametroDelPadreidcentralizadormes); //con esto traigo el id
     const data:any = await lastValueFrom(source$);
     
     this.idcomprasuma = data[0].comprassumas.idcomprasuma;
-   
+    
     this.datossumadetalles();
     
 
@@ -117,7 +118,7 @@ export class Ice100Component {
     
    
   });*/
-  this.hotSettingsArray=[];
+ // this.hotSettingsArray=[];
   this.crearmitabla();
   this.cdr.detectChanges();
   console.log("SON MIS DATOS CONVERTIDOS datos tabla", this.datosTabla);
@@ -339,7 +340,7 @@ async insertardatos(){
   console.log("mis datos data",data)
   const resultado = data.find((item: any) => item.idcomprasuma === this.idcomprasuma); //buiscando si hay datos en mi tabla
   console.log("resultado",resultado);
-  if(!resultado){ 
+  if(!resultado){ //esto cambiar quiza
         // creamos
         console.log("HOLOS NO HAY DATOS");
        await this.comprassumasdetalleService.postComprasumadetalles(this.jsonComprassArray);

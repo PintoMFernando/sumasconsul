@@ -22,7 +22,7 @@ import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { EmpresadatosinicialesService } from '../services/empresadatosiniciales.service';
 import { Empresadatosiniciales } from '../models/empresadatosiniciales.model';
-
+import { lastValueFrom, take } from 'rxjs';
 
 @Component({
   selector: 'app-centralizador',
@@ -52,6 +52,7 @@ export class CentralizadorComponent implements OnInit{
   backgroundColor: string = 'white'; //esto pinta el color de la celda para poner blanco, amarillo, o verde terminado
   backgroundColorPago: string = 'white'; //esto es el color de fondo de cobro-pago
   planillas: any='Si';
+  idcentralizador: string ="";
   constructor(private empresaService: EmpresaService,
               private miAdaptadorPrimeNG: MiAdaptadorPrimeNG,
               public dialogService: DialogService,
@@ -194,7 +195,7 @@ export class CentralizadorComponent implements OnInit{
     }
     
    );
-  
+   this.empresadetalles(id);
   }
 
 openModalCobro(idcentralizadormes: string){
@@ -236,12 +237,15 @@ openObservaciones(idcentralizadormes:string){
 }
 
 
- empresadetalles(id:number){
-
-  this.empresadatosiniciales.getEmpresadatosiniciales(id)
+ async empresadetalles(id:number){
+  const source$ = this.centralizadorService.getCentralizadormesbuscar(id,this.anioActual); //con esto traigo el id
+  const data:any = await lastValueFrom(source$);
+  this.idcentralizador=data.idcentralizador;
+  console.log("entrasadasdasdasdsa", this.idcentralizador );
+  this.empresadatosiniciales.getEmpresadatosiniciales(this.idcentralizador)
       .subscribe(
         (data: any) => {
-
+          console.log("aqui esta le datasaaaaaaaaaaaaaaaaaaaaaa", data);
           this.datosinicalesempresa=data[0];
           if(data[0].planillas == true){
             data[0].planillas=this.planillas; 
@@ -250,7 +254,7 @@ openObservaciones(idcentralizadormes:string){
            data[0].planillas = this.planillas;
          }
     
-   console.log("aqui esta le data", data);
+ 
    console.log("datosempresa inicialse", this.datosinicalesempresa);
         }    
        );

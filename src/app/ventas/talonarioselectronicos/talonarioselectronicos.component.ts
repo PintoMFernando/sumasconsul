@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 })
 
 export class TalonarioselectronicosComponent {
-  @Input() idpuntoventa: any;  
+  @Input() idmespuntoventasuma: any;  
   constructor(private formBuilder: FormBuilder,
               public ventatalonarioService: VentatalonarioService,
  

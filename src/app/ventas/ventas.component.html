@@ -3,11 +3,11 @@
   <p-tabView >
     <button pButton type="button" icon="pi pi-plus" class="p-button-text" (click)="observaciones()">Observaciones</button>
     
-    <p-tabPanel header="Nombre {{sucursal.nombre}} Nº{{sucursal.num_sucursall}}  " *ngFor="let sucursal of puntoventa"  >
+    <p-tabPanel header="Nombre {{sucursal.puntoventa?.nombre}} Nº{{sucursal.puntoventa?.num_sucursall}} " *ngFor="let sucursal of puntoventa2"  >
         <tr> 
-         <td><app-talonariosventas [idpuntoventa]=sucursal.idpuntoventa></app-talonariosventas></td>
-         <td><app-talonariosprevalorados [idpuntoventa]=sucursal.idpuntoventa></app-talonariosprevalorados></td>
-         <td><app-talonarioselectronicos [idpuntoventa]=sucursal.idpuntoventa></app-talonarioselectronicos></td>
+         <td><app-talonariosventas [idmespuntoventasuma]=sucursal.idmespuntoventasuma></app-talonariosventas></td>
+         <td><app-talonariosprevalorados [idmespuntoventasuma]=sucursal.idmespuntoventasuma></app-talonariosprevalorados></td>
+         <td><app-talonarioselectronicos [idmespuntoventasuma]=sucursal.idmespuntoventasuma></app-talonarioselectronicos></td>
         
         </tr>
     </p-tabPanel>

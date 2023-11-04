@@ -16,7 +16,7 @@ export class EmpresadatosinicialesService {
 
   constructor(private http: HttpClient) { }
 
-  getEmpresadatosiniciales(idempresadatosiniciales:number): Observable<Empresadatosiniciales> {
+  getEmpresadatosiniciales(idempresadatosiniciales:string): Observable<Empresadatosiniciales> {
     return this.http.get<Empresadatosiniciales>(`${this.baseUrl}/empresadatosiniciales/${idempresadatosiniciales}`);
     
   }
