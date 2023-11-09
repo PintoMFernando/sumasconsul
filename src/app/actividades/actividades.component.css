@@ -1,0 +1,64 @@
+.layout div {
+    flex: 1; /* Distribuye el espacio de manera uniforme entre los elementos internos */
+    text-align: center; /* Centra el contenido horizontalmente */
+    padding: 10px; /* Agrega un margen interno alrededor de cada elemento */
+    border: 1px solid #ddd; /* Agrega un borde a cada elemento */
+  }
+  
+  /* Estilo para el botón dentro de los elementos */
+  .layout .botonpeque {
+    width: 100%; /* Ajusta el ancho del botón al 100% del elemento */
+  }
+
+  .layout {
+    width: 1366px;
+    height: 200px;
+  
+    display: flex;
+    gap: 16px;
+  
+    justify-content: space-evenly;
+  }
+
+
+
+
+  /* Estilo para el contenedor principal */
+.container {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    min-height: 100vh; /* Asegura que el formulario ocupe al menos la altura de la ventana */
+  }
+  
+  /* Estilo para el formulario principal */
+  .form-group {
+    margin-bottom: 20px; /* Espacio entre campos */
+  }
+  
+  /* Estilo para los botones */
+  .btn {
+    margin-right: 10px; /* Espacio entre botones */
+  }
+  
+  /* Estilo para el formulario adicional */
+  .formulario-adicional {
+    border: 1px solid #ccc; /* Agrega un borde alrededor del formulario adicional */
+    padding: 20px; /* Espacio interno alrededor del formulario adicional */
+    margin-top: 20px; /* Espacio entre el formulario principal y el adicional */
+  }
+  
+  /* Estilo para los campos del formulario adicional */
+  .formulario-adicional .form-group {
+    margin-bottom: 15px; /* Espacio entre campos */
+  }
+  
+  /* Estilo para el botón de "Agregar" del formulario adicional */
+  .formulario-adicional .btn {
+    margin-top: 10px; /* Espacio entre el botón y los campos */
+  }
+  
+
+  .label-left-align {
+    text-align: left;
+}

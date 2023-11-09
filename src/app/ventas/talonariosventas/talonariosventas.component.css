@@ -57,4 +57,11 @@ form {
     /* Puedes agregar más estilos según tus necesidades */
   }
   
+  #selectOption {
+    width: 150px; /* Ajusta el valor según tus necesidades */
+  }
+
+  .talonarios input {
+    width: 120px; /* Ajusta el valor según tus necesidades */
+  }
 

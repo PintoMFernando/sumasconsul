@@ -31,8 +31,7 @@ import { ModalcrearmesContentComponent } from './modalcrearmes-content/modalcrea
 import { DropdownModule } from 'primeng/dropdown';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { MessageService, ConfirmEventType } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
+
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { TagModule } from 'primeng/tag';
 import { MoadalCobroContentComponent } from './moadal-cobro-content/moadal-cobro-content.component';
@@ -54,6 +53,10 @@ import { ComprasgasolinaComponent } from './compras/comprasgasolina/comprasgasol
 import { Ice100Component } from './compras/ice100%/ice100.component';
 import { ModalResumenmesContentComponent } from './modal-resumenmes-content/modal-resumenmes-content.component';
 import { ListboxModule } from 'primeng/listbox';
+import { ActividadesComponent } from './actividades/actividades.component';
+import { MessageService, ConfirmEventType } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { UpdatepuntoventaactividadComponent } from './updatepuntoventaactividad/updatepuntoventaactividad.component';
 
 
 registerAllModules();
@@ -61,6 +64,7 @@ registerAllModules();
   declarations: [
     AppComponent,
     PrincipalComponent,
+    ActividadesComponent,
     ModalIVAContentComponent,
     ModalIUEContentComponent,
     ModalcomisionContentComponent,
@@ -79,6 +83,9 @@ registerAllModules();
     ComprasgasolinaComponent,
     Ice100Component,
     ModalResumenmesContentComponent,
+    UpdatepuntoventaactividadComponent,
+    UpdatepuntoventaactividadComponent,
+    
     
     
    

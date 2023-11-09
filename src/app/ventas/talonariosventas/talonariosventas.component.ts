@@ -70,6 +70,7 @@ export class TalonariosventasComponent   {
   botonBloqueado: boolean = false;
   habilitarinicio:boolean=false;
   habilitarfin:boolean=false;
+  actividad: string="";
  //datostalonarios:datostalonario={};
  //talonario: talonarioventa={};
   jsonDatosArray:any = [];

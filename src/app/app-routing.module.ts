@@ -4,6 +4,7 @@ import { PrincipalComponent } from './principal/principal.component';
 import { AppComponent } from './app.component';
 import { CentralizadorComponent } from './centralizador/centralizador.component';
 import { MoadalCobroContentComponent } from './moadal-cobro-content/moadal-cobro-content.component';
+import { ActividadesComponent } from './actividades/actividades.component';
 
 
 
@@ -15,6 +16,7 @@ const routes: Routes = [{
   { path: '', redirectTo: '/centralizador', pathMatch: 'full' }, // Redireccionar a la página de inicio
   { path: 'centralizador/:id', component: CentralizadorComponent },
   { path: 'principal/:idempresa/:anioActual/:mes/:idcentralizadormes', component: PrincipalComponent },
+  { path: 'actividad', component: ActividadesComponent },
   
   
  

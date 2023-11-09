@@ -1,29 +1,36 @@
 <div class="opciones">
+  <div class="actividad">
+  <label> Actividad </label>
+  <select id="selectOption" name="selectOption"  [(ngModel)]="actividad" >
+    <option value="Caza Matriz">Casa Matriz</option>
+    <option value="Alquiler">Alquiler</option>
+    <option value="Restaurante">Restaurante</option>
+  </select>
+</div>
+<div class="talonarios">
     <label> Talonarios </label>
   <input
     type="number"
     [(ngModel)]="numberOfForms"
     (ngModelChange)="onNumberOfFormsChange()"/>
-
+  </div>
 </div>
 
   <div *ngFor="let tablas of hotSettingsArray; let i = index" class="form-container">
    
         <tr>
           <td colspan="2">
-            <select id="selectOption" name="selectOption">
-              <option value="opcion1">Casa Matriz</option>
-              <option value="opcion2">Alquiler</option>
-              <option value="opcion3">Restaurante</option>
-            </select>
+
+            <input type="text" [value]="actividad" readonly center>
           </td>
         </tr>
         <tr>
           <td>
+
             <label for="campo1" >Nº Talonario:</label>
           </td>
           <td>
-            <input type="number" id="talonario" name="talonario" [value]="talonario[i]" [disabled]="tablas.bloqueada" [(ngModel)]="talonario[i]"(ngModelChange)="onidChange(i)"/>{{talonario}}
+            <input type="number" id="talonario" name="talonario" [value]="i+1" [disabled]="tablas.bloqueada" />
           </td>
         </tr>ue
         <tr>

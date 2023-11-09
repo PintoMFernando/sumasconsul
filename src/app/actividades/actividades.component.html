@@ -1,0 +1,87 @@
+
+    <p-table  #datosTable [tableStyle]="{'min-width': '50rem'}"  styleClass="tabla" [styleClass]="'p-datatable-bordered'">
+      <ng-template pTemplate="header">
+          <tr>
+          <th colspan="5" >NOMBRE:{{empresa.razonsocial}} </th>
+          <th colspan="2" >GESTION: 2022</th>
+          <th colspan="4">Nº:{{empresa.num_empresa}}</th>
+      </tr>
+     <tr>
+           
+          <th colspan="4">USUARIO:{{empresa.usuario_ofv}}</th>
+          <th colspan="4">CONTRASEÑA:{{empresa.pass_ofv}}</th>  
+      </tr>
+      <tr>
+          <th colspan="4">ACTIVIDAD:{{empresa.actividad}}</th>
+          <th colspan="3">TARJETA:{{empresa.tarjeta_galileo}}</th>
+          <th colspan="3">PIN:{{empresa.pin_galileo}} {{empresa.comision}}</th>
+         
+      </tr>
+      </ng-template>
+    </p-table>
+    
+    <p-toast [showTransitionOptions]="'4000ms'"></p-toast>
+
+<section class="layout">
+    <div *ngFor="let datospuntoventa of puntoventa; let i = index">
+        <label> {{datospuntoventa.puntoventa_nombre}} {{datospuntoventa.puntoventa_num_sucursall}} </label> 
+
+       <p-button icon="pi pi-plus" class="botonpeque" label="Agregar" (click)="mostrarFormularioAdicional(i)"></p-button>
+
+
+
+
+       
+            <div class="formulario-adicional" *ngIf="formularioAdicionalVisible[i]">
+             
+                <div class="form-group">
+                  <label for="tipo">Tipo:</label>
+                  <select id="tipo" class="form-control" [(ngModel)]="opcion[i]" name="tipo" style="width: 150px;" (change)="selecttipo(opcion[i],i)">
+                    <option *ngFor="let tipo of actividadestipo" [value]="tipo.seccion">{{tipo.seccion}} . {{tipo.nombre}}</option>
+                  </select>
+
+
+                  <label for="seccion">Seccion:</label>
+                    <select id="seccion" class="form-control" [(ngModel)]="opcionseccion[i]" name="seccion" style="width: 150px;" (change)="selecSeccion(opcion[i],opcionseccion[i],i)">
+                      <option *ngFor="let seccion of secciones[i]" [value]="seccion.division">{{seccion.seccion}} . {{seccion.nombre}}</option>
+                    </select>
+
+
+
+                    <label for="division">Division:</label>
+                    <select id="division" class="form-control" [(ngModel)]="opciondivision[i]" name="division" style="width: 150px;" >
+                        <option *ngFor="let division of divisiones[i]" [value]="division.idactividades">{{division.seccion}} . {{division.nombre}}</option>
+                    </select>
+
+                   
+                </div>
+
+             
+
+                    
+  
+                <p-button class="botonpeque" label="Agregar Nueva Actividad" (click)="postactividad(opciondivision[i],i,datospuntoventa.puntoventa_idpuntoventa)"></p-button>
+                <p-button class="botonpeque0" label="Cancelar" (click)="cerrarformulario(i)"></p-button>
+              
+            </div>
+
+            <div *ngFor="let actividad of datospuntoventa.actividades_idactividades; let j = index" class="actividad-container">
+                <label for="Actividad">Actividad: {{actividad.seccion}}. {{actividad.nombre}}</label>
+                
+                <p-button icon="pi pi-pencil"  severity="success" class="botonpeque4" (click)="patchActividad(j,actividad.idactividades,datospuntoventa.puntoventa_idpuntoventa)"></p-button>
+                <p-button icon="pi pi-times"  severity="danger" class="botonpeque5" (click)="confirmationdeleteActividad(j,actividad.idactividades,datospuntoventa.puntoventa_idpuntoventa)"></p-button>
+                <p-button icon="pi pi-lock"  severity="danger" class="botonpeque6" (click)="deshabilitarActividad(j,actividad.idactividades,datospuntoventa.puntoventa_idpuntoventa)"></p-button>
+          
+            </div>
+          </div>
+
+</section>
+
+
+
+
+  
+
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '20vw'}"></p-confirmDialog>
+
