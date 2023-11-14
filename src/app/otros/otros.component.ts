@@ -9,6 +9,7 @@ import { OtrossumasService } from '../services/otrossumas.service';
 import { lastValueFrom, take } from 'rxjs';
 import { otrossumas } from '../models/otrossumas.model';
 import { v4 as uuidv4 } from 'uuid';
+import { LocalStorageService } from '../services/local-storage.service';
 
 @Component({
   selector: 'app-otros',
@@ -24,6 +25,7 @@ export class OtrosComponent {
     private hotRegistererotros: HotTableRegisterer,
     private sumasotrosService:  OtrossumasService,
     private cdr: ChangeDetectorRef,
+    private dbLocal:LocalStorageService,
     ) { }  
     
     idtalonario = 'hotInstance';
@@ -38,6 +40,7 @@ export class OtrosComponent {
      sumaotros: number =0;
      idcentralizadormes:string ="";
      otrosarray: otrossumas= new otrossumas;
+     otrosarray2:  otrossumas = new otrossumas();
     
   
   //PRUEBA Handsontable, DA
@@ -47,8 +50,9 @@ export class OtrosComponent {
 
   ngOnInit(){
     
-    this.traermisdatos();
-    //this.iniciarIntervalo();
+   // this.traermisdatos();// quitar traer mis datos
+    this.misdatoslocalstorage();
+    this.iniciarIntervalo();
   }
   
   ngOnDestroy() {
@@ -66,6 +70,16 @@ export class OtrosComponent {
     if (this.intervaloID) {
       clearInterval(this.intervaloID);
     }
+  }
+
+  async misdatoslocalstorage(){
+    const source$ = this.sumasotrosService.getOtrossumas(this.parametroDelPadreidcentralizadormes); //con esto traigo el id
+    const data:any = await lastValueFrom(source$);
+    this.dbLocal.SetOtros(data[0].otrossumas);
+    let datosdeotrossumas=this.dbLocal.GetOtros()
+    this.otrosarray = datosdeotrossumas
+    await this.crearmitabla();
+    await this.cdr.detectChanges();
   }
   
   async traermisdatos(){

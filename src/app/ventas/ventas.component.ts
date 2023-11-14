@@ -9,6 +9,8 @@ import { MespuntoventasumaService } from '../services/mespuntoventasuma.service'
 import { lastValueFrom, take } from 'rxjs';
 import { mespuntoventasuma } from '../models/mespuntoventasuma.model';
 import { v4 as uuidv4 } from 'uuid';
+import { PuntoventaactividadService } from '../services/puntoventaactividad.service';
+import { ventactividad } from '../models/ventaactividad.model';
 
 @Component({
   selector: 'app-ventas',
@@ -25,6 +27,9 @@ export class VentasComponent {
   puntoventa: Puntoventa[]=[];
   puntoventa2:mespuntoventasuma[] = [];
   jsonarraypuntoventa:any = [];
+  idpuntoventaactividad:any[]=[];
+  puntoventa3:any[]=[];
+  puntoventa4:ventactividad[]=[];
  
  
 
@@ -32,32 +37,54 @@ export class VentasComponent {
   constructor(private modalService:ModalserviceService,
               private puntoventaService: PuntoventaService,  
               private dblocal: LocalStorageService ,
-              private mespuntoventasumaService: MespuntoventasumaService,   
+              private mespuntoventasumaService: MespuntoventasumaService, 
+              private puntoventaactividadService: PuntoventaactividadService,  
     ) { }
 
 
   ngOnInit(){
-    this.mespuntoventasuma();
     console.log("holos mi id emeprsa???",this.dblocal.GetDatosEmpresa().idempresa);
     this.idempresaglobal=Number(this.dblocal.GetDatosEmpresa().idempresa);
-    
-    this.getPuntoVenta();
+    this.mespuntoventasuma();
+    this.getPuntoVentaactividad();
   }
 
-  getPuntoVenta(){
-    ///de aqui tengo que jalar las sucursales 
-  this.puntoventaService.getPuntoVenta(this.idempresaglobal)
+ async getPuntoVentaactividad(){
+    ///traigo los iddemi tabla idpuntoventaactividad para crear y poner a mi tabla mes ventasuma
+    await this.puntoventaactividadService.getPuntoventaactividad(this.idempresaglobal)
   .subscribe(
-    (data: any) => {
-      this.puntoventa=data;
-         console.log("es el  data", data);
-         console.log("es el modelo del data", this.puntoventa);
-         console.log("es el  data nombre", data[0].nombre);
+     (data: any) => {
+      this.idpuntoventaactividad=data; //aqui estan los id de la tabla actividad para introducir a la tabla mesventasuma 
+      if(data ===null){
+        //esta vacio SIGNIFICA QUE HAY QUE CREAR ACTIVIDADES PARA ESA EMPRESA NO TIENE
+        console.log("NO TIENE ACTIVIDADES....");
+      }else{
+        //traemos ...aqui introduciria a la tabla y jalamos 
+        console.log("TIENE ACTIVIDADES....INTRODUCIMOS Y JALAMOS");
+              this.traerdatos();   
+        //primero traemos todo
+        
+        
+      }
+         
+         console.log("es el  dataaaaaaaaaaaaaaaa", data);
+         console.log("es el modelo del dataaaaaaaaaaaaaa", this.idpuntoventaactividad);
+         
       
     }
     
    );
     
+  }
+  async traerdatos(){
+     
+    const source$ =this.puntoventaactividadService.getPuntoventaactividad(this.idempresaglobal);
+    const data:any = await lastValueFrom(source$);
+    this.puntoventa3=data;
+    
+    console.log("mis datos data de aslkdjhasidhbasjkdnlaskdas",data.data)
+    console.log("mis datos data de mi this4",this.puntoventa4)
+
   }
 
 
@@ -82,8 +109,8 @@ async mespuntoventasuma(){
     
   //this.mespuntoventasumaService.createmespuntoventasuma(this.idcentralizadormes);
 
-console.log("HOLSOOOOOOOOOOOOOOOOOOOOOOOOOO ES EL MI idcentralizadormes",this.parametroDelPadreidcentralizadormes)
-const source$ = this.mespuntoventasumaService.getmespuntoventasuma(this.parametroDelPadreidcentralizadormes); //con esto traigo el id
+console.log("HOLSOOOOOOOOOOOOOOOOOOOOOOOOOO ES EL MI idempresaaa",this.idempresaglobal)
+const source$ = this.puntoventaactividadService.getPuntoventaactividad(this.idempresaglobal); //con esto traigo el id
 const data:any = await lastValueFrom(source$);
 console.log("mis datos data de mespuntiventasumaAAAAA",data)
 

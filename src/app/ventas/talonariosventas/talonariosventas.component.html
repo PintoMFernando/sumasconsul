@@ -1,12 +1,5 @@
 <div class="opciones">
-  <div class="actividad">
-  <label> Actividad </label>
-  <select id="selectOption" name="selectOption"  [(ngModel)]="actividad" >
-    <option value="Caza Matriz">Casa Matriz</option>
-    <option value="Alquiler">Alquiler</option>
-    <option value="Restaurante">Restaurante</option>
-  </select>
-</div>
+  
 <div class="talonarios">
     <label> Talonarios </label>
   <input
@@ -21,7 +14,7 @@
         <tr>
           <td colspan="2">
 
-            <input type="text" [value]="actividad" readonly center>
+            <input type="text" [value]="nombreactividad" readonly center>
           </td>
         </tr>
         <tr>
@@ -38,7 +31,7 @@
             <label for="campo3">Factura Inicial:</label>
           </td>
           <td>
-            <input type="number" id="campo4" name="campo4" [(ngModel)]="factinicial" [value] ="0" required="true" [disabled]="tablas.bloqueada"/>
+            <input type="number" id="campo4" name="campo4" [(ngModel)]="factinicial[i]" [value] ="0" required="true" [disabled]="tablas.bloqueada"/>
           </td>
         </tr>
 
@@ -47,7 +40,7 @@
             <label for="campo5" >Factura Final:</label>
           </td>
           <td>
-            <input type="number" id="campo6" name="campo6" [(ngModel)]="factfinal" [disabled]="tablas.bloqueada"/>
+            <input type="number" id="campo6" name="campo6" [(ngModel)]="factfinal[i]" [disabled]="tablas.bloqueada"/>
           </td>
         </tr>
 
@@ -56,13 +49,13 @@
             <label for="campo7">Anular-Monto:</label>
           </td>
           <td>
-            <p-checkbox [binary]="true" inputId="binary" [(ngModel)]="agregarFilas" ></p-checkbox> 
+            <p-checkbox [binary]="true" inputId="binary" [(ngModel)]="agregarFilas[i]" ></p-checkbox> 
           </td>  
         </tr>
-        <tr *ngIf="agregarFilas">
+        <tr *ngIf="agregarFilas[i]">
           <td colspan="1">Ponga el Monto:</td>
           <input type="text" [(ngModel)]="montodinamico"/>
-          <td colspan="1"><button (click)="anulacionChange()">crear</button></td>
+          <td colspan="1"><button (click)="anulacionChange(i)">crear</button></td>
         </tr>
 
         <tr>
@@ -74,7 +67,7 @@
         <tr>
             <td colspan="2">
                 
-                    <hot-table [settings]="tablas" [hotId]="idtalonario"  ></hot-table>
+                    <hot-table [settings]="tablas" [hotId]="'talonario' + i"  ></hot-table>
                     <button (click)="guardarDatos(i)" [disabled]="tablas.bloqueada">Guardar</button>
 
                
@@ -83,3 +76,4 @@
         
    
     </div>
+    <p-toast></p-toast>

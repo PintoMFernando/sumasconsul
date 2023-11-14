@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { LocalStorageService } from '../services/local-storage.service';
 import { Empresa } from '../models/empresa.model';
 import { EmpresaService } from '../services/empresa.service';
 import { ActivatedRoute } from '@angular/router';
 import { PuntoventaService } from '../services/puntoventa.service';
 import { Puntoventa } from '../models/puntoventa.model';
-import { lastValueFrom } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { ActividadesService } from '../services/actividades.service';
 import { PuntoventaactividadService } from '../services/puntoventaactividad.service';
 
@@ -30,15 +30,25 @@ export class ActividadesComponent {
     public puntoventaactividadService: PuntoventaactividadService,
     public messageService: MessageService,
     private confirmationService: ConfirmationService,
-    public modalService: ModalserviceService
+    public modalService: ModalserviceService,
+    private cdRef: ChangeDetectorRef,  
 
 
 ) {
+  this.suscripcion = this.modalService.obtenerMensaje().subscribe((mensaje) => {
+    console.log("concluye el mensaje");
+  this.getpuntoventa();
+  this.cdRef.detectChanges();
+  this.mensaje = mensaje;
+  console.log(mensaje);
+  });
+
   
 
 
 }
-
+  suscripcion: Subscription;
+  mensaje: string = '';
   campo1:string ="";
   empresa: Empresa = new Empresa();
   idempresa: number =0; 
@@ -60,34 +70,39 @@ export class ActividadesComponent {
   puntoventa: any []=[];
   deletebutton: any[]=[];
   patchbutton: any[]=[];
-  
+  estadoBoton: boolean[] = [];
+  mostrarDatos: boolean []= [];
 
 
   ngOnInit(){
    // let id=Number(this.dblocal.GetDatosEmpresa().idempresa)
     this.empresa = this.dblocal.GetDatosEmpresa();
     this.idempresa=Number(this.empresa.idempresa); 
+    
     this.getpuntoventa();
-    this.getpuntoventaseccion();
-
+    
+    
    
 
 
   }
   async getpuntoventa(){
     this.puntoventa=[];
-    const source$ =  this.puntoventaactividadService.getPuntoventaactividad(this.idempresa);
+    const source$ =  this.puntoventaService.getPuntoventaactividad(this.idempresa);
     const data:any = await lastValueFrom(source$);
     this.puntoventa=data;
+    
     
 
     this.puntoventa.forEach(() => this.formularioAdicionalVisible.push(false));
     console.log("SON MIS DATOS EN DATA", this.puntoventa);
     console.log("VISIBLE", this.formularioAdicionalVisible);
    
-   
+    await this.getpuntoventaseccion();
     
   }
+  
+
 
   async getpuntoventaseccion(){
   
@@ -114,6 +129,7 @@ export class ActividadesComponent {
         error: (error) => { console.log('Este es el error', error)}, 
          
        });
+       this.divisiones[index]=[];
        
 
   }
@@ -133,7 +149,7 @@ export class ActividadesComponent {
   }
 
   async postactividad(opciondivision:number,index:number,idpuntoventa:any){
-     
+    this.mostrarDatos[index] = !this.mostrarDatos[index];
     this.formularioAdicionalVisible[index]=false;
     this.secciones[index]=[];
     this.divisiones[index]=[];
@@ -253,9 +269,17 @@ export class ActividadesComponent {
 
   }
 
-  deshabilitarActividad(index2:number,idactividades:number,idpuntoventa:number){
+  async deshabilitarActividad(index2:number,idactividades:number,idpuntoventa:number){
+    const source$ = this.puntoventaactividadService.getPuntoventaactividadbusqueda(Number(idactividades),Number(idpuntoventa)); 
+    const data:any = await lastValueFrom(source$);
+    const resultado = data.find((item: any) => item.idpuntoventa === idpuntoventa && item.idactividades === idactividades);
+    const idpuntoventaactividad= String(resultado.idpuntoventaactividad)
+    this.estadoBoton[index2]= Boolean(resultado.estado)
+    const jsondatos ={
+      estado: !this.estadoBoton[index2]
+    }
+   await this.puntoventaactividadService.patchPuntoventaactividad(idpuntoventaactividad,jsondatos);
    
-    //this.puntoventaactividadService.patchPuntoventaactividad()
 
   }
 

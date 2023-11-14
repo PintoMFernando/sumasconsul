@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
-import { firstValueFrom } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
 
@@ -23,4 +23,17 @@ export class SumatalonarioService {
  
  
  }
+
+ /*getTalonariosuma(idcentralizadormes:string): Observable<puntoventaactividad>{
+  return this.http.get<puntoventaactividad>(`${this.baseUrl}/puntoventaactividad/${idempresa}`).pipe(
+   catchError((error)=>{
+     console.log('Error desde el servicio',error)
+     return throwError(() => error);
+   })
+  )
+  
+  }
+*/
+ 
+
 }

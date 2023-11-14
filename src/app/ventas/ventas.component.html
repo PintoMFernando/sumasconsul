@@ -3,13 +3,35 @@
   <p-tabView >
     <button pButton type="button" icon="pi pi-plus" class="p-button-text" (click)="observaciones()">Observaciones</button>
     
-    <p-tabPanel header="Nombre {{sucursal.puntoventa?.nombre}} Nº{{sucursal.puntoventa?.num_sucursall}} " *ngFor="let sucursal of puntoventa2"  >
-        <tr> 
-         <td><app-talonariosventas [idmespuntoventasuma]=sucursal.idmespuntoventasuma></app-talonariosventas></td>
-         <td><app-talonariosprevalorados [idmespuntoventasuma]=sucursal.idmespuntoventasuma></app-talonariosprevalorados></td>
-         <td><app-talonarioselectronicos [idmespuntoventasuma]=sucursal.idmespuntoventasuma></app-talonarioselectronicos></td>
+    <p-tabPanel header="Nombre {{sucursal.nombrepuntoventa}} Nº{{sucursal.num_sucursall}} " *ngFor="let sucursal of puntoventa3"  >
+      
+      
+      <tr> 
+         <td>
+          <p-tabView >
+
+            <p-tabPanel header="{{actividad.nombreactividades}} " *ngFor="let actividad of sucursal.data"  >
+                 
+              <tr>
+                  <td> <app-talonariosventas [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.nombreactividades></app-talonariosventas></td>
+                  <td><app-talonariosprevalorados [idmespuntoventasuma]=sucursal.idmespuntoventasuma></app-talonariosprevalorados></td>
+                  <td><app-talonarioselectronicos [idmespuntoventasuma]=sucursal.idmespuntoventasuma></app-talonarioselectronicos></td>
+                
+              </tr>
+
+            </p-tabPanel>
+
+          </p-tabView>
+
+         
+        
+        
+        
+        </td>
+        
         
         </tr>
+      
     </p-tabPanel>
 
      

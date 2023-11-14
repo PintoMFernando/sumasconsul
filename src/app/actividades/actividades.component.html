@@ -37,20 +37,20 @@
                 <div class="form-group">
                   <label for="tipo">Tipo:</label>
                   <select id="tipo" class="form-control" [(ngModel)]="opcion[i]" name="tipo" style="width: 150px;" (change)="selecttipo(opcion[i],i)">
-                    <option *ngFor="let tipo of actividadestipo" [value]="tipo.seccion">{{tipo.seccion}} . {{tipo.nombre}}</option>
+                    <option *ngFor="let tipo of actividadestipo" [value]="tipo?.seccion">{{tipo?.seccion}} . {{tipo?.nombre}}</option>
                   </select>
 
 
                   <label for="seccion">Seccion:</label>
                     <select id="seccion" class="form-control" [(ngModel)]="opcionseccion[i]" name="seccion" style="width: 150px;" (change)="selecSeccion(opcion[i],opcionseccion[i],i)">
-                      <option *ngFor="let seccion of secciones[i]" [value]="seccion.division">{{seccion.seccion}} . {{seccion.nombre}}</option>
+                      <option *ngFor="let seccion of secciones[i]" [value]="seccion?.division">{{seccion?.seccion}} . {{seccion?.nombre}}</option>
                     </select>
 
 
 
                     <label for="division">Division:</label>
                     <select id="division" class="form-control" [(ngModel)]="opciondivision[i]" name="division" style="width: 150px;" >
-                        <option *ngFor="let division of divisiones[i]" [value]="division.idactividades">{{division.seccion}} . {{division.nombre}}</option>
+                        <option *ngFor="let division of divisiones[i]" [value]="division?.idactividades">{{division?.seccion}} . {{division?.nombre}}</option>
                     </select>
 
                    
@@ -65,15 +65,19 @@
               
             </div>
 
-            <div *ngFor="let actividad of datospuntoventa.actividades_idactividades; let j = index" class="actividad-container">
-                <label for="Actividad">Actividad: {{actividad.seccion}}. {{actividad.nombre}}</label>
+          
+            
+
+              <div *ngFor="let actividad of datospuntoventa.actividades_idactividades; let j = index" class="actividad-container">
+                <label for="Actividad">Actividad: {{actividad?.seccion}}. {{actividad?.nombre}}</label>
                 
                 <p-button icon="pi pi-pencil"  severity="success" class="botonpeque4" (click)="patchActividad(j,actividad.idactividades,datospuntoventa.puntoventa_idpuntoventa)"></p-button>
                 <p-button icon="pi pi-times"  severity="danger" class="botonpeque5" (click)="confirmationdeleteActividad(j,actividad.idactividades,datospuntoventa.puntoventa_idpuntoventa)"></p-button>
-                <p-button icon="pi pi-lock"  severity="danger" class="botonpeque6" (click)="deshabilitarActividad(j,actividad.idactividades,datospuntoventa.puntoventa_idpuntoventa)"></p-button>
-          
+                <p-button  [icon]="estadoBoton[j] ? 'pi pi-lock' : 'pi pi-lock-open'" [class]="estadoBoton[j] ? 'botonpeque6' : 'botonpeque6'" (click)="deshabilitarActividad(j,actividad.idactividades,datospuntoventa.puntoventa_idpuntoventa)"></p-button>
+              
             </div>
-          </div>
+          
+    </div>
 
 </section>
 

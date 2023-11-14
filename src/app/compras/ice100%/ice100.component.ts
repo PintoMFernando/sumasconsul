@@ -11,6 +11,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { error } from 'jquery';
 import { lastValueFrom, take } from 'rxjs';
 import { Comprassumasdetalle } from 'src/app/models/comprassumasdetalle';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { ActivatedRoute } from '@angular/router';
+import { Comprassumas } from 'src/app/models/comprassumas';
 
 @Component({
   selector: 'app-ice100',
@@ -26,6 +29,8 @@ export class Ice100Component {
     public mesconcomprasumasservice: ComprassumasService,
      public comprassumasdetalleService:  ComprassumasdetalleService,
      private cdr: ChangeDetectorRef,
+     private dbLocal:LocalStorageService,
+     private route: ActivatedRoute,
     
     private hotRegisterer3: HotTableRegisterer,
     ) { }  
@@ -41,12 +46,15 @@ export class Ice100Component {
     sumadescuento: number = 0;
     sumacompratotal: number = 0;
     idcomprasuma: string =""; 
-    //datosMatriz: any[] = [];
-    datosTabla: any[] = [];
+    datosMatriz: any[] = [];
+    //datosTabla: any[] = [];
+    datosTabla:  Comprassumas = new Comprassumas();
     datossumastabla: Comprassumasdetalle = new Comprassumasdetalle();
     //idd:string = "";
      settingFormula = false;
      intervaloID: any;
+     itemcompras:  Comprassumas = new Comprassumas();
+     idcentralizadormes: string='';
   
   //PRUEBA Handsontable, DA
   hyperformulaInstance = HyperFormula.buildEmpty({
@@ -54,9 +62,53 @@ export class Ice100Component {
   });
 
   ngOnInit(){
-    this.miid();
+
+    this.jsonComprassArray=[];
+   // this.miIdcentralizadormes();
+    this.traerdatoslocalStoragecompras();
+    //this.miid();
     this.iniciarIntervalo();
   
+  }
+
+  /*async miIdcentralizadormes(){
+    const sources$ = this.mesconcomprasumasservice.getComprassumas(this.parametroDelPadreidcentralizadormes); //con esto traigo el id de centralizadormes al localstorage
+    const datas:any = await lastValueFrom(sources$);
+    this.dbLocal.SetCentralizadormes(datas[0].comprassumas.idcomprasuma);
+  }*/
+
+ async traerdatoslocalStoragecompras(){
+
+    
+   // let idcentralizadormes = Number(this.route.snapshot.paramMap.get('idcentralizadormes'));  //este es el id global de user
+   
+   // this.mesconcomprasumasservice.getComprassumas(this.parametroDelPadreidcentralizadormes).subscribe((data: any) => {
+    const source$ = this.mesconcomprasumasservice.getComprassumas(this.parametroDelPadreidcentralizadormes); //con esto traigo el id
+    const data:any = await lastValueFrom(source$); 
+   // const idcomprasumas=data[0].comprassumas.idcomprasuma;
+    this.idcomprasuma=data[0].comprassumas.idcomprasuma;
+   //let idcentralizadormes=String(this.dbLocal.GetCentralizadormes().idcentralizadormes)
+    
+
+    const sources$ = this.comprassumasdetalleService.getComprassumassolodetalles(this.idcomprasuma);
+    const dataa:any = await lastValueFrom(sources$);
+   this.dbLocal.SetCompras(dataa);
+   this.itemcompras = this.dbLocal.GetCompras();
+   console.log("estoy actualixadnpoooooooooooooooooooooABAJODATAAA", dataa)
+    console.log("estoy actualixadnpoooooooooooooooooooooABAJO", this.dbLocal.SetCompras(dataa))
+    //this.idcomprasuma = itemcompras.comprassumas.idcomprasuma;
+     this.datossumadetalles();
+
+    
+       
+   // });
+
+  }
+  async actualizarlocalstorage(){
+    const sources$ = this.comprassumasdetalleService.getComprassumassolodetalles(this.idcomprasuma);
+    const dataa:any = await lastValueFrom(sources$);
+     this.dbLocal.SetCompras(dataa);
+
   }
   
   ngOnDestroy() {
@@ -81,24 +133,31 @@ export class Ice100Component {
     this.idcomprasuma="";
     const source$ = this.mesconcomprasumasservice.getComprassumas(this.parametroDelPadreidcentralizadormes); //con esto traigo el id
     const data:any = await lastValueFrom(source$);
-    
     this.idcomprasuma = data[0].comprassumas.idcomprasuma;
-    
     this.datossumadetalles();
+
+   
+
+   
+
+   // this.itemcompras = this.dbLocal.GetCompras();
+    //const idcomprasumas = datas[0].comprassumas.idcomprasuma;
+
     
 
   }
 
   async datossumadetalles(){
-   
-   const source$ = this.comprassumasdetalleService.getComprassumassolodetalles(this.idcomprasuma);
+    console.log("ENTRA A DATOSSUMADETALLES");
+   /*const source$ = this.comprassumasdetalleService.getComprassumassolodetalles(this.idcomprasuma);
    const data:any = await lastValueFrom(source$);
    console.log("SON MIS DATOS EN DATA", data);
-   //this.datosMatriz = data.map((item: any)  => [item.monto, item.descuento,item.montogasolina, item.ice100,item.icecreditofis,item.descuentoice100]); //mapea para traqnsformar a matriz
-   
-   //this.datossumastabla=data;
-   this.datosTabla=data;
-   
+   */
+    let datosdecompras=this.dbLocal.GetCompras()
+  // this.datosTabla=data;  //aqui estaba con data
+   this.datosTabla=datosdecompras;
+
+   //this.datosTabla=datosdecompras;
   //this.datosTabla.concat(data);
 
    /*this.datosTabla.forEach((obj:any) => {
@@ -119,8 +178,8 @@ export class Ice100Component {
    
   });*/
  // this.hotSettingsArray=[];
-  this.crearmitabla();
-  this.cdr.detectChanges();
+  await this.crearmitabla();
+  await this.cdr.detectChanges();
   console.log("SON MIS DATOS CONVERTIDOS datos tabla", this.datosTabla);
 }
 
@@ -283,11 +342,12 @@ export class Ice100Component {
   //this.hotRegisterer3.getInstance('tabla3').setDataAtCell(0, 2, '=SUM(A:A)-SUM(B:B)');
   
   this.hotSettingsArray[0].data = this.datosTabla;
-  this.datosTabla=[];
+  this.datosTabla={};
+  //this.datosTabla= [];
   //this.hotSettingsArray[0].data = pruebaMatriz;
   console.log("AQUI ESTAN MIS DATOS PARA LA TABLApero en lo que cree",this.datosTabla);
   
-  console.log("AQUI ESTAN MIS DATOS PARA LA TABLA",this.hotSettingsArray[0].data);
+  console.log("AQUI ESTAN MIS DATOS PARA LA TABLAAAAAAAAAAAAAAAA",this.hotSettingsArray[0].data);
   //this.hotSettingsArray[0].data = pruebaMatriz;
 
   
@@ -313,7 +373,8 @@ async guardar(){
     const matrizdata =this.hotRegisterer3.getInstance('tabla3').getData()
     console.log("HOLSO ES MI AMTRIADATA",  matrizdata);
   for (const fila of matrizdata) {
-    if (fila[0] !== null || fila[1] !== null || fila[3] !== null|| fila[4] !== null || fila[5] !== null || fila[6] !== null || fila[7] !== null) {
+    console.log("tamanio de fila ", fila.length)
+    if (fila[0] !== null || fila[1] || fila[2] !== null || fila[3] !== null|| fila[4] !== null || fila[5] !== null || fila[6] !== null) {
       const jsondataice100 ={
            idcomprasumadetalle:uuidv4(),
            monto:fila[0] || 0,
@@ -329,7 +390,7 @@ async guardar(){
     }
   
 }
-this.insertardatos();
+await this.insertardatos();
 console.log("holos es el json que contiene SUMASDETALLES",this.jsonComprassArray);
 }
 
@@ -350,10 +411,11 @@ async insertardatos(){
       await this.comprassumasdetalleService.deleteComprasumadetalles(this.idcomprasuma);
       await this.comprassumasdetalleService.postComprasumadetalles(this.jsonComprassArray);
       this.jsonComprassArray=[];
+      
     }
 
- 
-    
+     this.actualizarlocalstorage();
+     this.cdr.detectChanges();
   //tengo que preguntar si hay o no hjay datos
  
    // this.comprassumasdetalleService.postComprasumadetalles(this.jsonComprassArray)

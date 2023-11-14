@@ -66,7 +66,7 @@ export class UpdatepuntoventaactividadComponent {
         error: (error) => { console.log('Este es el error', error)}, 
          
        });
-       
+       this. divisiones=[];
 
   }
 
@@ -98,7 +98,8 @@ export class UpdatepuntoventaactividadComponent {
     }
     console.log("asdasdasd",jsondatos);
    await this.puntoventaactividadService.patchPuntoventaactividad(idpuntoventaactividad,jsondatos);
-    
+   await this.modalService.enviarMensaje("holosactualizate"); //con esto actualiza actividades
+   this.cerrarModal();
 
   }
 

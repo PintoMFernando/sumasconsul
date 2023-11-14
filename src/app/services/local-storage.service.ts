@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Empresa } from '../models/empresa.model';
 import { User } from '../models/user.model';
+import { Comprassumasdetalle } from '../models/comprassumasdetalle';
+import { Comprassumas } from '../models/comprassumas';
+import { Centralizadormes } from '../models/centralizadormes.model';
+import { otrossumas } from '../models/otrossumas.model';
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +48,81 @@ export class LocalStorageService {
   StateUser():boolean{
     return localStorage.getItem("cruge_user")!==null;
   }
+
+   
+
+  /*SetCentralizadormes(centralizadormes: Centralizadormes){
+    localStorage.setItem("centralizadormes",JSON.stringify(centralizadormes));
+  }
+  GetCentralizadormes():Centralizadormes{
+    if(localStorage.getItem("centralizadormes")){
+      let centralizadormes = localStorage.getItem("centralizadormes")??'';
+      return JSON.parse(centralizadormes);
+    }
+    else
+    return new Centralizadormes();
+  }
+  StateCentralizadormes():boolean{
+    return localStorage.getItem("centralizadormes")!==null;
+  }
+*/
+
+
+
+  SetCompras(comprassumas:Comprassumas){
+    localStorage.setItem("comprassumas",JSON.stringify(comprassumas));
+  }
+  GetCompras():Comprassumas{
+    if(localStorage.getItem("comprassumas")){
+      let comprassumas = localStorage.getItem("comprassumas")??'';
+      return JSON.parse(comprassumas);
+    }
+    else
+    return new Comprassumas();
+  }
+  StateCompras():boolean{
+    return localStorage.getItem("comprassumas")!==null;
+  }
+
+
+
+
+
+
+
+  SetVentas(ventas:User){
+    localStorage.setItem("ventas",JSON.stringify(ventas));
+  }
+  GetVentas():User{
+    if(localStorage.getItem("ventas")){
+      let ventas = localStorage.getItem("ventas")??'';
+      return JSON.parse(ventas);
+    }
+    else
+    return new User();
+  }
+  StateVentas():boolean{
+    return localStorage.getItem("ventas")!==null;
+  }
+
+
+  SetOtros(otrosumas:otrossumas){
+    localStorage.setItem("otrosumas",JSON.stringify(otrosumas));
+  }
+  GetOtros():otrossumas{
+    if(localStorage.getItem("otrosumas")){
+      let otrosumas = localStorage.getItem("otrosumas")??'';
+      return JSON.parse(otrosumas);
+    }
+    else
+    return new otrossumas();
+  }
+  StateOtros():boolean{
+    return localStorage.getItem("otrosumas")!==null;
+  }
+
+
+
+
 
 }

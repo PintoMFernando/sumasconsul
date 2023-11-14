@@ -24,6 +24,18 @@
     color: rgb(241, 237, 232) !important;
     text-align: center;
   }
+  .botonpeque0 .p-button{
+    font-size: 10px !important; /* Ajusta el tamaño de la fuente */
+    padding: 2px 4px !important;
+    background-color: rgb(175, 86, 80);
+  }
+
+  .botonpeque .p-button{
+    font-size: 10px !important; /* Ajusta el tamaño de la fuente */
+    padding: 2px 4px !important;
+    background-color: rgb(80, 90, 175);
+  }
+
   .botonpeque1 .p-button{
     font-size: 1px !important; /* Ajusta el tamaño de la fuente */
     padding: 1px 2px !important;
@@ -33,14 +45,34 @@
     font-size: 5px !important; /* Ajusta el tamaño de la fuente */
     padding: 1px 2px !important;
     background-color: rgb(80, 90, 175);
-    
-   
   }
   .botonpeque3 .p-button{
     font-size: 1px !important; /* Ajusta el tamaño de la fuente */
     padding: 1px 2px !important;
     background-color: rgb(24, 218, 111);
   }
+
+  .botonpeque4 .p-button{
+    font-size: 1px !important; /* Ajusta el tamaño de la fuente */
+    padding: 1px 2px !important;
+    width: 5px;
+    background-color: rgb(24, 218, 111);
+  }
+
+  .botonpeque5 .p-button{
+    font-size: 1px !important; /* Ajusta el tamaño de la fuente */
+    padding: 1px 2px !important;
+    background-color: rgb(218, 24, 24);
+  }
+
+  
+  .botonpeque6 .p-button{
+    font-size: 1px !important; /* Ajusta el tamaño de la fuente */
+    padding: 1px 2px !important;
+    background-color: rgb(170, 143, 143);
+  }
+  
+
   probado .p-button{
     font-size: 10px !important; /* Ajusta el tamaño de la fuente */
     padding: 4px 8px !important;
@@ -93,4 +125,6 @@
     color: #fff;
   }
 
- 
+  .actividad-container {
+    margin-bottom: 50px; /* Ajusta el valor según tu preferencia */
+}
