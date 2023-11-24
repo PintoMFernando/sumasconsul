@@ -58,8 +58,8 @@
           <p-button icon="pi pi-eye" (click)="showDialogIVA()"  [style]="{'width':'2px','height':'2px','background-color': '#DA3838'}" ></p-button>
         </th>
         <th>Saldo IUE :
-          <input type="number" class="custom-input"  [disabled]="!checkboxsaldoiuenput" value="{{centralizadormes.saldoiue}}">
-          <p-checkbox  [binary]="true" inputId="binary"  [(ngModel)]="checkboxsaldoiuenput"></p-checkbox>
+          <input type="number" class="custom-input"  [disabled]="!checkboxsaldoiuenput" value="{{centralizadormes.saldoiue}}"  [(ngModel)]="saldoiuecontenido" (ngModelChange)="onsaldoIueChange()">
+          <p-checkbox  [binary]="true" inputId="binary"  [(ngModel)]="checkboxsaldoiuenput" (ngModelChange)="onsaldoiueChange()"></p-checkbox>
           <p-button icon="pi pi-eye" (click)="showDialogIUE()"  [style]="{'width':'2px','height':'2px','background-color': '#DA3838'}" ></p-button>
       </th>
       <th>Comision 
@@ -121,4 +121,4 @@
 
 
 
-<button>Guardar</button>
+<button (click)="calcularCentralizadormes()">Guardar</button>

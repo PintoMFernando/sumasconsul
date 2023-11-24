@@ -39,8 +39,14 @@ export class Ice100Component {
     hotSettingsArray: any[] =[]; 
     bloqeuarboton:boolean =false;
     jsonComprassArray:any = [];
+    jsonComprassTotalesArray:any = [];
     sumacompra100: number = 0;
+    sumacompra100bruto: number = 0;
+    sumacompra100excento: number = 0;
+    sumacompra100neto: number = 0;
+
     sumacompragasolina: number = 0;
+    sumacompragasolina30: number = 0;
     sumacompraice: number = 0;
     sumacompracf: number = 0;
     sumadescuento: number = 0;
@@ -64,6 +70,7 @@ export class Ice100Component {
   ngOnInit(){
 
     this.jsonComprassArray=[];
+    this.jsonComprassTotalesArray=[];
    // this.miIdcentralizadormes();
     this.traerdatoslocalStoragecompras();
     //this.miid();
@@ -178,9 +185,10 @@ export class Ice100Component {
    
   });*/
  // this.hotSettingsArray=[];
+  console.log("SON MIS DATOS CONVERTIDOS datos tabla", this.datosTabla);
   await this.crearmitabla();
   await this.cdr.detectChanges();
-  console.log("SON MIS DATOS CONVERTIDOS datos tabla", this.datosTabla);
+ 
 }
 
    
@@ -217,6 +225,21 @@ export class Ice100Component {
        this.sumacompracf = this.hotRegisterer3.getInstance('tabla3').getDataAtCell(3, 2);
         this.sumadescuento = this.hotRegisterer3.getInstance('tabla3').getDataAtCell(4, 2);
         this.sumacompratotal = this.hotRegisterer3.getInstance('tabla3').getDataAtCell(5,2);
+
+
+        this.sumacompra100bruto = this.hotRegisterer3.getInstance('tabla3').getDataAtCell(6,2); //bruto
+  
+    // sumacompra100excento: 
+    //sumacompra100neto: 
+
+        this.sumacompragasolina30 = this.hotRegisterer3.getInstance('tabla3').getDataAtCell(7,2);
+        this.sumacompra100excento= this.hotRegisterer3.getInstance('tabla3').getDataAtCell(8,2);//excento
+        this.sumacompra100neto= this.hotRegisterer3.getInstance('tabla3').getDataAtCell(9,2);//NETO
+
+  
+        
+
+     
       
       
       
@@ -225,13 +248,25 @@ export class Ice100Component {
     afterChange : (changes,source) =>{ //se supone que contiene el valor de de las formulas
       if (!this.settingFormula) {
         this.settingFormula = true;
-        this.hotRegisterer3.getInstance('tabla3').setDataAtCell(0, 2, '=SUM(A:A)-SUM(B:B)');
-         this.hotRegisterer3.getInstance('tabla3').setDataAtCell(1, 2, '=SUM(D:D)');
+        this.hotRegisterer3.getInstance('tabla3').setDataAtCell(0, 2, '=SUM(A:A)-SUM(B:B)');// suma 100% * 
+         this.hotRegisterer3.getInstance('tabla3').setDataAtCell(1, 2, '=SUM(D:D)');//gasolina *
          
-         this.hotRegisterer3.getInstance('tabla3').setDataAtCell(2, 2, '=SUM(E:E)'); 
-         this.hotRegisterer3.getInstance('tabla3').setDataAtCell(3, 2, '=SUM(F:F)');
+         this.hotRegisterer3.getInstance('tabla3').setDataAtCell(2, 2, '=SUM(E:E)'); //ice *
+         this.hotRegisterer3.getInstance('tabla3').setDataAtCell(3, 2, '=SUM(F:F)');//icecreiitofiscal
          this.hotRegisterer3.getInstance('tabla3').setDataAtCell(4, 2, '=SUM(G:G)');
-         this.hotRegisterer3.getInstance('tabla3').setDataAtCell(5, 2, '=(C3-C4+C5)');  //
+         this.hotRegisterer3.getInstance('tabla3').setDataAtCell(5, 2, '=(C3-C4+C5)');
+           
+         //desde aqui saco el brutoexcento neto
+         this.hotRegisterer3.getInstance('tabla3').setDataAtCell(6, 2, '=SUM(C1+C2+C3)'); //bruto
+        
+
+           //GASOLINA SUMA
+           this.hotRegisterer3.getInstance('tabla3').setDataAtCell(7, 2, '=SUM(D:D)*30%');
+           //ICE TOTAL
+           this.hotRegisterer3.getInstance('tabla3').setDataAtCell(8, 2, '=C8+C3-C4'); //excento
+           this.hotRegisterer3.getInstance('tabla3').setDataAtCell(9, 2, '=C7-C9'); //neto
+
+          
 
         this.settingFormula = false;
       }
@@ -362,15 +397,31 @@ async guardar(){
   });
 */
 
- 
-  
-  
   
 
 
 
      //este id es la clave  
-    const matrizdata =this.hotRegisterer3.getInstance('tabla3').getData()
+    const matrizdata =this.hotRegisterer3.getInstance('tabla3').getData();
+    
+    const jsondataTotalcompras ={
+      idcomprasuma: this.idcomprasuma,
+      tipo: 1,
+      totalice: matrizdata[2][2],
+      totalicecredito:matrizdata[3][2],
+      total100:matrizdata[0][2],
+      //totaldescuento100:matrizdata[1][2],
+      //totalcompra100:matrizdata[0][2],     //es el principal de compras
+      totalgasolina: matrizdata[1][2],     ///es el principal de gasolina
+      //totalgasolinadesceunto:matrizdata[1][2],
+      //totaldecuentoicecredito:matrizdata[1][2],
+      //totaltodoicecredito:matrizdata[5][2],  //es el principla de creditofisacal
+    
+     
+    }
+   
+  
+    
     console.log("HOLSO ES MI AMTRIADATA",  matrizdata);
   for (const fila of matrizdata) {
     console.log("tamanio de fila ", fila.length)
@@ -387,14 +438,21 @@ async guardar(){
       }
       this.jsonComprassArray.push(jsondataice100)
       
+    
+
+      
     }
+   
+    
   
 }
-await this.insertardatos();
+
+
+await this.insertardatos(jsondataTotalcompras);
 console.log("holos es el json que contiene SUMASDETALLES",this.jsonComprassArray);
 }
 
-async insertardatos(){
+async insertardatos(totalcomprasjson:any){
   console.log("HOLSO ES EL MI id",this.idcomprasuma)
   const source$ = this.comprassumasdetalleService.getComprassumasdetalle(this.idcomprasuma); //con esto traigo el id
   const data:any = await lastValueFrom(source$);
@@ -404,12 +462,16 @@ async insertardatos(){
   if(!resultado){ //esto cambiar quiza
         // creamos
         console.log("HOLOS NO HAY DATOS");
+        //aqui colocar el json de comprassumas
+        
        await this.comprassumasdetalleService.postComprasumadetalles(this.jsonComprassArray);
+       await this.mesconcomprasumasservice.patchComprassumas(this.idcomprasuma, totalcomprasjson)
        this.jsonComprassArray=[];
   }else{
       //BORRAMOS Y creamos
       await this.comprassumasdetalleService.deleteComprasumadetalles(this.idcomprasuma);
       await this.comprassumasdetalleService.postComprasumadetalles(this.jsonComprassArray);
+      await this.mesconcomprasumasservice.patchComprassumas(this.idcomprasuma, totalcomprasjson)
       this.jsonComprassArray=[];
       
     }

@@ -13,7 +13,7 @@ export class ServicioConexionService {
   constructor(private http: HttpClient) { }
 
   getDatos(): Observable<Empresa> {
-    return this.http.get<Empresa>(`${this.baseUrl}/empresa/1593`);
+    return this.http.get<Empresa>(`${this.baseUrl}/empresa/1516`);
     
   }
   

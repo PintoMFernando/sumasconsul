@@ -5,13 +5,39 @@ import { Comprassumasdetalle } from '../models/comprassumasdetalle';
 import { Comprassumas } from '../models/comprassumas';
 import { Centralizadormes } from '../models/centralizadormes.model';
 import { otrossumas } from '../models/otrossumas.model';
+import { ventataalonario } from '../models/ventatalonario';
+import { EmpresaService } from './empresa.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageService {
+
+  item: Empresa = new Empresa(); 
   
-  constructor() { }
+  constructor( 
+    private empresaService: EmpresaService,
+  ) { }
+
+
+  async traerdatosempresalocalstorage(idempresa:number){
+    this.empresaService.getEmpresa(idempresa).subscribe(data => {
+
+    this.SetDatosEmpresa(data);
+    //this.item = this.GetDatosEmpresa();
+   /*    if (this.datosTable) {
+        this.miAdaptadorPrimeNG.personalizarTabla(this.datosTable);
+      } else {
+      console.error('La referencia datosTable es undefined.');
+    }*/
+    });
+
+
+  }
+
+
+
+
   reset(){
     localStorage.clear();
   }
@@ -90,20 +116,23 @@ export class LocalStorageService {
 
 
 
-  SetVentas(ventas:User){
+  SetVentas(ventas:any){
     localStorage.setItem("ventas",JSON.stringify(ventas));
   }
-  GetVentas():User{
+  GetVentas():any{
     if(localStorage.getItem("ventas")){
       let ventas = localStorage.getItem("ventas")??'';
       return JSON.parse(ventas);
     }
     else
-    return new User();
+    return [];
   }
   StateVentas():boolean{
     return localStorage.getItem("ventas")!==null;
   }
+
+
+
 
 
   SetOtros(otrosumas:otrossumas){
@@ -120,6 +149,12 @@ export class LocalStorageService {
   StateOtros():boolean{
     return localStorage.getItem("otrosumas")!==null;
   }
+
+  SetOtrosresultados(otrosumasresultados:any){
+    localStorage.setItem("otrosumasresultados",JSON.stringify(otrosumasresultados));
+  }
+
+  
 
 
 

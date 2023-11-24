@@ -11,6 +11,7 @@ import { mespuntoventasuma } from '../models/mespuntoventasuma.model';
 import { v4 as uuidv4 } from 'uuid';
 import { PuntoventaactividadService } from '../services/puntoventaactividad.service';
 import { ventactividad } from '../models/ventaactividad.model';
+import { SumatalonarioService } from '../services/sumatalonario.service';
 
 @Component({
   selector: 'app-ventas',
@@ -31,14 +32,15 @@ export class VentasComponent {
   puntoventa3:any[]=[];
   puntoventa4:ventactividad[]=[];
  
- 
-
+  datosTabla: any[] = [];
+ numeroformularios: number=0;
    
   constructor(private modalService:ModalserviceService,
               private puntoventaService: PuntoventaService,  
               private dblocal: LocalStorageService ,
               private mespuntoventasumaService: MespuntoventasumaService, 
               private puntoventaactividadService: PuntoventaactividadService,  
+              public sumatalonarioService: SumatalonarioService,
     ) { }
 
 
@@ -48,6 +50,8 @@ export class VentasComponent {
     this.mespuntoventasuma();
     this.getPuntoVentaactividad();
   }
+
+  
 
  async getPuntoVentaactividad(){
     ///traigo los iddemi tabla idpuntoventaactividad para crear y poner a mi tabla mes ventasuma
@@ -83,7 +87,7 @@ export class VentasComponent {
     this.puntoventa3=data;
     
     console.log("mis datos data de aslkdjhasidhbasjkdnlaskdas",data.data)
-    console.log("mis datos data de mi this4",this.puntoventa4)
+    console.log("mis datos data de mi this4",this.puntoventa3)
 
   }
 

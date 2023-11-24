@@ -66,27 +66,51 @@
                  <li>Fecha Creacion Centralizador: {{fila.fecha}}</li>
                 
             </td>
-            <td >{{fila.totalventas}}</td>
-            <td >{{fila.totalcompras}}</td>
+            <td  >
+                <ul *ngFor="let puntoventa of fila.puntoventa"  style="list-style-type: none;">
+                <li><b>Punto deVenta:{{puntoventa.puntoventa.nombre}}.{{puntoventa.puntoventa.actividad}}=</b>{{puntoventa.puntoventa.montototal}}</li> 
+                </ul>
+                <ul style="list-style-type: none;">
+                    <li><b>Total=</b> {{fila.totalventas}}</li>
+                </ul>
+            </td>
+
+            <td style="list-style-type: none;">
+                <li><b>Bruto:</b>   {{fila.bruto}}</li>
+                <li><b>Excento:</b> {{fila.excento}}</li>
+                <li><b>Neto:</b>    {{fila.totalcompras}}</li>
+            
+            </td>
             <td style="list-style-type: none;">
                    <li>&#8203;</li>  
                    <li>{{fila.iva}}</li>
                    <li>Resp.Libro:(LCV){{fila.resplibro}}</li> 
             </td>
-            <td style="list-style-type: none;">
-                    <li>&#8203;</li>
-                    <li>{{fila.it}}</li>
-                    <li>Resp.Baacarizacion:(BANC){{fila.respbancarizacion}}</li>
+            <td style="list-style-type: none;" style="text-align: center">
+                    <li style="list-style-type: none;" >&#8203;</li>
+                    <li style="list-style-type: none;" >{{fila.it}}</li>
+                    <li style="list-style-type: none;" >Resp.Baacarizacion:(BANC){{fila.respbancarizacion}}</li>
             </td>
             <td >{{ fila.saldoiva  }}</td>
             <td >{{ fila.saldoiue  }}</td>
             <td >{{ fila.comision }}</td>
-            <td >{{ fila.total }}</td>
+            <td  >
+                <ul style="list-style-type: none;" >
+                    <li>{{ fila.total }}</li>
+                </ul>
+                <ul *ngFor="let otrossumas of fila.otrosumas" style="list-style-type: none;">
+                <li><b> {{otrossumas.otrossumas.nombre}}=</b>{{otrossumas.otrossumas.monto}}</li>
+                </ul>
+                <ul style="list-style-type: none;">
+                    <li><b>Total=</b>{{ fila.totaltodo }}</li>
+                </ul>
+                
+            </td>
             
             <td style="list-style-type: none;" >
                     <li class="mes"></li>
                     <li style="margin-bottom: 2px;" label="FFFF">Resp.Cobro:</li>
-                    <li style="margin-bottom: 2px;">Fecha Cobro: {{fila.centralizador.anio}} </li>
+                    <li style="margin-bottom: 2px;">Fecha Cobro: {{fila.anio}} </li>
                     <li style="margin-bottom: 2px;">Monto:{{fila.observaciones}} </li>
             </td>
 

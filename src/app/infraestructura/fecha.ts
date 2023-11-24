@@ -32,4 +32,8 @@ export class Fecha {
     public addDay(day:number){
         return moment(this.fecha).add(day)
     }
+    public static getNumeroMes(nombreMes: string): number | undefined {
+        const mesEncontrado = this.meses.find((mes) => mes.label === nombreMes);
+        return mesEncontrado ? mesEncontrado.value : undefined;
+    }
 }

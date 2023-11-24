@@ -63,7 +63,8 @@ export class CentralizadorComponent implements OnInit{
               private centralizadormesService :CentralizadormesService,
               private cdRef: ChangeDetectorRef,   
               private userService: UserService,
-              private empresadatosiniciales: EmpresadatosinicialesService,     
+              private empresadatosiniciales: EmpresadatosinicialesService,   
+               
     ) { 
       this.generarAnios();
 
@@ -81,10 +82,13 @@ export class CentralizadorComponent implements OnInit{
     }
 
   ngOnInit(): void {
-    let id = Number(this.route.snapshot.paramMap.get('id'));  //este es el id global
     
+    //this.centralizadormesService.getCentralizadormesdatossucursales(this.)
+    let id = Number(this.route.snapshot.paramMap.get('id'));  //este es el id global
+    this.dbLocal.traerdatosempresalocalstorage(id); ///le pido datos al local storage
+    this.item = this.dbLocal.GetDatosEmpresa();  //muestro mis datos del local
     this.empresadetalles(id);
-    this.empresaService.getEmpresa(id).subscribe(data => {
+   /* this.empresaService.getEmpresa(id).subscribe(data => {
        
       const nombreDelMes = Fecha.getMesesArray().find((mescierre) => mescierre.value === data.mescierre)?.label; //esto combierte el numero del json a mes con nombre
       //data.mescierre = nombreDelMes || 'Mes';
@@ -97,6 +101,7 @@ export class CentralizadorComponent implements OnInit{
       console.error('La referencia datosTable es undefined.');
     }
     });
+*/
 
 
     let iduser = Number(this.route.snapshot.paramMap.get('iduser'));  //este es el id global de user
@@ -173,7 +178,7 @@ export class CentralizadorComponent implements OnInit{
     this.visible = true;         // hace visible al modal de del observaciones
   }
 
-  traerdatos(){
+  async  traerdatos(){
     console.log("entra a traer datos");
     let id=Number(this.dbLocal.GetDatosEmpresa().idempresa)
     this.mess =[];
@@ -195,7 +200,7 @@ export class CentralizadorComponent implements OnInit{
     }
     
    );
-   this.empresadetalles(id);
+  await this.empresadetalles(id);
   }
 
 openModalCobro(idcentralizadormes: string){

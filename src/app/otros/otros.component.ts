@@ -31,7 +31,7 @@ export class OtrosComponent {
     idtalonario = 'hotInstance';
     hotSettingsArray: any[] =[]; 
     bloqeuarboton:boolean =false;
-    jsonComprassArray:any = [];
+    jsonOtrosArray:any = [];
     otros:string="";
     settingFormula = false;
      intervaloID: any;
@@ -116,7 +116,7 @@ export class OtrosComponent {
   afterChange : (changes,source) =>{ //se supone que contiene el valor de de las formulas
     if (!this.settingFormula) {
       this.settingFormula = true;
-      this.hotRegistererotros.getInstance(this.idtalonario).setDataAtCell(0, 1,'=SUM(A:A)');
+      this.hotRegistererotros.getInstance(this.idtalonario).setDataAtCell(0, 2,'=SUM(B:B)');
       this.settingFormula = false;
     }
     
@@ -127,19 +127,22 @@ export class OtrosComponent {
       case 0:
         th.style.backgroundColor = '#3D69F4';
         break;
-      case 2:
+      case 1:
         th.style.backgroundColor = '#3D69F4';
         break;
+        case 3:
+          th.style.backgroundColor = '#3D69F4';
+          break;
       // Agrega más casos para más columnas
     }
   },
 
-    colHeaders: ['Monto Bs','TOTAL','Observaciones'], //aqui se coloca lo nombres de columnas
+    colHeaders: ['NombreCobro','Monto Bs','TOTAL','Observaciones'], //aqui se coloca lo nombres de columnas
     rowHeaders: true, //Aqui se coloca la numeracion de filas
     minSpareRows: 1,  //esto crea automaticamente las filas
     fillHandle: true, //esto crea celdas al jalar desde una esquinita
                         //language: 'es-MX',
-    colWidths: [65, 50, 350],               
+    colWidths: [100, 90,50,330],               
     contextMenu: {
       items: {
         'row_above': {
@@ -156,13 +159,14 @@ export class OtrosComponent {
       }    
     },
     columns: [
+      { data: 'nombrecobro',},
       { data: 'montootros',},
       { data: 'Total',
         readOnly: true,},
       { data: 'observaciones',},
     ], 
     hiddenColumns:{
-       columns:[1],
+       columns:[2],
     },
     
     licenseKey: 'non-commercial-and-evaluation'
@@ -178,10 +182,10 @@ export class OtrosComponent {
   //this.hotSettingsArray[0].data =pruebaMatriz;
   console.log("AQUI ESTAN MIS DATOS PARA LA TABLA otros xdxd",this.hotSettingsArray[0].data);
   
-
+  this.dbLocal.SetOtrosresultados(this.hotSettingsArray[0].data);
 }
  
-guardar(){
+async guardar(){
   /*this.bloqeuarboton= true;
   var readOnly= this.hotRegistererotros.getInstance(this.idtalonario).getSettings().readOnly;
    this.hotRegistererotros.getInstance(this.idtalonario).updateSettings({                         //esto bloquea la tabla
@@ -194,16 +198,17 @@ guardar(){
     if (fila[0] !== null || fila[2] !== null ) {
       const jsondata ={
       idotrossumas:uuidv4(),
-      montootros: fila[0] || 0,
-      observaciones:fila[2]||"",
+      nombrecobro: fila[0]||"" ,
+      montootros: fila[1] || 0,
+      observaciones:fila[3]||"",
       idcentralizadormes: this.parametroDelPadreidcentralizadormes
       }
-      this.jsonComprassArray.push(jsondata)
+      this.jsonOtrosArray.push(jsondata)
     }
   
 }
-console.log("holos es el json",this.jsonComprassArray);
-this.enviardatos();
+console.log("holos es el json",this.jsonOtrosArray);
+await this.enviardatos();
  
 }
 
@@ -216,17 +221,16 @@ async enviardatos(){
   if(!resultado){ 
         // creamos
         console.log("HOLOS NO HAY DATOS");
-       await this.sumasotrosService.createotrossuma(this.jsonComprassArray);
-       this.jsonComprassArray=[];
+       await this.sumasotrosService.createotrossuma(this.jsonOtrosArray);
+       this.jsonOtrosArray=[];
   }else{
       //BORRAMOS Y creamos
       await this.sumasotrosService.deleteOtrossumasdetalles(this.parametroDelPadreidcentralizadormes);
-      await this.sumasotrosService.createotrossuma(this.jsonComprassArray);
-      this.jsonComprassArray=[];
+      await this.sumasotrosService.createotrossuma(this.jsonOtrosArray);
+      this.jsonOtrosArray=[];
     }
 
- 
-  
+      
 
 
 

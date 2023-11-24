@@ -48,6 +48,18 @@ getComprassumas(idcentralizadormes:string): Observable<Comprassumas> {
 }
 
 
+async patchComprassumas(idcomprasuma: string, jsondatos:any) {
+      
+    
+  try{
+   return  await firstValueFrom(this.http.patch(`${this.baseUrl}/comprassumas/${idcomprasuma}`, jsondatos, { headers: this.headers }))
+  }catch(e){
+    return e
+  }
+
+
+}
+
 
 
 

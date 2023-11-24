@@ -4,7 +4,7 @@
 
 <input
     type="number"
-    [(ngModel)]="numberOfForms"
+    [(ngModel)]="numberOfForms[index]"
     (ngModelChange)="onNumberOfFormsChange()"/>
 
     
@@ -12,18 +12,15 @@
 
   
 
-<div *ngFor="let form of Arraydetabla; let i = index" class="form-container">
+<div *ngFor="let form of Arraydetabla[index]; let i = index" class="form-container">
  
  
-        <tr>
-            <td colspan="2">
-              <select id="selectOption" name="selectOption">
-                <option value="opcion1">Casa Matriz</option>
-                <option value="opcion2">Alquiler</option>
-                <option value="opcion3">Restaurante</option>
-              </select>
-            </td>
-          </tr>
+  <tr>
+    <td colspan="2">
+
+      <input type="text" [value]="nombreactividad" readonly center>
+    </td>
+  </tr>
 
           <tr>
             <td>
@@ -40,7 +37,7 @@
               <label for="factinicial">Factura Inicial:</label>
             </td>
             <td>
-              <input type="number" id="factinicial" [(ngModel)]="factinicial"  />
+              <input type="number" id="factinicial" [(ngModel)]="factinicial[i]"    />
             </td>
 
           </tr>
@@ -50,7 +47,7 @@
               <label for="factfinal" >Factura Final:</label>
             </td>
             <td>
-              <input type="number" id="factfinal" [(ngModel)]="factfinal"  />
+              <input type="number" id="factfinal" [(ngModel)]="factfinal[i]"  />
             </td>
           </tr>
 
@@ -59,7 +56,7 @@
             <label for="monto">Monto Importe:</label>
           </td>
           <td>
-            <input type="number" id="monto" [(ngModel)]="monto"   />
+            <input type="number" id="monto" [(ngModel)]="monto[i]"   />
           </td>
         </tr>
         <tr>
@@ -74,9 +71,13 @@
            chooseLabel="Subir"
            name="demo[]" 
            url="https://www.primefaces.org/cdn/api/upload.php" 
-           accept=".pdf,.xls,.xlsx" 
-           (onUpload)="onUpload($event)"
-           [disabled]="botonClickeado">
+           accept=".xls,.xlsx" 
+           (onUpload)="onUpload($event,i)"
+           [disabled]="botonClickeado[i]"
+           [auto]="true"
+           >
+          
+           
         </p-fileUpload>
           
 
@@ -91,15 +92,16 @@
             <label for="observacion">Observacion:</label>
           </td>
           <td>
-            <textarea rows="3" type="text" id="observacion" [(ngModel)]="observacion"  ></textarea>
+            <textarea rows="3" type="text" id="observacion" [(ngModel)]="observacion[i]"  ></textarea>
           </td>
         </tr>
 
        
 
-        <button type="submit" class="btn btn-primary" (click)="guardar()" [disabled]="botonguardar">Guardar</button>
+        <button type="submit" class="btn btn-primary" (click)="guardar(i)" [disabled]="botonguardar">Guardar</button>
       </div>
     
    
 </div>
 
+<p-toast></p-toast>

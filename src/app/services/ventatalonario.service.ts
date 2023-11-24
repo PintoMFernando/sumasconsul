@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
-import { v4 as uuidv4 } from 'uuid';
-import { firstValueFrom } from 'rxjs';
+
+import { Observable, firstValueFrom } from 'rxjs';
 import { SumatalonarioService } from './sumatalonario.service';
 
 @Injectable({
@@ -10,7 +10,7 @@ import { SumatalonarioService } from './sumatalonario.service';
 })
 export class VentatalonarioService {
   constructor(private http:  HttpClient,
-              private sumatalonarioService: SumatalonarioService,
+           
     ) {}
   
    private baseUrl = environment.url;
@@ -31,42 +31,30 @@ export class VentatalonarioService {
 
  
   
-  async createVentatalonarioelectronico(idventatalonario:string,factinicial:number,factfinal:number,monto:number,idpuntoventa:number) {
-    const jsondatoselectronicos = {
-     idventatalonario: idventatalonario,
-     numtalonario: 1,
-     factinicial: factinicial,
-     factfinal: factfinal,
-     tipo:3,
-     montototal: Number(monto),
-     idpuntoventa:idpuntoventa,
-   };
  
-   try{
-    return  await firstValueFrom(this.http.post(`${this.baseUrl}/venatatalonario/`, jsondatoselectronicos, { headers: this.headers }))
-   }catch(e){
-     return e
-   }
- 
- 
- }
 
- async createVentatalonarioelectronicoarchivo(observacion:string, archivo:any,idventatalonario:string) {
-  const jsondatoselectronicos = {
-   idarchivotalonarioelectronico: uuidv4(),
-   observacion: observacion,
-   archivo:archivo,
-   idventatalonario:idventatalonario,
- };
-
- try{
-  return  await firstValueFrom(this.http.post(`${this.baseUrl}/archivostalonarioelectronico/`, jsondatoselectronicos, { headers: this.headers }))
- }catch(e){
-   return e
- }
-
+getventaactividadbusqueda(idventaactividad:string): Observable<any> {
+  return this.http.get<any>(`${this.baseUrl}/venatatalonario/busquedaventtalonario/${idventaactividad}`);
 
 }
+
+async deleteVentatalonario(idventatalonario:string){
+  //importante manejar el subscribe para eliminar
+  console.log(idventatalonario);
+return await this.http.delete(`${this.baseUrl}/venatatalonario/${idventatalonario}`).subscribe(
+ () => {
+   console.log('Talonario eliminada correctamente');
+ },
+ (error) => {
+   console.error('Error al eliminar el talonario', error);
+ }
+)
+
+}
+
+
+
+
 
 
 

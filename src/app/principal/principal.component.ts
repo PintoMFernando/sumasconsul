@@ -16,6 +16,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { CentralizadorService } from '../services/centralizador.service';
 import { lastValueFrom, take } from 'rxjs';
 import { MespuntoventasumaService } from '../services/mespuntoventasuma.service';
+import { CalculocentralizadormesService } from '../services/calculocentralizadormes.service';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class PrincipalComponent implements OnInit {
   idcentralizadormes: string="";
   numbers: number[] = [];
   checkboxsaldoivainput: boolean = false;
+  checkboxsaldoiueinput: boolean = false;
   checkboxsaldoiuenput: boolean = false;
   checkboxcomisioninput: boolean = false;
   checkboxivaimpuestosnainput: boolean = false;
@@ -39,6 +41,7 @@ export class PrincipalComponent implements OnInit {
   centralizadormes: Centralizadormes = new Centralizadormes();
   empresadatos: Empresa = new Empresa(); //aqui estan los datos del backend
   saldoivacontenido: string ="";
+  saldoiuecontenido: number =0;
   ivaimpuestoscontenido: string ="";
   comisioncontenido: string ="";
   balancecontenido:string ="";
@@ -48,6 +51,7 @@ export class PrincipalComponent implements OnInit {
   datoscentralizadormes:any;
   inputcambio: boolean = false;
   inputiva:boolean = false;
+  inputiue:boolean = false;
   inputivaimpuestos: boolean = false;
   inputbalance: boolean = false;
   inputtrabajo: boolean = false;
@@ -59,6 +63,7 @@ trabajo2:number=0;
 balance2:number=0;
  total:number=0;
  anioactual :string ='';
+ anioactual2 :number =0;
  idcentralizador :string ="";
  planillasvalor: boolean = false;
  planillascontenido:boolean =false;
@@ -73,6 +78,7 @@ balance2:number=0;
                public empresadetallee : EmpresadatosinicialesService,
                public centralizadorService: CentralizadorService,
                public mespuntoventasumaService: MespuntoventasumaService,
+               public calculocentralizadormesService:CalculocentralizadormesService,
     
     ) {
           
@@ -82,8 +88,9 @@ balance2:number=0;
    
   ngOnInit() {                  //aqui llega los parametros enviados desde el centralizador mes e idempresa
     this.idcentralizadormes = this.route.snapshot.params['idcentralizadormes'];
-    
+    this.idempresa = this.route.snapshot.params['idempresa'];
     this.anioactual = this.route.snapshot.params['anioActual'];
+    this.anioactual2 = this.route.snapshot.params['anioActual'];
     console.log("es el anio actual", this.anioactual);
     this.mes = this.route.snapshot.params['mes'];
     //this.idempresa = this.route.snapshot.params['idempresa'];
@@ -151,9 +158,24 @@ balance2:number=0;
         this.inputiva=false;
       
         this.centralzadormesservice.patchmescentraliador(this.idcentralizadormes,this.saldoivacontenido);
+        
         console.log('Valor actual del input comision:', this.saldoivacontenido);
     }
   }
+  onsaldoIueChange(){
+    this.inputiue=true;
+   }
+ 
+   onsaldoiueChange() {    ///desde aqui se cambia el valor de saldoiva y manda el ptach
+     if (this.checkboxsaldoiueinput == false  &&  this.inputiue==true) {
+         this.inputiue=false;
+         console.log('Valor actual del input comision:', this.saldoiuecontenido);
+         //this.centralzadormesservice.patchmescentraliador(this.idcentralizadormes,this.saldoiuecontenido); cambiar
+         this.calculocentralizadormesService.getpatchClculoscentralizadormescomprasiue(this.idcentralizadormes,this.saldoiuecontenido,this.mes,this.anioactual2,this.idempresa)
+         
+     }
+   }
+
 
 
   onivaImpuestosnChange(){
@@ -163,8 +185,9 @@ balance2:number=0;
   onivaimpuestosnChange(){
     if (this.checkboxivaimpuestosnainput == false  && this.inputivaimpuestos==true) {
       this.inputivaimpuestos = false;
-      this.centralzadormesservice.patchmescentraliadorivaimpuestos(this.idcentralizadormes,this.ivaimpuestoscontenido);
-      console.log('Valor actual del input comision:', this.ivaimpuestoscontenido);
+     // this.centralzadormesservice.patchmescentraliadorivaimpuestos(this.idcentralizadormes,this.ivaimpuestoscontenido);
+     this.centralzadormesservice.getpatchClculoscentralizadormesivaimpuestos(this.idcentralizadormes,this.ivaimpuestoscontenido) 
+     console.log('Valor actual del input comision:', this.ivaimpuestoscontenido);
     }
     
 
@@ -288,6 +311,26 @@ balance2:number=0;
    );
 }
  
+
+async calcularCentralizadormes(){
+  
+ /* this.idempresa = this.route.snapshot.params['idempresa'];
+    this.idcentralizadormes = this.route.snapshot.params['idcentralizadormes'];
+    this.anioactual = this.route.snapshot.params['anioActual'];
+    console.log("es el anio actual", this.anioactual);
+    this.mes = this.route.snapshot.params['mes'];
+*/
+    console.log("mis datos a guardar??", this.idempresa,this.idcentralizadormes,this.anioactual2,this.mes)
+
+    await this.calculocentralizadormesService.getpatchClculoscentralizadormes(this.idcentralizadormes,this.mes,this.idempresa,this.anioactual2)
+    await this.calculocentralizadormesService.getpatchClculoscentralizadormescompras(this.idcentralizadormes)
+    await this.calculocentralizadormesService.getpatchClculoscentralizadormescomprasiva(this.idcentralizadormes,this.mes,this.anioactual2,this.idempresa)
+    await this.calculocentralizadormesService.getpatchClculoscentralizadormescomprasit(this.idcentralizadormes)
+    await this.calculocentralizadormesService.getpatchClculoscentralizadormesotros(this.idcentralizadormes)
+    await this.calculocentralizadormesService.getpatchClculoscentralizadormestotal(this.idcentralizadormes)
+    await this.calculocentralizadormesService.getpatchClculoscentralizadormestotaltodo(this.idcentralizadormes)
+
+}
 
 
 

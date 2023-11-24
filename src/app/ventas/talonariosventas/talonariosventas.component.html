@@ -2,10 +2,13 @@
   
 <div class="talonarios">
     <label> Talonarios </label>
-  <input
+ 
+    <input
     type="number"
-    [(ngModel)]="numberOfForms"
-    (ngModelChange)="onNumberOfFormsChange()"/>
+    [(ngModel)]="numberOfForms[index]"
+    (ngModelChange)="onNumberOfFormsChange()"
+    name="numberOfForms"/>
+
   </div>
 </div>
 
@@ -20,12 +23,12 @@
         <tr>
           <td>
 
-            <label for="campo1" >Nº Talonario:</label>
+            <label for="campo1"  readonl>Nº Talonario:</label>
           </td>
           <td>
-            <input type="number" id="talonario" name="talonario" [value]="i+1" [disabled]="tablas.bloqueada" />
+            <input type="number" id="talonario" name="talonario" [value]="i+1" [disabled]="tablas.bloqueada" readonly/>
           </td>
-        </tr>ue
+        </tr>
         <tr>
           <td>
             <label for="campo3">Factura Inicial:</label>

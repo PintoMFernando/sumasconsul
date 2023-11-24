@@ -1,3 +1,5 @@
+import { sumatalonario } from "./sumatalonario";
+
 export class ventataalonario{ 
 
   idventatalonario?:string; 
@@ -9,7 +11,8 @@ export class ventataalonario{
   archivo?:string;
   numatorizacion?:number;
   estado?:number;
-  idpuntoventa?:string;
- 
+  idpuntoventaactividad?:string;
+  idcentralizadormes?:string;
+ sumatalonario?:sumatalonario;
    
   }

@@ -13,6 +13,9 @@ import { ConfirmationService, ConfirmEventType,MessageService } from 'primeng/ap
 import { VentatalonarioService } from 'src/app/services/ventatalonario.service';
 import { SumatalonarioService } from 'src/app/services/sumatalonario.service';
 import { v4 as uuidv4 } from 'uuid';
+import { lastValueFrom } from 'rxjs';
+import { ventataalonario } from 'src/app/models/ventatalonario';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 //import * as Handsontable from 'handsontable';
 
 
@@ -26,7 +29,8 @@ export class TalonariosventasComponent   {
   @Input() idmespuntoventasuma: any;  
   @Input() idpuntoventaactividad: any;  
   @Input() nombreactividad: any;  
-  @Input()  parametroDelPadreidcentralizadormes: any;  
+  @Input()  parametroDelPadreidcentralizadormes: string='';  
+  @Input()  index: any;  
   
   valorCelda: any; 
 
@@ -38,6 +42,8 @@ export class TalonariosventasComponent   {
               public ventastalonarioService: VentatalonarioService,
               public sumatalonarioService: SumatalonarioService,
               public messageService: MessageService,
+              public dbLocal: LocalStorageService,
+              
               //private hot: Handsontable,
              
              )
@@ -47,12 +53,13 @@ export class TalonariosventasComponent   {
                //var hot :any;               
               }
               
-  numberOfForms: number = 0;
+  //numberOfForms: number = 0;
+  numberOfForms: any [] = [];
   formArray: FormGroup[] = [];
   hotSettingsArray: any[] =[]; //esto contiene todas mis isntancias de handsontable
   hotDataArray =[];
   tablesSettings: Handsontable.GridSettings[] = [];
-
+  suma: number = 0;
   obsArray=[];
   ultimoNumeroIngresado: number = 0;
   ultimoValorInputFinal: number = 0;
@@ -86,15 +93,80 @@ export class TalonariosventasComponent   {
   estado:number=0;
   talonario: any[] =[];
   arrayTabla :any[]=[];
-
+  //datosTabla:  ventataalonario = new ventataalonario();
+  datosTabla: any[] = [];
+  //datosTabla: ventataalonario = new ventataalonario
+  conteotalonarios: number =0;
+  settingFormula = false;
+ //idventatalonario: string ="";
+ idventatalonario: string[] = [];
   
   ngOnInit(){
-    this.traertablasventas();
+     this.traerlocalstorage();
+    //this.traertablasventas();
     //const resultadoFormula = this.handsontable.getDataAtCell(0, 1); // Obtiene el valor de la celda con la fórmula
     //console.log("aquii",resultadoFormula); // Muestra el resultado en la consola
-     console.log("aqui esta el id de punto venta", this.idmespuntoventasuma);
+    console.log("Aqui va mi Index", this.index);
+     console.log("11111", this.idmespuntoventasuma);
+     console.log("22222222", this.idpuntoventaactividad);
+     console.log("33333333", this.nombreactividad);
+     console.log("4444444", this.parametroDelPadreidcentralizadormes);
      
   }
+
+  async traerlocalstorage(){
+    const source$ = this.sumatalonarioService.getTalonariosuma(String(this.idmespuntoventasuma),1); //con esto traigo el id
+    const data:any = await lastValueFrom(source$);
+    console.log("esteeeeeeeeeeeeeee e smi data",data)
+    await this.dbLocal.SetVentas(data);
+    await this.traertablasventas();
+  }
+
+
+  async traertablasventas(){
+    
+   // const source$ = this.sumatalonarioService.getTalonariosuma(String(this.idmespuntoventasuma)); //con esto traigo el id
+   // const data:any = await lastValueFrom(source$);
+    let datosdecompras=this.dbLocal.GetVentas()
+    
+    this.datosTabla = datosdecompras;
+   // this.datosTabla = data;
+    console.log("MIS DATOS TABLA",this.datosTabla)
+    
+    console.log("MIS DATOS TABLA tamaniooooo",this.datosTabla.length)
+   
+   
+    for( let i=0; i< this.datosTabla.length;i++){
+   
+    //this.conteotalonarios=0;
+      for( let j=0; j< this.datosTabla[i].length;j++){
+        console.log("aqui hay algooooo", this.datosTabla[i][j].idpuntoventaactividad);
+      if( this.idpuntoventaactividad === this.datosTabla[i][j].idpuntoventaactividad && this.idmespuntoventasuma === this.datosTabla[i][j].idcentralizadormes){
+         //estoy apartando segun idactividad y mes, para poner a cada input su propio valor ya que estoy traendo varios datos de una y tengo que separar   
+         this.conteotalonarios++;
+         this.idventatalonario[j]= this.datosTabla[i][j].idventatalonario
+        this.factinicial[j]= this.datosTabla[i][j].factinicial;
+        this.factfinal[j]= this.datosTabla[i][j].factfinal;
+             
+      }
+      console.log("MI FACTURA INICIAL", this.factinicial[j]);
+     console.log("MI FACTURA FINAL", this.factfinal[j]);
+    }
+    
+     console.log("que hay aquiiiiii", this.conteotalonarios)
+  }
+
+  this.numberOfForms[this.index]=this.conteotalonarios
+  console.log("CONTEOOOOOOOOOOOOOOOOOOOOOOOOOOOO", this.conteotalonarios);
+  await this.onNumberOfFormsChange();
+    // if(this.idpuntoventaactividad == data.idpuntoactividad && this.parametroDelPadreidcentralizadormes === data.idcentralizadormes){
+    //}
+   
+   
+       
+   }
+
+
 
 
   hyperformulaInstance = HyperFormula.buildEmpty({
@@ -102,15 +174,15 @@ export class TalonariosventasComponent   {
   });
   
 
-  onNumberOfFormsChange() {
-    this.actualizarFormularios();
+  async onNumberOfFormsChange() {
+    await this.actualizarFormularios();
   }
 
   private actualizarFormularios() {
    
     //const cantidadFormularios = this.numberOfForms;
     //this.crearFormularios(cantidadFormularios );
-    const cantidadFormularios = this.numberOfForms;
+    const cantidadFormularios = this.numberOfForms[this.index];
     const formulariosActuales = this.hotSettingsArray.length;
     const ultimoValor = this.hotSettingsArray.length-1; 
     
@@ -148,11 +220,30 @@ export class TalonariosventasComponent   {
         },
         
         data: [
-          ['','', '=SUM(B:B)'],               
+                     
           
         ],
+        afterFormulasValuesUpdate : (changes) => { //contiene el valor de la celda de las sumas
+      
+          this.suma = this.hotRegisterer.getInstance('talonario'+i).getDataAtCell(0,2 );
+         
+        
+        
+        
+        
+      },
        
         afterChange : (changes,source) =>{
+          if (!this.settingFormula) {
+            this.settingFormula = true;
+            this.hotRegisterer.getInstance('talonario'+i).setDataAtCell(0, 2, '=SUM(B:B)');
+            this.settingFormula = false;
+          }
+            
+          
+
+        //  this.hotRegisterer.getInstance('tabla3').setDataAtCell(0, 2, '=SUM(B:B)');
+
         if (changes || source === 'edit') {
           //console.log("Changes:", changes[3]);
           changes!.forEach((changes, index, array) => {
@@ -162,7 +253,7 @@ export class TalonariosventasComponent   {
             const col =changes[1];
             const rowCount = this.hotRegisterer.getInstance('talonario'+i).countRows();
             
-              if (col === 'Monto Bs') {
+              if (col === 'monto') {
                // console.log("entra al col",col);
                 //const numero = parseInt(value, 10);
                 if (value) {
@@ -202,8 +293,9 @@ export class TalonariosventasComponent   {
       },  
     
       
-        colHeaders: ['Nº Factura', 'Monto Bs','SUMA TOTAL'], //aqui se coloca lo nombres de columnas
-        rowHeaders: false, //Aqui se coloca la numeracion de filas
+       // colHeaders: ['Nº Factura', 'Monto Bs','SUMA TOTAL'], //aqui se coloca lo nombres de columnas
+       colHeaders: ['numfactura', 'monto','Total'],  
+       rowHeaders: false, //Aqui se coloca la numeracion de filas
         minSpareRows: 1,  //esto crea automaticamente las filas
         fillHandle: true, //esto crea celdas al jalar desde una esquinita
                             //language: 'es-MX',
@@ -225,7 +317,7 @@ export class TalonariosventasComponent   {
         },
         
     
-        columns: [
+        /*columns: [
           {
             data: 'NºFactura',
             //readOnly: false,    //esto bloquea la celda para que solo sea de lectura
@@ -241,15 +333,51 @@ export class TalonariosventasComponent   {
             readOnly: true,
             className: 'bg-read-only',  
           },
-        ], 
+        ],*/
+        columns: [
+          {
+            data: 'numfactura',
+            //readOnly: false,    //esto bloquea la celda para que solo sea de lectura
+            //editor: false,
+            type: 'numeric',
+          },
+          {
+            data: 'monto',
+            
+          },
+          {
+            data: 'SUMA TOTAL',
+            readOnly: true,
+            className: 'bg-read-only',  
+          },
+        ],
+
         licenseKey: 'non-commercial-and-evaluation'
         
       };
      
       this.hotSettingsArray.push(hotSettings);
+      
+
+
+        
+      //console.log("AQUI TENDRIA QUE PONER MIS DATAS EN UN FOR O ALGO", this.hotSettingsArray[0].data)
+    }
+    for( let i=0; i< this.datosTabla.length;i++){
+      for( let j=0; j< this.datosTabla[i].length;j++){
+      if( this.idpuntoventaactividad === this.datosTabla[i][j].idpuntoventaactividad && this.idmespuntoventasuma === this.datosTabla[i][j].idcentralizadormes){
+       
+        this.hotSettingsArray[j].data = this.datosTabla[i][j].sumaventatalonario;
+        console.log("AQUI ESTA MI DONDE ESTARIA TODOooooooooooo????",i,  this.hotSettingsArray[i].data)   
+      }
+      
     }
 
+  }
+
     console.log("AQUI ESTA MI ARRAY", this.hotSettingsArray)
+    
+   
     console.log("AQUI ESTA EL TAMANIO DE MI ARRAY", this.hotSettingsArray.length)
     console.log("AQUI ESTA MI CANTIDAD", cantidad)
   }
@@ -380,7 +508,7 @@ export class TalonariosventasComponent   {
 console.log("AQUI DEBEWRIA ESTAR TODOS MISA DATOS PARA RECORRER",this.arrayTabla);
 this.guardarTalonarioslocalstorage(this.arrayTabla);
 
-this.guardarTalonarios(this.arrayTabla);//con esto guarda en la db
+this.guardarTalonarios(this.arrayTabla,index);//con esto guarda en la db
   }
 
 
@@ -390,20 +518,54 @@ this.guardarTalonarios(this.arrayTabla);//con esto guarda en la db
  }
  
  
-  async guardarTalonarios(arrayTalonarios:any){
+  async guardarTalonarios(arrayTalonarios:any,index:number){
+    //aqui hay este 
+    console.log("aquie sta mi index",index)
+    console.log("aquie sta mis cosas", this.idventatalonario[index])
+
+    if(this.idventatalonario[index]){//hay este id en sumasdetalles
+      console.log("este  si tiene datos");
+    const source$ = this.ventastalonarioService.getventaactividadbusqueda(this.idventatalonario[index]); //con esto traigo el id
+    const data:any = await lastValueFrom(source$);
+    console.log("mis datos data",data)
+    const resultado = data.find((item: any) => item.idventatalonario === this.idventatalonario[index]); //buiscando si hay datos en mi tabla
+    console.log("resultado",resultado);
+ 
+   //exisate este dato?????
      arrayTalonarios.forEach(async (json :any) => {
-      
+      if(!resultado){
+        //no hay datos, creamos
+         
+        await this.crearTalonarios(json.arraytalonario,json.arraysumatalonario);
+
+      }else{
+        //si hay datos, borramos y creamos
+        await this.ventastalonarioService.deleteVentatalonario(this.idventatalonario[index]);
+        await this.crearTalonarios(json.arraytalonario,json.arraysumatalonario);
+        //await this.ventastalonarioService.createVentatalonario(json.arraytalonario);
+        //await this.sumatalonarioService.createSumatalonario(json.arraysumatalonario);
+      }
       console.log("aqui tendria que estar mi talonario",json.arraytalonario); //aqui ahcer el await
       console.log("aqui tendria que estar mis sumas???",json.arraysumatalonario); 
-      await this.ventastalonarioService.createVentatalonario(json.arraytalonario);
-     await this.sumatalonarioService.createSumatalonario(json.arraysumatalonario);
-  });
-  
-  
-
-    
       
+  });
+}else{
+     // await this.crearTalonarios(arraytalonario,arraysumatalonario);
+      console.log("no hay este id");
+      arrayTalonarios.forEach(async (json :any) => {
+          await this.crearTalonarios(json.arraytalonario,json.arraysumatalonario);   
+    });
+     
   }
+
+
+}
+  async crearTalonarios(arraytalonario:any,arraysumatalonario:any){
+    await this.ventastalonarioService.createVentatalonario(arraytalonario);
+    await this.sumatalonarioService.createSumatalonario(arraysumatalonario);
+    
+  }
+  
 
 
   anulacionChange(index:number){
@@ -440,10 +602,6 @@ bloqueartabla(index:number){
   this.habilitarfin=true;
 }
 
-async traertablasventas(){
 
-
-    
-}
 
 }

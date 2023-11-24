@@ -68,6 +68,19 @@ export class CentralizadormesService {
   
   }
 
+  async getpatchClculoscentralizadormesivaimpuestos(idcentralizadormes: string, ivaimpuestos:string ){ //este es nuevo me quede aqui
+    try{
+     return  await firstValueFrom(this.http.get(`${this.baseUrl}/centralizadormes/calculosivasaldoiva/${idcentralizadormes}/${ivaimpuestos}` ))
+    }catch(e){
+      return e
+    }
+  
+  
+  }
+
+
+
+
   async patchmescentralizadorcomision(idcentralizadormes: string, comision:string ) {
     const datos={
       comision: Number(comision),
@@ -79,6 +92,13 @@ export class CentralizadormesService {
     }
   
   
+  }
+
+
+
+ getCentralizadormesdatossucursales(idmescentralizador:string): Observable<Centralizadormes> {
+    return this.http.get<Centralizadormes>(`${this.baseUrl}/centralizadormes/traermisdatossucursales/${idmescentralizador}`);
+    
   }
 
 
