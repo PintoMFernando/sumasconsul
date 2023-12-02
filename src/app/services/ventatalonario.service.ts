@@ -53,6 +53,20 @@ return await this.http.delete(`${this.baseUrl}/venatatalonario/${idventatalonari
 }
 
 
+async createdelteVentasSumas( jsondatosventas:any) {
+
+  
+  try{
+  return  await firstValueFrom(this.http.post(`${this.baseUrl}/venatatalonario/buscarborraractualizar`, jsondatosventas, { headers: this.headers }))
+  }catch(e){
+  return e
+  }
+  
+  
+  
+  }
+
+
 
 
 

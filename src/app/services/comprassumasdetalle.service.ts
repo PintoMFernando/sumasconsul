@@ -84,6 +84,21 @@ export class ComprassumasdetalleService {
 
   }
 
+   
+
+async searchdeletepactchcompras( idcomprasuma:string,jsondatos:any) {
+  try{
+   return  await firstValueFrom(this.http.post(`${this.baseUrl}/comprassumasdetalle/buscarborraractualizar/${idcomprasuma}`, jsondatos, { headers: this.headers }))
+  }catch(e){
+    return e
+  }
+  
+
+
+}
+
+
+
 
  
 

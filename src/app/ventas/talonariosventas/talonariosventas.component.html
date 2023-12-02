@@ -5,7 +5,7 @@
  
     <input
     type="number"
-    [(ngModel)]="numberOfForms[index]"
+    [(ngModel)]="numberOfForms[indexinterior]"
     (ngModelChange)="onNumberOfFormsChange()"
     name="numberOfForms"/>
 
@@ -26,7 +26,7 @@
             <label for="campo1"  readonl>Nº Talonario:</label>
           </td>
           <td>
-            <input type="number" id="talonario" name="talonario" [value]="i+1" [disabled]="tablas.bloqueada" readonly/>
+            <input  type="number" id="talonario" name="talonario"   [disabled]="tablas.bloqueada"  [(ngModel)]="numtalonario[i]" readonly />
           </td>
         </tr>
         <tr>
@@ -70,13 +70,13 @@
         <tr>
             <td colspan="2">
                 
-                    <hot-table [settings]="tablas" [hotId]="'talonario' + i"  ></hot-table>
-                    <button (click)="guardarDatos(i)" [disabled]="tablas.bloqueada">Guardar</button>
+                    <hot-table [settings]="tablas" [hotId]="'talonario'+i"  ></hot-table>
+                 
 
                
               </td>
         </tr>
         
-   
     </div>
     <p-toast></p-toast>
+    <button (click)="guardarDatos()">prueba</button>

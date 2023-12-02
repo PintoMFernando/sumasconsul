@@ -156,6 +156,11 @@ if(data.length !=0){
 
 }
 
+calcularPosicion(indexInterior: number, indexExterior: number): number {
+  const cantidadActividadesPorSucursal = this.puntoventa3[0].data.length;
+  return indexExterior * cantidadActividadesPorSucursal + indexInterior;
+}
+
   }
 
   

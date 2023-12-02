@@ -50,6 +50,18 @@ export class OtrossumasService {
   }
 
 
+  async buscarcrearborrarotrossumas( idcentralizadormes:string,jsondatos:any) {
+    try{
+     return  await firstValueFrom(this.http.post(`${this.baseUrl}/otrossumas/buscarborrarcrear/${idcentralizadormes}`, jsondatos, { headers: this.headers }))
+    }catch(e){
+      return e
+    }
+    
+  
+  
+  }
+
+
 
 
 

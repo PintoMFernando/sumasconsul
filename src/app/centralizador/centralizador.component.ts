@@ -53,17 +53,18 @@ export class CentralizadorComponent implements OnInit{
   backgroundColorPago: string = 'white'; //esto es el color de fondo de cobro-pago
   planillas: any='Si';
   idcentralizador: string ="";
-  constructor(private empresaService: EmpresaService,
-              private miAdaptadorPrimeNG: MiAdaptadorPrimeNG,
+  idempresa: number=0;
+  datosmes:any;
+  empresadatosdetalles:any;
+ 
+  constructor(
               public dialogService: DialogService,
               private modalService: ModalserviceService,
               private route: ActivatedRoute,
               private dbLocal:LocalStorageService,
               private centralizadorService: CentralizadorService,
-              private centralizadormesService :CentralizadormesService,
               private cdRef: ChangeDetectorRef,   
-              private userService: UserService,
-              private empresadatosiniciales: EmpresadatosinicialesService,   
+                
                
     ) { 
       this.generarAnios();
@@ -82,42 +83,17 @@ export class CentralizadorComponent implements OnInit{
     }
 
   ngOnInit(): void {
-    
-    //this.centralizadormesService.getCentralizadormesdatossucursales(this.)
-    let id = Number(this.route.snapshot.paramMap.get('id'));  //este es el id global
-    this.dbLocal.traerdatosempresalocalstorage(id); ///le pido datos al local storage
+    this.idempresa = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.dbLocal.traerdatosempresalocalstorage(this.idempresa); ///le pido datos al local storage
     this.item = this.dbLocal.GetDatosEmpresa();  //muestro mis datos del local
-    this.empresadetalles(id);
-   /* this.empresaService.getEmpresa(id).subscribe(data => {
-       
-      const nombreDelMes = Fecha.getMesesArray().find((mescierre) => mescierre.value === data.mescierre)?.label; //esto combierte el numero del json a mes con nombre
-      //data.mescierre = nombreDelMes || 'Mes';
-
-    this.dbLocal.SetDatosEmpresa(data);
-    this.item = this.dbLocal.GetDatosEmpresa();
-       if (this.datosTable) {
-        this.miAdaptadorPrimeNG.personalizarTabla(this.datosTable);
-      } else {
-      console.error('La referencia datosTable es undefined.');
-    }
-    });
-*/
-
+    this.empresadetalles(this.idempresa);
+  
 
     let iduser = Number(this.route.snapshot.paramMap.get('iduser'));  //este es el id global de user
-    this.userService.getUser().subscribe(data => {
-    this.dbLocal.SetUser(data);
+    this.dbLocal.traerdatosuserlocalstorage(iduser);
     this.itemuser = this.dbLocal.GetUser();
-    console.log("aquie stan el data de user",data);
-       if (this.datosTable) {
-        this.miAdaptadorPrimeNG.personalizarTabla(this.datosTable);
-      } else {
-      console.error('La referencia datosTable es undefined.');
-    }
-    });
-    console.log("aquie stan el ID",id);
-    console.log("aquie stan el ID",iduser);
-
+    
      this.buscar(); 
      
      
@@ -126,14 +102,12 @@ export class CentralizadorComponent implements OnInit{
   
     ClickNuevoMes() {
       this.mess=[];
-      console.log('entra nuevo mes');
-      let id = Number(this.route.snapshot.paramMap.get('id'));
      const data={header: 'Crear Nuevo Mes',
            width: '20%',
           height: '40%',
          data:{
            anioActual: this.anioActual,
-           id: id,
+           id: this.idempresa,
           }
    }
       this.modalService.openModal(data, ModalcrearmesContentComponent); //abre el modal "modalcrearmes-content"  
@@ -155,12 +129,11 @@ export class CentralizadorComponent implements OnInit{
     
   }
 
-  buscar() {
-      let id=Number(this.dbLocal.GetDatosEmpresa().idempresa)
-      this.centralizadorService.getCentralizadormesbuscar(id,this.anioActual).subscribe({
+  async buscar() {
+      await this.centralizadorService.getCentralizadormesbuscar(this.idempresa,this.anioActual).subscribe({
         next: data=>{ 
            if(data ==null){ 
-            console.log("No hay dato" ,this.ClickNuevoMes())
+            console.log("No hay dato" ,   this.ClickNuevoMes())
           }
             else{
               console.log("Ya hay datos",this.traerdatos())
@@ -179,28 +152,20 @@ export class CentralizadorComponent implements OnInit{
   }
 
   async  traerdatos(){
-    console.log("entra a traer datos");
-    let id=Number(this.dbLocal.GetDatosEmpresa().idempresa)
     this.mess =[];
-    this.centralizadormesService.getCentralizadormes(id,this.anioActual)
-  .subscribe(
-    (data: any) => {
-      // Suponiendo que 'data' tiene la misma estructura que el modelo 'Centralizadormes'
-      console.log("es el data",data);
-      for (let i = 0; i < data.length; i++) {
-      this.mes = data[i];
-      const nombreDelMes = Fecha.getMesesArray().find((mes) => mes.value === data[i].mes)?.label; //esto combierte el numero del json a mes con nombre
-      data[i].mes = nombreDelMes || 'Mes no válido';
-      //const fechaFormateada = data[i].fecha.transform('yyyy-MM-dd');
+    await this.dbLocal.traerdatoscentralizadorlocalstorage(this.idempresa,this.anioActual);
+    this.datosmes = this.dbLocal.GetCentralizador();
+   
+      for (let i = 0; i < this.datosmes.length; i++) {
+      this.mes = this.datosmes[i];
+      const nombreDelMes = Fecha.getMesesArray().find((mes) => mes.value === this.datosmes[i].mes)?.label; //esto combierte el numero del json a mes con nombre
+      this.datosmes[i].mes = nombreDelMes || 'Mes no válido';
+      
       this.mess.push(this.mes);
-      this.idmes = data[i].idcentralizador;
-     
       
      }
-    }
-    
-   );
-  await this.empresadetalles(id);
+   
+  await this.empresadetalles(this.idempresa);
   }
 
 openModalCobro(idcentralizadormes: string){
@@ -243,26 +208,17 @@ openObservaciones(idcentralizadormes:string){
 
 
  async empresadetalles(id:number){
-  const source$ = this.centralizadorService.getCentralizadormesbuscar(id,this.anioActual); //con esto traigo el id
-  const data:any = await lastValueFrom(source$);
-  this.idcentralizador=data.idcentralizador;
-  console.log("entrasadasdasdasdsa", this.idcentralizador );
-  this.empresadatosiniciales.getEmpresadatosiniciales(this.idcentralizador)
-      .subscribe(
-        (data: any) => {
-          console.log("aqui esta le datasaaaaaaaaaaaaaaaaaaaaaa", data);
-          this.datosinicalesempresa=data[0];
-          if(data[0].planillas == true){
-            data[0].planillas=this.planillas; 
+  this.idcentralizador = this.dbLocal.GetCentralizador()[0].idcentralizador;
+  this.dbLocal.traerdatosempresadetalleslocalstorage(this.idcentralizador)
+  this.empresadatosdetalles= this.dbLocal.GetEmpresadetalles();
+        
+          this.datosinicalesempresa=this.empresadatosdetalles[0];
+          if(this.empresadatosdetalles[0].planillas == true){
+            this.empresadatosdetalles[0].planillas=this.planillas; 
          }else{
            this.planillas= 'No'
-           data[0].planillas = this.planillas;
-         }
-    
- 
-   console.log("datosempresa inicialse", this.datosinicalesempresa);
-        }    
-       );
+           this.empresadatosdetalles[0].planillas = this.planillas;
+         }    
  }
  
 }

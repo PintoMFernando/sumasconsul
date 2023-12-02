@@ -67,6 +67,7 @@ balance2:number=0;
  idcentralizador :string ="";
  planillasvalor: boolean = false;
  planillascontenido:boolean =false;
+ empresadatosdetalles:any;
  
 
 
@@ -79,6 +80,7 @@ balance2:number=0;
                public centralizadorService: CentralizadorService,
                public mespuntoventasumaService: MespuntoventasumaService,
                public calculocentralizadormesService:CalculocentralizadormesService,
+               public dbLocal: LocalStorageService,
     
     ) {
           
@@ -91,17 +93,13 @@ balance2:number=0;
     this.idempresa = this.route.snapshot.params['idempresa'];
     this.anioactual = this.route.snapshot.params['anioActual'];
     this.anioactual2 = this.route.snapshot.params['anioActual'];
-    console.log("es el anio actual", this.anioactual);
+   
     this.mes = this.route.snapshot.params['mes'];
     //this.idempresa = this.route.snapshot.params['idempresa'];
-    
     this.centralizadormesCall();
     this.empresaCall();
     this.empresadetalle();
-    console.log("este es el ide",this.idempresa,this.mes,this.idempresa);
-    console.log("este es el id de CENTRALIZADOR?????",this.idcentralizadormes);
-    console.log('Valor actual del input trabajo:', this.balancecontenido);
-    console.log('Valor actual del input trabajo:', this.trabajocontenido);
+    
   }
 
   valorPlanillas(){
@@ -280,13 +278,12 @@ balance2:number=0;
   }
   
   async empresadetalle(){
-     
-    let id=Number(this.dblocal.GetDatosEmpresa().idempresa)
-    console.log("HOLOS EMWETRA A EMPRESA DETALLE",id);
-
-    const source$ = this.centralizadorService.getCentralizadormesbuscar(id,Number(this.anioactual)); //con esto traigo el id
-  const data:any = await lastValueFrom(source$);
-  this.idcentralizador=data.idcentralizador;
+    this.idcentralizador = this.dbLocal.GetCentralizador()[0].idcentralizador;
+   
+ 
+    
+    this.empresadatosdetalles = this.dbLocal.GetEmpresadetalles();
+    console.log("estosssssssssssssssssss son mis mpresadatosdetalles")
 
   this.empresadetallee.getEmpresadatosiniciales(this.idcentralizador)
   .subscribe(

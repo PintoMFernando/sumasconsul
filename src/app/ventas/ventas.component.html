@@ -3,13 +3,13 @@
   <p-tabView >
     <button pButton type="button" icon="pi pi-plus" class="p-button-text" (click)="observaciones()">Observaciones</button>
     
-    <p-tabPanel header="Nombre {{sucursal.nombrepuntoventa}} Nº{{sucursal.num_sucursall}} " *ngFor="let sucursal of puntoventa3"  >
+    <p-tabPanel header="Nombre {{sucursal.nombrepuntoventa}} Nº{{sucursal.num_sucursall}} " *ngFor="let sucursal of puntoventa3 ; let j = index"  >
       <tr> 
         <td>
           <p-tabView >
             <p-tabPanel header="{{actividad.nombreactividades}} " *ngFor="let actividad of sucursal.data ; let i = index"  > 
               <tr>
-                  <td> <app-talonariosventas [index]=i [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.nombreactividades></app-talonariosventas></td>
+                  <td> <app-talonariosventas [indexinterior]=i [indexexterior]=j  [posicion]="j * puntoventa3[0].data.length + i" [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.nombreactividades></app-talonariosventas></td>
                   <td><app-talonariosprevalorados [index]=i [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.nombreactividades></app-talonariosprevalorados></td>
                   <td><app-talonarioselectronicos [index]=i [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.nombreactividades></app-talonarioselectronicos></td>
                 
@@ -21,5 +21,6 @@
         </td>
       </tr>
     </p-tabPanel>
+  
   </p-tabView>
 </div>

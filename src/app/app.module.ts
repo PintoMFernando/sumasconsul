@@ -57,6 +57,7 @@ import { ActividadesComponent } from './actividades/actividades.component';
 import { MessageService, ConfirmEventType } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { UpdatepuntoventaactividadComponent } from './updatepuntoventaactividad/updatepuntoventaactividad.component';
+import { VentanuevoComponent } from './ventanuevo/ventanuevo.component';
 
 
 registerAllModules();
@@ -85,6 +86,7 @@ registerAllModules();
     ModalResumenmesContentComponent,
     UpdatepuntoventaactividadComponent,
     UpdatepuntoventaactividadComponent,
+    VentanuevoComponent,
     
     
     

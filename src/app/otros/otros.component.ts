@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Handsontable from 'handsontable';
 import { ContextMenu } from 'handsontable/plugins';
@@ -19,11 +19,11 @@ import { LocalStorageService } from '../services/local-storage.service';
 })
 export class OtrosComponent {
   @Input() parametroDelPadreidcentralizadormes: string='';
-  constructor(private formBuilder: FormBuilder,
+  constructor(
               
     
     private hotRegistererotros: HotTableRegisterer,
-    private sumasotrosService:  OtrossumasService,
+  
     private cdr: ChangeDetectorRef,
     private dbLocal:LocalStorageService,
     ) { }  
@@ -54,6 +54,16 @@ export class OtrosComponent {
     this.misdatoslocalstorage();
     this.iniciarIntervalo();
   }
+  @HostListener('window:popstate', ['$event']) //para caundo se vaya atras
+  onPopState(event: any) {
+    this.guardarLSDB();
+  }
+
+  @HostListener('window:beforeunload', ['$event']) //para cuando cierre el navegador
+  onBeforeUnload(event: any) {
+    this.guardarLSDB();
+  }
+
   
   ngOnDestroy() {
     // Detén el intervalo cuando el componente se destruye para evitar fugas de memoria
@@ -73,28 +83,14 @@ export class OtrosComponent {
   }
 
   async misdatoslocalstorage(){
-    const source$ = this.sumasotrosService.getOtrossumas(this.parametroDelPadreidcentralizadormes); //con esto traigo el id
-    const data:any = await lastValueFrom(source$);
-    this.dbLocal.SetOtros(data[0].otrossumas);
-    let datosdeotrossumas=this.dbLocal.GetOtros()
-    this.otrosarray = datosdeotrossumas
+
+    this.dbLocal.traerdatosotroslocalstorage(this.parametroDelPadreidcentralizadormes)
+    this.otrosarray = this.dbLocal.GetOtros()
     await this.crearmitabla();
     await this.cdr.detectChanges();
   }
   
-  async traermisdatos(){
-    this.idcentralizadormes="";
-    const source$ = this.sumasotrosService.getOtrossumas(this.parametroDelPadreidcentralizadormes); //con esto traigo el id
-    const data:any = await lastValueFrom(source$);
-    this.otrosarray=data[0].otrossumas;
-
-    console.log("aqui esta mi dataaaaaaaaa", data);
-    console.log("aqui estan mis otros array", this.otrosarray);
-    //this.idcentralizadormes = data[0].comprassumas.idcomprasuma;
-    this.crearmitabla();
-    this.cdr.detectChanges();
-  }
-
+ 
 
   crearmitabla(){
   const hotSettings: Handsontable.GridSettings = {
@@ -171,28 +167,17 @@ export class OtrosComponent {
     
     licenseKey: 'non-commercial-and-evaluation'
   };
-  /*const pruebaMatriz = [
-    {MontoBs:20, observaciones: "dasdjadasdasdadasdasd"}, 
-    
-    
-   ];*/
-  this.hotSettingsArray.push(hotSettings);
-  console.log("dada", this.otrosarray);
-  this.hotSettingsArray[0].data = this.otrosarray;
-  //this.hotSettingsArray[0].data =pruebaMatriz;
-  console.log("AQUI ESTAN MIS DATOS PARA LA TABLA otros xdxd",this.hotSettingsArray[0].data);
   
-  this.dbLocal.SetOtrosresultados(this.hotSettingsArray[0].data);
+  this.hotSettingsArray.push(hotSettings);
+  
+  this.hotSettingsArray[0].data = this.otrosarray;
+ 
 }
  
 async guardar(){
-  /*this.bloqeuarboton= true;
-  var readOnly= this.hotRegistererotros.getInstance(this.idtalonario).getSettings().readOnly;
-   this.hotRegistererotros.getInstance(this.idtalonario).updateSettings({                         //esto bloquea la tabla
-    readOnly: !readOnly
-  });*/
-
-  //console.log("HOLSO ES EL DATA",  this.hotRegistererotros.getInstance(this.idtalonario).getData());
+ 
+  this.jsonOtrosArray=[];
+  
   const matrizdata =this.hotRegistererotros.getInstance(this.idtalonario).getData()
   for (const fila of matrizdata) {
     if (fila[0] !== null || fila[2] !== null ) {
@@ -208,31 +193,38 @@ async guardar(){
   
 }
 console.log("holos es el json",this.jsonOtrosArray);
-await this.enviardatos();
+await this.enviardatoslocalstorage();
+ 
+}
+async guardarLSDB(){
+ 
+  this.jsonOtrosArray=[];
+  
+  const matrizdata =this.hotRegistererotros.getInstance(this.idtalonario).getData()
+  for (const fila of matrizdata) {
+    if (fila[0] !== null || fila[2] !== null ) {
+      const jsondata ={
+      idotrossumas:uuidv4(),
+      nombrecobro: fila[0]||"" ,
+      montootros: fila[1] || 0,
+      observaciones:fila[3]||"",
+      idcentralizadormes: this.parametroDelPadreidcentralizadormes
+      }
+      this.jsonOtrosArray.push(jsondata)
+    }
+  
+}
+console.log("holos es el json",this.jsonOtrosArray);
+await this.guardardatoslocalstorageyDB();
  
 }
 
-async enviardatos(){
-  const source$ = this.sumasotrosService.getsolodetallesOtrossumas(this.parametroDelPadreidcentralizadormes); //con esto traigo el id
-  const data:any = await lastValueFrom(source$);
-  console.log("mis datos data",data)
-  const resultado = data.find((item: any) => item.idcentralizadormes === this.parametroDelPadreidcentralizadormes); //buiscando si hay datos en mi tabla
-  console.log("resultado",resultado);
-  if(!resultado){ 
-        // creamos
-        console.log("HOLOS NO HAY DATOS");
-       await this.sumasotrosService.createotrossuma(this.jsonOtrosArray);
-       this.jsonOtrosArray=[];
-  }else{
-      //BORRAMOS Y creamos
-      await this.sumasotrosService.deleteOtrossumasdetalles(this.parametroDelPadreidcentralizadormes);
-      await this.sumasotrosService.createotrossuma(this.jsonOtrosArray);
-      this.jsonOtrosArray=[];
-    }
-
-      
-
-
-
+async enviardatoslocalstorage(){
+  this.dbLocal.traerdatosguardarotroslocalstorage(this.jsonOtrosArray)
 }
+
+async guardardatoslocalstorageyDB(){
+  await this.dbLocal.traerdatosbuscarcrearborrarotros(this.parametroDelPadreidcentralizadormes,this.jsonOtrosArray)
+}
+
 }
