@@ -498,12 +498,7 @@ export class TalonariosventasComponent   {
 
  async guardarDatos(){
   console.log("HOLOOOOOOOOOOS mi fact inicial  mi fact ifdnal mi talonario cuantas veces ENTRARARARARARARARAR",this.numtalonario,this.factinicial,this.factfinal)
-  //console.log(`El componente está en la posición ${this.posicion}`);
-
- // if(this.matrizventaService.datosencabezadoscrear[this.indexexterior][this.indexinterior]){
-  //console.log(`ngOnInit ha sido llamado ${this.contadorNgOnInit} veces.`);
- //if(this.contadorNgOnInit ===1){
-  //console.log(`ENTRA SOLO UNA ${this.contadorNgOnInit} VEZ.`);
+  
   await this.convertircabecera();
 
 
@@ -865,25 +860,10 @@ console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///
   }
   const ultimoarray = this.matrizventaService.datosencabezadoscrear[this.matrizventaService.datosencabezadoscrear.length - 1];
   
-  //const arrayCompleto = this.matrizventaService.datosencabezadoscrear;
- //const ultimoarray = arrayCompleto[arrayCompleto.length - 1];
 
-  // Ahora puedes trabajar con ultimoarray de manera segura
   console.log("AQUI VA TODOOOO---------------------------------",ultimoarray);
   this.matrizventaService.arraycabeceratodo = ultimoarray
-//} else {
-  // Manejar el caso en el que datosencabezadoscrear[0] no está definido o es un array vacío
-  
-  //this.matrizventaService.arraycabeceratodo  = this.matrizventaService.datosencabezadoscrear[0]
-  //console.error('El primer array no está definido o está vacío.',this.matrizventaService.datosencabezadoscrear[0]);
-//}
 
-  //const  ultimoarray=  this.matrizventaService.datosencabezadoscrear[0][this.matrizventaService.datosencabezadoscrear[0].length - 1];
- // const ultimoElemento = ultimoarray[ultimoarray.length - 1];
-
-
-
- // console.log("MIIIIIIIIIIIIIIIIIIIIIIIIIIS datos ordenadosososadoa",ultimoarray)
   
   }
 
