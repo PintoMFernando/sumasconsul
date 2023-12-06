@@ -127,7 +127,7 @@ async traerventaslocalstorage(idmespuntoventasuma:string,idtipo:number){
   //const datosActuales = this.GetVentas();
  //await this.ClearVentas();
  let source$ = this.sumatalonarioService.getTalonariosuma(String(idmespuntoventasuma),idtipo); //con esto traigo el id
-  let data:any = await lastValueFrom(source$);
+  let data:any = [await lastValueFrom(source$)];
  await this.SetVentas(data);
  /*if( localStorage.getItem('ventas')){  //el ls estavacio
   console.log('Datos después de almacenar: HOLOOOS ESTA VACIO PREGUNTAR EL DB ESTA VACIO????????');
@@ -169,7 +169,7 @@ async guardarsumasventasDBlocalstorage(){
   //await this.ClearVentas();
   const enviar= await this.GetVentas()
   console.log("estos son mi datos a guardaaaaaaaaaaaaaardadoooooHOLOS enserio entras mas de una vez?????",enviar)
-  //await this.ventastalonarioService.createdelteVentasSumas(enviar); //aqui reducimos codigo solo enviando el json y el id
+  await this.ventastalonarioService.createdelteVentasSumas(enviar); //aqui reducimos codigo solo enviando el json y el id
   //let data:any = await lastValueFrom(source$); 
   //await this.SetVentas(jsondatosotros);   
   

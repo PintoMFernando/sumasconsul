@@ -12,8 +12,8 @@
     </div>
   </div>
   
-        <div *ngFor="let tablas of hotSettingsArray; let i = index" class="form-container">
-   
+        <div *ngFor="let tablas of tablas; let i = index" class="form-container">
+         
           <tr>
             <td colspan="2">
   
@@ -26,7 +26,7 @@
               <label for="campo1" >Nº Talonario:</label>
             </td>
             <td>
-              <input type="text" id="campo2" name="campo2" [value]="i + 1" [disabled]="tablas.bloqueada" readonly/>
+              <input type="text" id="campo2" name="campo2" [value]="i + 1"  readonly/>
             </td>
           </tr>
           <tr>
@@ -34,7 +34,7 @@
               <label for="campo3">Factura Inicial:</label>
             </td>
             <td>
-              <input type="number" id="campo4" name="campo4" [(ngModel)]="factinicial[i]" [value] ="0" required="true" [disabled]="tablas.bloqueada"/>
+              <input type="number" id="campo4" name="campo4" [(ngModel)]="tablas.factinicial" value ="{{tablas.factinicial}}" required="true" />
       
             </td>
           </tr>
@@ -44,7 +44,7 @@
               <label for="campo5" >Factura Final:</label>
             </td>
             <td>
-              <input type="number" id="campo6" name="campo6" [(ngModel)]="factfinal[i]" [disabled]="tablas.bloqueada"/>
+              <input type="number" id="campo6" name="campo6" [(ngModel)]="tablas.factfinal"  value ="{{tablas.factfinal}}" [disabled]="tablas.bloqueada"/>
             </td>
           </tr>
   
@@ -53,13 +53,20 @@
               <label for="campo7">Anular-Monto:</label>
             </td>
             <td>
-              <p-checkbox [binary]="true" inputId="binary" [(ngModel)]="agregarFilas[i]" ></p-checkbox> 
+              <p-checkbox [binary]="true" inputId="binary" [(ngModel)]="tablas.agregarFilas" value="{{tablas.agregarFilas}}" ></p-checkbox> 
+            </td>  
+           
+          </tr>
+          <tr>
+              <td><label for="campo5" >Total:</label></td>
+              <td>
+              <input type="number" id="campo9" name="campo9"   value ="{{tablas.suma}}" readonly/>
             </td>  
           </tr>
-          <tr *ngIf="agregarFilas[i]">
+          <tr *ngIf="tablas.agregarFilas">
             <td colspan="1">Ponga el Monto:</td>
-            <input type="text" [(ngModel)]="montodinamico"/>
-            <td colspan="1"><button (click)="anulacionChange(i)">crear</button></td>
+            <input type="number" [(ngModel)]="tablas.montodinamico"/>
+            <td colspan="1"><button (click)="anulacionChange(tablas.iduuid)">crear</button></td>
           </tr>
   
           <tr>
@@ -67,17 +74,17 @@
               <label for="suma">Suma Ventas Prevaloradas</label>
             </td>
           </tr>
-  
+         
           <tr>
               <td colspan="2">
                   
-                <hot-table [settings]="tablas" [hotId]="'talonario' + i"  ></hot-table>
-                      <button (click)="guardarDatos(i)" [disabled]="tablas.bloqueada">Guardar</button>
+                <hot-table [settings]="tablas.hotSettings" [hotId]="tablas.iduuid"  ></hot-table>
+                      <button (click)="guardar(i)" [disabled]="tablas.bloqueada">Guardar</button>
   
                  
                 </td>
           </tr>
           
-     
+      
       </div>
       <p-toast></p-toast>

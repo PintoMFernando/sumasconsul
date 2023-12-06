@@ -15,6 +15,7 @@ import { ventataalonario } from 'src/app/models/ventatalonario';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { MatrizventasService } from 'src/app/services/matrizventas.service';
 import { interval, Subscription } from 'rxjs';
+import { Formulario } from 'src/app/models/tablatalonario.model';
 
 
 @Component({
@@ -50,15 +51,20 @@ export class TalonariosventasComponent   {
               private cdr: ChangeDetectorRef,
              
              )
-             { this.matrizventaService.matrizLocalstorage = [];              
+             { this.matrizventaService.matrizLocalstorage = [];
+              this.matrizventaService.matrizLocalstorageidventatalonario = [];              
               }
               
   logicaEjecutada = false;
   //numberOfForms: number = 0;
+  tabla: ventataalonario = new ventataalonario;
+  tablatalonarios : Formulario = new Formulario(this.hotRegisterer);
+ 
   contadorNgOnInit:number=0;
   numberOfForms: any [] = [];
   formArray: FormGroup[] = [];
   hotSettingsArray: any[] =[]; //esto contiene todas mis isntancias de handsontable
+  hotSettingsArray2: any[] =[];
   misencabezados: any[] =[]; //esto contiene todas mis isntancias de handsontable
   hotDataArray =[];
   tablesSettings: Handsontable.GridSettings[] = [];
@@ -120,6 +126,20 @@ export class TalonariosventasComponent   {
   ngOnInit(){
     //if (!this.ejecutado) {
 
+    //this.matrizventaService.matrizLocalstorageidventatalonario= []
+          const datosEspecificos = {
+            idpuntoventaactividad:this.idpuntoventaactividad,
+            idmes:this.idmespuntoventasuma,
+            tipo:1,
+            datos:[]
+          
+          };
+
+             this.matrizventaService.matrizLocalstorageidventatalonario.push({
+            idposicion: datosEspecificos
+            });
+          console.log("que hay aquiiiiiiiii-----------------------------",this.matrizventaService.matrizLocalstorageidventatalonario)
+     
 
      this.traerlocalstorage();
      this.iniciarIntervalo();
@@ -266,45 +286,28 @@ export class TalonariosventasComponent   {
     
   
     for ( let i = valoaumentar; i < cantidad; i++) {
-       this.numtalonario[i]=i+1;
+         this.numtalonario[i]=i+1;
       
 
       //this.factinicial[i]= 
-      const form = this.formBuilder.group({
-        
-        field1: ['', Validators.required],
-        field2: ['']
-      });
+     
       const  isHotReadOnly: boolean = false;//ver esto para bloquear la tabla
       const hotSettings: Handsontable.GridSettings = {
         formulas: {
           engine: this.hyperformulaInstance,       //con esto funciona las formulas
         },
-        
-        data: [
-                     
-          
-        ],
+        data: [],
+
         afterFormulasValuesUpdate : (changes) => { //contiene el valor de la celda de las sumas
-      
           this.suma = this.hotRegisterer.getInstance('talonario'+i).getDataAtCell(0,2 );
-         
-        
-        
-        
-        
       },
-       
         afterChange : (changes,source) =>{
           if (!this.settingFormula) {
             this.settingFormula = true;
             this.hotRegisterer.getInstance('talonario'+i).setDataAtCell(0, 2, '=SUM(B:B)');
             this.settingFormula = false;
           }
-            
-          
-
-        //  this.hotRegisterer.getInstance('tabla3').setDataAtCell(0, 2, '=SUM(B:B)');
+        
 
         if (changes || source === 'edit') {
           //console.log("Changes:", changes[3]);
@@ -314,18 +317,10 @@ export class TalonariosventasComponent   {
             const value = changes[3]  //aqui esta el valor de las casillas
             const col =changes[1];
             const rowCount = this.hotRegisterer.getInstance('talonario'+i).countRows();
-            
               if (col === 'monto') {
-               // console.log("entra al col",col);
-                //const numero = parseInt(value, 10);
                 if (value) {
-                 
                     this.hotRegisterer.getInstance('talonario'+i).setDataAtCell(row, 0, this.factinicial[i] + row); //con esto pone automaticamente numeros siempre y cuando ponga fact inicial
-                
-                  
                   }
-             
-            
             switch (value) {
               case 'I':
               case 'i':
@@ -343,8 +338,7 @@ export class TalonariosventasComponent   {
                 this.hotRegisterer.getInstance('talonario'+i).setCellMeta(changes[0], 1, 'className', 'colorblanco');
                 break;
             }
-            this.hotRegisterer.getInstance('talonario'+i).render(); 
-            
+            this.hotRegisterer.getInstance('talonario'+i).render();  
           }
             
           })
@@ -416,15 +410,16 @@ export class TalonariosventasComponent   {
 
         licenseKey: 'non-commercial-and-evaluation'
         
-      };
-     
-      this.hotSettingsArray.push(hotSettings);
+         };
+      //const iduuid =uuidv4();
       
-
-
-        
-      //console.log("AQUI TENDRIA QUE PONER MIS DATAS EN UN FOR O ALGO", this.hotSettingsArray[0].data)
+     // this.hotSettingsArray.push(hotSettings, this.tabla);
+     this.hotSettingsArray.push(hotSettings); 
+     this.hotSettingsArray2.push(this.tablatalonarios); 
+     //console.log("AQUI TENDRIA QUE PONER MIS DATAS EN UN FOR O ALGO", this.hotSettingsArray[0].data)
+    
     }
+    console.log("MI HOTSETTINGSARRAY2222222222222222222222222222??",this.hotSettingsArray2)
     console.log("MI HOTSETTINGSARRAY??",this.hotSettingsArray)
     console.log("que es datoTabla????",this.datosTabla)
 
@@ -829,7 +824,7 @@ console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///
   
   // Asegurarse de que la posición [j][i] esté inicializada
   if (!this.matrizventaService.datosencabezadoscrear[this.indexexterior][this.indexinterior]) {
-  this.matrizventaService.datosencabezadoscrear[this.indexexterior][this.indexinterior] = [1,1];
+  this.matrizventaService.datosencabezadoscrear[this.indexexterior][this.indexinterior] = [];
   }
   
   this.matrizventaService.datosencabezadoscrear[this.indexexterior][this.indexinterior] = 

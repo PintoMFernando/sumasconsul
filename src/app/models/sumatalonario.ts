@@ -4,5 +4,13 @@ export class sumatalonario{
   numfactura?:number;
   monto?:number;
   estado?:number;
-  idtalonarioventas?:string;
+  idventatalonario?:string;
+  created_at?:Date;
+  updated_at?:Date;
+  deletedAtobs?: Date | null;
 }
+
+
+
+
+
