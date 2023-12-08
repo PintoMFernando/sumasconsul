@@ -41,6 +41,7 @@ export class VentasComponent {
               private mespuntoventasumaService: MespuntoventasumaService, 
               private puntoventaactividadService: PuntoventaactividadService,  
               public sumatalonarioService: SumatalonarioService,
+              
     ) { }
 
 
@@ -82,12 +83,11 @@ export class VentasComponent {
   }
   async traerdatos(){
      
-    const source$ =this.puntoventaactividadService.getPuntoventaactividad(this.idempresaglobal);
+    const source$ =this.puntoventaService.getPuntoVentaTodo(this.idempresaglobal,this.parametroDelPadreidcentralizadormes); //esto tengo nque mover al local storage 
+    
     const data:any = await lastValueFrom(source$);
     this.puntoventa3=data;
-    
-    console.log("mis datos data de aslkdjhasidhbasjkdnlaskdas",data.data)
-    console.log("mis datos data de mi this4",this.puntoventa3)
+    console.log("mis datos data de mi this ***************************************************************4",this.puntoventa3)
 
   }
 

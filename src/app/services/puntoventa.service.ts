@@ -27,6 +27,11 @@ export class PuntoventaService {
     )
     
     }
+
+    getPuntoVentaTodo(idempresa:number,idcentralizadormes:string): Observable<Puntoventa> {
+      return this.http.get<Puntoventa>(`${this.baseUrl}/puntoventa/todoventa/${idempresa}/${idcentralizadormes}`, { headers: this.headers });
+      
+     }
   
 
 

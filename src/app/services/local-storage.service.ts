@@ -129,6 +129,7 @@ async traerventaslocalstorage(idmespuntoventasuma:string,idtipo:number){
  let source$ = this.sumatalonarioService.getTalonariosuma(String(idmespuntoventasuma),idtipo); //con esto traigo el id
   let data:any = [await lastValueFrom(source$)];
  await this.SetVentas(data);
+ console.log("asdipojsajf oi;sjoi;jsiorsjurjiojhfisjfsd",data)
  /*if( localStorage.getItem('ventas')){  //el ls estavacio
   console.log('Datos después de almacenar: HOLOOOS ESTA VACIO PREGUNTAR EL DB ESTA VACIO????????');
   let source$ = this.sumatalonarioService.getTalonariosuma(String(idmespuntoventasuma),idtipo); //con esto traigo el id
@@ -176,6 +177,62 @@ async guardarsumasventasDBlocalstorage(){
  
 }
 
+
+
+//ventasPrevaloradas
+async traerventasPrevaloradaslocalstorage(idmespuntoventasuma:string,idtipo:number){
+  //const datosActuales = this.GetVentas();
+ //await this.ClearVentas();
+ let source$ = this.sumatalonarioService.getTalonariosuma(String(idmespuntoventasuma),idtipo); //con esto traigo el id
+  let data:any = [await lastValueFrom(source$)];
+ await this.SetVentasPrevaloradas(data);
+ console.log("asdipojsajf oi;sjoi;jsiorsjurjiojhfisjfsd",data)
+ /*if( localStorage.getItem('ventas')){  //el ls estavacio
+  console.log('Datos después de almacenar: HOLOOOS ESTA VACIO PREGUNTAR EL DB ESTA VACIO????????');
+  let source$ = this.sumatalonarioService.getTalonariosuma(String(idmespuntoventasuma),idtipo); //con esto traigo el id
+  let data:any = await lastValueFrom(source$);
+  if(data){ //la db esta vacio
+     //necesita crear no hay datos muestra ne blanco 
+  }else{
+   
+  }
+
+ }else{
+  let source$ = this.sumatalonarioService.getTalonariosuma(String(idmespuntoventasuma),idtipo); //con esto traigo el id
+  let data:any = await lastValueFrom(source$);
+  //el local storaqge no esta vacio entonces..muestra en blanco 
+  if(!data){ //la db esta vacio
+    //necesita crear no hay datos muestra ne blanco 
+ }else{
+   await this.SetVentas(data);
+ }
+ }
+ 
+*/
+  
+ 
+}
+
+//esto guarda en el localstorage 
+async guardarsumasventasPrevaloradaslocalstorage(jsondatoventasprevaloradas:any){
+  console.log('Datos anteeees de almacenar:', jsondatoventasprevaloradas);
+  await this.ClearVentasPrevaloradas();
+ 
+  await this.SetVentasPrevaloradas(jsondatoventasprevaloradas);  //esto guarda los datos en el ls
+ 
+}
+
+//guarde en el la db 
+async guardarsumasventasPrevaloradasDBlocalstorage(){   //esto verificar
+  //await this.ClearVentas();
+  const enviar= await this.GetVentasPrevaloradas()
+  console.log("estos son mi datos a guardaaaaaaaaaaaaaardadoooooHOLOS enserio entras mas de una vez?????",enviar)
+  await this.ventastalonarioService.createdelteVentasSumas(enviar); //aqui reducimos codigo solo enviando el json y el id
+  //let data:any = await lastValueFrom(source$); 
+  //await this.SetVentas(jsondatosotros);   
+  
+ 
+}
 
 
  
@@ -337,6 +394,26 @@ async guardarsumasventasDBlocalstorage(){
   ClearVentas() {
     localStorage.removeItem("ventas");
   }
+
+
+  SetVentasPrevaloradas(ventasprevaloradas: any) {
+    localStorage.setItem("ventasprevaloradas",JSON.stringify(ventasprevaloradas));
+  }
+  GetVentasPrevaloradas():any[]{
+    if(localStorage.getItem("ventasprevaloradas")){
+      let ventasprevaloradas = localStorage.getItem("ventasprevaloradas")??'';
+      return ventasprevaloradas ? JSON.parse(ventasprevaloradas) : [];
+    }
+    else
+    return [];
+  }
+  StateVentasPrevaloradas():boolean{
+    return localStorage.getItem("ventasprevaloradas")!==null;
+  }
+  ClearVentasPrevaloradas() {
+    localStorage.removeItem("ventasprevaloradas");
+  }
+
 
 
 

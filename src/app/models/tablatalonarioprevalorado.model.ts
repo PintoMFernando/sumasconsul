@@ -68,19 +68,7 @@ export class FormularioPrevalorado {
                   }
 
 
-                  if(this.agregarFilas==true){
-                    this.agregarFilas=false;
-                    const rango = this.factfinal-this.factinicial;
-                   
-                   for (var i=0; i<= rango; i++) {
-                 
-                     const fact=this.factinicial;
-                     this.hotRegisterer.getInstance(this.iduuid).alter('insert_row_below');   //esto crea las columnas que yo quiera
-                     this.hotRegisterer.getInstance(this.iduuid).setDataAtCell(i,0,this.factinicial);
-                     this.hotRegisterer.getInstance(this.iduuid).setDataAtCell(i,1,this.montodinamico);//aqui pone los datos en la casillas
-                     //this.datostalonarios.push({monto:this.montodinamico}); 
-                   }
-                 }
+               
              
             
             switch (value) {
@@ -186,27 +174,6 @@ private static generateUUID(): string {
     return uuidv4();
 }
 
-anulacionChange(){
-   
-    if(this.agregarFilas==true){
-    this.agregarFilas=false;
-    const rango = this.factfinal-this.factinicial;
-   
-   for (var i=0; i<= rango; i++) {
- 
-     const fact=this.factinicial;
-     this.hotRegisterer.getInstance(this.iduuid).alter('insert_row_below');   //esto crea las columnas que yo quiera
-     this.hotRegisterer.getInstance(this.iduuid).setDataAtCell(i,0,this.factinicial);
-     this.hotRegisterer.getInstance(this.iduuid).setDataAtCell(i,1,this.montodinamico);//aqui pone los datos en la casillas
-     //this.datostalonarios.push({monto:this.montodinamico}); 
-   }
- 
- 
-   
-   
-   //aqui se tendria  que bloquear la tabla  
- 
- }
- } 
+
 
 }

@@ -16,6 +16,8 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { MatrizventasService } from 'src/app/services/matrizventas.service';
 import { interval, Subscription } from 'rxjs';
 import { Formulario } from 'src/app/models/tablatalonario.model';
+import { TalonarioLogico } from 'src/app/models/tablatalonariologico.model';
+import { VentasMesOperaciones } from 'src/app/models/ventasMesOperaciones.model';
 
 
 @Component({
@@ -32,6 +34,7 @@ export class TalonariosventasComponent   {
   @Input()  indexinterior: any;  
   @Input()  indexexterior: any;  
   @Input() posicion: any;
+  @Input() todotalonarios: any;
   @ViewChild('numFacturaInput', { static: false }) numFacturaInput!: ElementRef;
  
 
@@ -49,17 +52,18 @@ export class TalonariosventasComponent   {
               public dbLocal: LocalStorageService,
               private matrizventaService: MatrizventasService,
               private cdr: ChangeDetectorRef,
+              private ventasMesOperaciones: VentasMesOperaciones,
              
              )
              { this.matrizventaService.matrizLocalstorage = [];
-              this.matrizventaService.matrizLocalstorageidventatalonario = [];              
+              this.matrizventaService.matrizLocalstorageidventatalonario = [];
+             // this.ventasMesOperaciones.datosTabla = [];          
               }
               
   logicaEjecutada = false;
   //numberOfForms: number = 0;
   tabla: ventataalonario = new ventataalonario;
   tablatalonarios : Formulario = new Formulario(this.hotRegisterer);
- 
   contadorNgOnInit:number=0;
   numberOfForms: any [] = [];
   formArray: FormGroup[] = [];
@@ -110,6 +114,7 @@ export class TalonariosventasComponent   {
   datosTabla: any[] = [];
   //datosTabla: ventataalonario = new ventataalonario
   conteotalonarios: number =0;
+  conteotalonarios2: number =0;
   settingFormula = false;
  //idventatalonario: string ="";
  idventatalonario: string[] = [];
@@ -123,30 +128,36 @@ export class TalonariosventasComponent   {
   facturainicial:number=0;
   facturafinal:number=0;
   //ejecutado: boolean = false;
+  ventasMesOperacioness: VentasMesOperaciones = new VentasMesOperaciones(this.dbLocal);
+  hasPreviousValue: boolean = false; 
+  previousValue: number | null = null;
+  previousValue2: number | null = null;
   ngOnInit(){
+    console.log("aqui estan mis talonariooooos-------------------------------------------------------------???",this.todotalonarios)
     //if (!this.ejecutado) {
-
+      //console.log('datosTabla en ngOnInit:', this.ventasMesOperaciones.datosTabla);
+    
+      
     //this.matrizventaService.matrizLocalstorageidventatalonario= []
           const datosEspecificos = {
-            idpuntoventaactividad:this.idpuntoventaactividad,
+            idpuntoventaactividad:this.idpuntoventaactividad,      //aqui estaba tratando de formar un json con las claves de puntoventaactividad y el mes  
             idmes:this.idmespuntoventasuma,
             tipo:1,
             datos:[]
           
           };
 
-             this.matrizventaService.matrizLocalstorageidventatalonario.push({
-            idposicion: datosEspecificos
-            });
-          console.log("que hay aquiiiiiiiii-----------------------------",this.matrizventaService.matrizLocalstorageidventatalonario)
+          this.matrizventaService.matrizLocalstorageidventatalonario.push({   //para despues colocarlo en mi servicio array para que tnega su propio espacio
+          idposicion: datosEspecificos
+          });
+        
      
 
      this.traerlocalstorage();
-     this.iniciarIntervalo();
-     
-    
-    console.log("Aqui va mi Index interior i", this.indexinterior);
-    console.log("Aqui va mi Index exterior j", this.indexexterior);
+    // this.iniciarIntervalo();
+
+   // console.log("Aqui va mi Index interior i", this.indexinterior);
+   // console.log("Aqui va mi Index exterior j", this.indexexterior);
      console.log("11111 IDMESPUNTOVETNASUMA", this.idmespuntoventasuma);
      console.log("22222222 IDPUNTOVENTAACTIVIDAD", this.idpuntoventaactividad);
      console.log("33333333 NOMBREACTIVIDAD", this.nombreactividad);
@@ -191,9 +202,9 @@ export class TalonariosventasComponent   {
 
   async traerlocalstorage(){
     
-    await this.dbLocal.traerventaslocalstorage(String(this.idmespuntoventasuma),1)
+    await this.dbLocal.traerventaslocalstorage(String(this.idmespuntoventasuma),1)  //aqui traigo mis datos del local storage y si no hay trae mis tados de la db
 
-    console.log("VEZ QUE ENTRA AL LOCAL STORAGE A TRAER",this.conteo++);
+   
     await this.traertablasventas();
   }
 
@@ -201,13 +212,20 @@ export class TalonariosventasComponent   {
   async traertablasventas(){
  
     //this.datosTabla =[];
-     this.datosTabla = await this.dbLocal.GetVentas();
-  
+     this.datosTabla = await this.dbLocal.GetVentas();    //aqui asigno los valores que traje del LS/DB y le asgino a datosatbla 
+     this.ventasMesOperaciones.datosTabla = await this.dbLocal.GetVentas();
+
+// Llamar a la función agregarTalonario después de crear la instancia
+
+
+     
+  //   this.ventasMesOperaciones.datosTabla 
  
-   console.log("MI THIS DATOS TABLAAAAS",this.datosTabla)
+   console.log("MI THIS DATOS TABLAAAA***********************************************S",this.datosTabla,this.datosTabla[0].length)
+   console.log("MI VENTAMESOPERACIONESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS??",this.ventasMesOperaciones.datosTabla,this.ventasMesOperaciones.datosTabla[0].length)
    
-    for( let i=0; i< this.datosTabla.length;i++){
-   
+    for( let i=0; i< this.datosTabla.length;i++){         //esto es codigo pasado, le asignaba a mis inputs de facturas inicales finales, los valores que traia del backend
+     
     //this.conteotalonarios=0;
       for( let j=0; j< this.datosTabla[i].length;j++){
         console.log("aqui hay algooooo", this.datosTabla[i][j].idpuntoventaactividad);
@@ -231,11 +249,13 @@ export class TalonariosventasComponent   {
  
   }
 
-  this.numberOfForms[this.indexinterior]=this.conteotalonarios
-  
-  await this.onNumberOfFormsChange();
+  this.numberOfForms[this.indexinterior]=this.todotalonarios.length  /// con esto contaba los talonarios de mi datos que traia de mi db y le asignaba esa valor a numberofForms
+                                                                ///numberforms es el input con el cual creo mis talonarios
 
+   console.log("MI VENTAMESO TAMANIOOOOOOOOOOOOOS??",this.numberOfForms[this.indexinterior])
+  //await this.onNumberOfFormsChange();
 
+  await this.actualizarFormularios();
     // if(this.idpuntoventaactividad == data.idpuntoactividad && this.parametroDelPadreidcentralizadormes === data.idcentralizadormes){
     //}
    
@@ -250,33 +270,70 @@ export class TalonariosventasComponent   {
     licenseKey: 'internal-use-in-handsontable',
   });
   
+  onFocus(event: any) {
 
-  async onNumberOfFormsChange() {
-    await this.actualizarFormularios();
+    if (!this.hasPreviousValue) {
+      this.previousValue = this.numberOfForms[this.indexinterior];
+      this.hasPreviousValue = true;
+    }
   }
 
-  private actualizarFormularios() {
+  async onNumberOfFormsChange() {
+     this.previousValue2= this.previousValue;
+
    
+
+    // Hacer algo con el valor anterior y el nuevo valor
+  //  console.log('Valor anterior:',  this.previousValue2);
+  //  console.log('Nuevo valor:', newFormValue)
+
+    this.numberOfForms[this.indexinterior] = this.todotalonarios.length ;
+
+    await this.actualizarFormularios();
+    
+ 
+  }
+ 
+ 
+
+  private actualizarFormularios() {
+   // console.log('Valor anterior:',  this.previousValue2);
+   // console.log('Nuevo valor:', this.numberOfForms[this.indexinterior]);
+
+    console.log("MIIIIIIIIIIIIIIIIIIIIII VALOR ANTERIOOOOOR???/",this.previousValue )
     //const cantidadFormularios = this.numberOfForms;
     //this.crearFormularios(cantidadFormularios );
-    const cantidadFormularios = this.numberOfForms[this.indexinterior];
-    const formulariosActuales = this.hotSettingsArray.length;
-    const ultimoValor = this.hotSettingsArray.length-1; 
+    const cantidadFormularios = this.numberOfForms[this.indexinterior];    ///toda esta parte me creo varables para poder calcular, cuantos talonarios aumentare 
+   // const cantidadFormularios = this.ventasMesOperaciones.datosTabla[0].length;  
+    // const formulariosActuales = this.ventasMesOperaciones.datosTabla[0].length;             /// sobre los que ya estan, para que no me remplace o aumente mas de lo que es
+    
+    console.log('Valor anterior:',  this.previousValue2);
+    console.log('Nuevo valor:', cantidadFormularios);
+    
+    if (this.previousValue2 !== null) {
+      // Tu código aquí
+        
+    const cantaumentar = cantidadFormularios- this.previousValue2
+    this.crearFormularios(cantidadFormularios,cantaumentar);
+    }
+   
+
     
     
-    
-    if (cantidadFormularios > formulariosActuales) {
+    console.log("MIIIIIIIIIIIIIIIIIIIIII CANTIDAD DE FORNMULARIOS", cantidadFormularios)
+   
+     //0>
+  /*  if (cantidadFormularios > formulariosActuales) {                             
       this.crearFormularios(cantidadFormularios,formulariosActuales);
     }else if(cantidadFormularios< formulariosActuales){ //aqui quiere reducir 
          if(this.hotRegisterer.getInstance('talonario'+ultimoValor).getData()[0][0] !== null  ){ // tiene datos no quita tiene dato
-          
-          this.messageService.add({ severity: 'error', summary: 'CUIDADO ', detail: 'No se puede Quitar el Talonairo por que Hay datos en el ' });
+            this.messageService.add({ severity: 'error', summary: 'CUIDADO ', detail: 'No se puede Quitar el Talonairo por que Hay datos en el ' });
          }else{
           this.hotSettingsArray.pop()
           this.numtalonario.pop()
           
          }
-    }
+    }*/
      
      
   }
@@ -284,13 +341,15 @@ export class TalonariosventasComponent   {
     //if(this.hotRegisterer.getInstance('talonario'+index).getData()) ==)
     //this.hotSettingsArray =[];
     
-  
-    for ( let i = valoaumentar; i < cantidad; i++) {
-         this.numtalonario[i]=i+1;
-      
-
-      //this.factinicial[i]= 
+     console.log("cantidad y valor a aaumentar ",cantidad,valoaumentar)
      
+     console.log("tamanio", this.ventasMesOperaciones.datosTabla.length)
+    for ( let i = valoaumentar; i < cantidad; i++) {                 ///aqui itero la cantidad que se aumentare a mis handsontables "valoraumentar " hace eso, creo mis handsontable y los agrego a mi array de handsontable para mostrar  ami vista
+         this.numtalonario[i]=i+1;
+         console.log("conteooioooooooooooooooooooo cuantas veces entras>>>>>>",i)
+       //  this.ventasMesOperaciones.agregarTalonario(this.idpuntoventaactividad,this.idmespuntoventasuma)  //aqui es de donde traigo lo que ceramos con la clase
+                                                                                                          //aqui itero  las veces que se aumentar el talonario llama  ala funcion y agrega el obejto
+      //this.factinicial[i]= 
       const  isHotReadOnly: boolean = false;//ver esto para bloquear la tabla
       const hotSettings: Handsontable.GridSettings = {
         formulas: {
@@ -419,22 +478,22 @@ export class TalonariosventasComponent   {
      //console.log("AQUI TENDRIA QUE PONER MIS DATAS EN UN FOR O ALGO", this.hotSettingsArray[0].data)
     
     }
-    console.log("MI HOTSETTINGSARRAY2222222222222222222222222222??",this.hotSettingsArray2)
-    console.log("MI HOTSETTINGSARRAY??",this.hotSettingsArray)
-    console.log("que es datoTabla????",this.datosTabla)
+    console.log("MI VENTAMESOPERACIONESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS??",this.ventasMesOperaciones.datosTabla)  //AQUI ESTARIA MIS DATOS SUPONGO EN EL ARRAY 
+   
+
 
  
     
    
     
-    for( let i=0; i< this.datosTabla.length;i++){
+    for( let i=0; i< this.datosTabla.length;i++){                              //aqui  pongo los datos que traigo de mi DB/LS a mi array de handsontables 
       for( let j=0; j< this.datosTabla[i].length;j++){
       if( this.idpuntoventaactividad === this.datosTabla[i][j].idpuntoventaactividad && this.idmespuntoventasuma === this.datosTabla[i][j].idcentralizadormes){
        //comparo mis datos para que se vayan a su lugar correcto
         this.hotSettingsArray[j].data = this.datosTabla[i][j].sumaventatalonario;
-        console.log("mi fact inical aqui",this.factinicial[j])
-        console.log("mi fact final aqui",this.factfinal[j])
-        console.log("mi numtalonario aqui", this.numtalonario[j])
+       // console.log("mi fact inical aqui",this.factinicial[j])
+        //console.log("mi fact final aqui",this.factfinal[j])
+      //  console.log("mi numtalonario aqui", this.numtalonario[j])
        
         
         let misencabezados ={
@@ -444,7 +503,7 @@ export class TalonariosventasComponent   {
         }
       
        
-        console.log("MI HOTSETTINGSARRAY que esto guardando aqui??",this.hotSettingsArray[j].data)
+       // console.log("MI HOTSETTINGSARRAY que esto guardando aqui??",this.hotSettingsArray[j].data)
        this.matrizventaService.datosencabezados.push(misencabezados);
       } 
       
@@ -452,11 +511,11 @@ export class TalonariosventasComponent   {
 
   }
   
-  let exterior=this.indexexterior;
-  let interior=this.indexinterior;
-  console.log("MIS ENCABEZADOOOOOOOOOOOOOOOOOOOOO",this.matrizventaService.datosencabezados)
+  let exterior=this.indexexterior;     //aqui estaba manejando mis ids  segun mis iteraciones de los datos que traigo
+  let interior=this.indexinterior;    //a
+  //console.log("MIS ENCABEZADOOOOOOOOOOOOOOOOOOOOO",this.matrizventaService.datosencabezados)
   
-  console.log("MI HOTSETTINGSARRAY que esto guardandhtyyo aqui??",this.hotSettingsArray)
+  //console.log("MI HOTSETTINGSARRAY que esto guardandhtyyo aqui??",this.hotSettingsArray)
 
  
   if (!this.matrizventaService.matrizLocalstorage[exterior]) {
@@ -476,7 +535,7 @@ export class TalonariosventasComponent   {
   
   this.matrizventaService.matrizLocalstorage[exterior][interior] = [
     //...this.matrizventaService.matrizLocalstorage[exterior][interior],
-    datosCombinados
+    datosCombinados                                                     //aqui estaba colocando mis datos segun las posicione sy empece a hacerme lio 
   ];
 
    
@@ -492,25 +551,25 @@ export class TalonariosventasComponent   {
   
 
  async guardarDatos(){
-  console.log("HOLOOOOOOOOOOS mi fact inicial  mi fact ifdnal mi talonario cuantas veces ENTRARARARARARARARAR",this.numtalonario,this.factinicial,this.factfinal)
+  //console.log("HOLOOOOOOOOOOS mi fact inicial  mi fact ifdnal mi talonario cuantas veces ENTRARARARARARARARAR",this.numtalonario,this.factinicial,this.factfinal)
   
-  await this.convertircabecera();
+  //await this.convertircabecera();
 
 
  
 
-  
+  //apartir de aqui esto no importa porque solo transformaba mis datos a lo loco
 
 
   
   
   
-console.log("aquie staran mis encabezados???",this.matrizventaService.datosencabezadoscrear)
+//console.log("aquie staran mis encabezados???",this.matrizventaService.datosencabezadoscrear)
 //console.log("aquie staran mis encabezados PRUEBA EMPTY???",this.matrizventaService.datosencabezadoscrear[this.indexexterior][this.indexinterior])
 //console.log("aquie staran mis encabezados mis cosas???",this.matrizventaService.datosencabezadoscrear[this.indexexterior][this.indexinterior][0])
-console.log("index exterior index interior???",this.indexexterior,this.indexinterior)
+//console.log("index exterior index interior???",this.indexexterior,this.indexinterior)
 
-  console.log("ASI ME LLEGAN MIS DATOOOOOOS", this.matrizventaService.matrizLocalstorage)
+  //console.log("ASI ME LLEGAN MIS DATOOOOOOS", this.matrizventaService.matrizLocalstorage)
   const extractedDataArray = this.matrizventaService.matrizLocalstorage.flatMap((handsontable: any) =>
   handsontable.map((item: any) =>
     item[0].hotSettingsArray?.flatMap((settings: any) =>
@@ -522,7 +581,7 @@ console.log("index exterior index interior???",this.indexexterior,this.indexinte
     )
   )
 );
-console.log("aqui que hay que transfroma",extractedDataArray ) ///aqui le pone en arrays segun los punto de venta osea 3  segun si tentgo datos o no 
+//console.log("aqui que hay que transfroma",extractedDataArray ) ///aqui le pone en arrays segun los punto de venta osea 3  segun si tentgo datos o no 
 let separatedArrays = [];
 let currentArray = [];
  let miarrayprincipal =[]
@@ -541,13 +600,13 @@ miarrayprincipal.push(separatedArrays)
 this.numerodetalonario=0;
 this.facturainicial=0;
 this.facturafinal=0;
-console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); 
-console.log("Mi cabeceraaaaaaaaaaaaaaa",this.matrizventaService.datosencabezadoscrear)
-console.log("elkl tdoooooooo???????????????",this.matrizventaService.arraycabeceratodo) 
+//console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); 
+//console.log("Mi cabeceraaaaaaaaaaaaaaa",this.matrizventaService.datosencabezadoscrear)
+//console.log("elkl tdoooooooo???????????????",this.matrizventaService.arraycabeceratodo) 
 for (let i = 0; i < miarrayprincipal.length; i++) {
 
   const arrayinterno= miarrayprincipal[i]
-  console.log("el tamanio de mi array internooo",arrayinterno)
+ 
  
   for (let j = 0; j < arrayinterno.length; j++){ 
 
@@ -559,10 +618,7 @@ for (let i = 0; i < miarrayprincipal.length; i++) {
                break;
     //  miarrayprincipal[i][j][0]?.misencabezados = miarray ;
     }else{
-      console.log("aquie staran mis encabezados o que es estooooasas 111???",this.matrizventaService.arraycabeceratodo[i] , j)
-      console.log("aquie staran mis encabezados o que es estooooasas 222???",this.matrizventaService.arraycabeceratodo[i][0] , j)
-      console.log("aquie staran mis encabezados o que es estooooasas???",this.matrizventaService.arraycabeceratodo[i][0] , j)
-      console.log("aquie staran mis encabezados o que es estoooo???",this.matrizventaService.arraycabeceratodo[i][0]?.numerodetalonario , j)
+     
      const misencabezados = {
       numtalonario: this.matrizventaService.arraycabeceratodo[i][0]?.numerodetalonario[j],
        factinicial:this.matrizventaService.arraycabeceratodo[i][0]?.facturainicial[j],
@@ -590,11 +646,7 @@ for (let i = 0; i < miarrayprincipal.length; i++) {
 }
    
   
-console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///hay que trabajar con esto // esto separa por talonarios sigue siendo 3 arrays(si tiene datos) pero tienes los talonarios dentro
 
-  console.log("HOLOOOS mi fact inical",this.factinicial)
-  console.log("HOLOOOS mi fact final",this.factfinal)
-  console.log("HOLOOS mi numtalonario", this.numtalonario)
   
       this.arrayTabla=[]
       this.jsonDatossumasArray=[]
@@ -602,15 +654,15 @@ console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///
      for (let i = 0; i < miarrayprincipal.length; i++) {
 
       const arrayinterno= miarrayprincipal[i]
-      console.log("el tamanio de mi array internooo",arrayinterno)
+
      
       for (let j = 0; j < arrayinterno.length; j++){ 
-        console.log("ENTRA  AJ????? ESTE ES MI TAMANIO", j, arrayinterno.length)
+    
        
        
         this.jsonDatossumasArray= [];
      //   if(!miarrayprincipal[i][j][0]?.misencabezados){
-          console.log("mi encabezados  no existe ")
+          
       //  if(miarrayprincipal[i][j][0].misencabezados.length === 0  ){ //aqui tengo que recuperar //ESTO ME ARROJA ERROR CREO QUE ENO LEE MIS ENCABEZADOS
           this. numerodetalonario= Number(miarrayprincipal[i][j][0]?.misencabezados?.numtalonario)
           this. facturainicial=  Number(miarrayprincipal[i][j][0]?.misencabezados?.factinicial)
@@ -624,11 +676,11 @@ console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///
       //}else{  //aqui estamos creandoe l talonario
         //aqui tendria que anadirle????????
 
-        console.log("aquie staran mis encabezados PRUEBA EMPTY2222222??? LO QUE LE LELGA ALKA FUNCION",this.matrizventaService.datosencabezadoscrear) //PRO0BARE CONE STE
+       // console.log("aquie staran mis encabezados PRUEBA EMPTY2222222??? LO QUE LE LELGA ALKA FUNCION",this.matrizventaService.datosencabezadoscrear) //PRO0BARE CONE STE
         //console.log("aquie staran mis encabezados PRUEBA EMPTY2222222??? LO QUE LE LELGA ALKA FUNCIONasdasdad",this.matrizventaService.datosencabezadoscrear[i][j], i,j) //PRO0BARE CONE STE
-        console.log("aquie staran mis encabezados PRUEBA EMPTYewrwerwerwerwerw2222222??? DESPUES DE LA FUNCION",this.matrizventaService.arraycabecera) //con este funcionaaaaa
-        console.log("aquie staran mis encabezados ESTE ES EL QUE NECESITOOOOOOO??? DESPUES DE LA FUNCION",this.matrizventaService.arraycabeceratodo) 
-        console.log("aquie staran mis encabezados ESTE ES EL QUE NECESITOOOOOOO??? ERRRORRRRR",this.matrizventaService.arraycabeceratodo[i] ,i) 
+       // console.log("aquie staran mis encabezados PRUEBA EMPTYewrwerwerwerwerw2222222??? DESPUES DE LA FUNCION",this.matrizventaService.arraycabecera) //con este funcionaaaaa
+       // console.log("aquie staran mis encabezados ESTE ES EL QUE NECESITOOOOOOO??? DESPUES DE LA FUNCION",this.matrizventaService.arraycabeceratodo) 
+       // console.log("aquie staran mis encabezados ESTE ES EL QUE NECESITOOOOOOO??? ERRRORRRRR",this.matrizventaService.arraycabeceratodo[i] ,i) 
         //console.log("aquie staran mis encabezados PRUEBA EMPTY2222222???TAMANIOOO",this.matrizventaService.datosencabezadoscrear.length)
         //console.log("aquie staran mis encabezados PRUEBA EMPTY2222222???",this.matrizventaService.datosencabezadoscrear[i])
         //console.log("MIS I2 mi J2" ,j,i)
@@ -663,7 +715,7 @@ console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///
           idcentralizadormes:String(this.idmespuntoventasuma),
           sumaventatalonario:[],
         };
-        console.log("mi json talonario xdxdxd", jsontalonario)
+      
 
         for (let k = 0; k < miarrayprincipal[i][j].length; k++){ 
       if(this.facturainicial !=0  && this.facturafinal !=0){
@@ -715,7 +767,7 @@ console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///
        this.jsonDatosArray[j].sumaventatalonario = [this.jsonDatossumasArray]; 
        this.jsonDatossumasArray= []; 
       }
-      else { console.log("no hay factura inical ni final ") ;break}
+      else { ;break}
       }///es j
        if(this.jsonDatosArray.length !== 0){
        this.arrayTabla.push(this.jsonDatosArray);
@@ -724,7 +776,7 @@ console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///
     
       } //es i
          
-  console.log("este es mi array tabla", this.arrayTabla)
+  
     await this.guardarTalonarioslocalstorage(this.arrayTabla);
  //   } 
   }
@@ -734,7 +786,7 @@ console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///
 
 
   async guardarTalonarioslocalstorage(arrayTalonarios:any){
-    console.log("mis datos para setear al LOCAL STORAGE",arrayTalonarios);
+  
    await this.dbLocal.guardarsumasventaslocalstorage(arrayTalonarios)
 
  }
@@ -800,7 +852,7 @@ console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///
   
   async convertircabecera(){
     //if(!this.logicaEjecutada){
-    console.log("MIIUIIIIIII MIIIIIIIII factura inicla mi final y mi numtlaonario",this.numtalonario,this.factinicial,this.factfinal)
+    
     if(this.numtalonario.length != 0  && this.factinicial.length !=0 && this.factfinal.length !=0){
     //let arraycabecera =[]
  //for (let i = 0; i < this.numtalonario.length; i++){
@@ -810,13 +862,13 @@ console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///
    facturainicial: this.factinicial,
    facturafinal:   this.factfinal
   }
-  console.log("MI CABECERAAAA", cabecera)
+ 
   
   this.matrizventaService.arraycabecera.push(cabecera)
 
   
  //}
- console.log("mi   CABECERA ARRAY ", this.matrizventaService.arraycabecera)
+ 
 
  if (!this.matrizventaService.datosencabezadoscrear[this.indexexterior]) {
   this.matrizventaService.datosencabezadoscrear[this.indexexterior] = [];
@@ -843,9 +895,7 @@ console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///
   // Verifica si datosencabezadoscrear[0] está definido y tiene una longitud mayor que cero
 //if (this.matrizventaService.datosencabezadoscrear[0] && this.matrizventaService.datosencabezadoscrear[0].length > 0) {
   // Obtiene el último elemento del primer array
-  console.log("EN MI CONVERSION DE DATOSENCABEZADOSCREAR",this.matrizventaService.datosencabezadoscrear);
-  console.log("EN MI CONVERSION DE DATOSENCABEZADOSCREAR tamaniooooo",this.matrizventaService.datosencabezadoscrear.length);
-  console.log("EN MI CONVERSION DE DATOSENCABEZADOSCREARADASDASDASDASD",this.matrizventaService.datosencabezadoscrear[0]);
+ 
   //const ultimoarray = this.matrizventaService.datosencabezadoscrear[0][this.matrizventaService.datosencabezadoscrear[0].length - 1];
   for(let i=0; i<this.matrizventaService.datosencabezadoscrear.length;i++){
     if((typeof this.matrizventaService.datosencabezadoscrear[i]   === 'undefined')){
@@ -856,7 +906,7 @@ console.log("AQUI TENDRIA QEUE STAR MIS DATOS SIUUUUUU:", miarrayprincipal); ///
   const ultimoarray = this.matrizventaService.datosencabezadoscrear[this.matrizventaService.datosencabezadoscrear.length - 1];
   
 
-  console.log("AQUI VA TODOOOO---------------------------------",ultimoarray);
+
   this.matrizventaService.arraycabeceratodo = ultimoarray
 
   

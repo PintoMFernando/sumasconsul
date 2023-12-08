@@ -12,7 +12,7 @@ import { MatrizventasService } from 'src/app/services/matrizventas.service';
 import { NuevomesService } from 'src/app/services/nuevomes.service';
 import { SumatalonarioService } from 'src/app/services/sumatalonario.service';
 import { VentatalonarioService } from 'src/app/services/ventatalonario.service';
-
+import { ChangeDetectorRef } from '@angular/core';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -30,7 +30,7 @@ export class TalonariosprevaloradosComponent {
   @Input() nombreactividad: any;  
   @Input()  parametroDelPadreidcentralizadormes: string='';  
   @Input()  index: any;  
-
+  @Input() todotalonarios: any;
   
   numberOfFormss: number = 0;
   formArray2: FormGroup[] = [];
@@ -45,15 +45,15 @@ export class TalonariosprevaloradosComponent {
     public dbLocal: LocalStorageService,
     public talonarios: NuevomesService,
     private matrizventaService: MatrizventasService,
-    
+    private cdr: ChangeDetectorRef,
    
     ) {// this.matrizventaService.matrizLocalstorageidventatalonarioprevalorado = [];  
     }          
-   //numberOfForms: number = 0;
+   
    numberOfForms: any [] = [];
-   formArray: FormGroup[] = [];
+  
    hotSettingsArray: any[] =[]; //esto contiene todas mis isntancias de handsontable
-   hotDataArray =[];
+  
    tablesSettings: Handsontable.GridSettings[] = [];
    suma: number = 0;
    obsArray=[];
@@ -75,7 +75,7 @@ export class TalonariosprevaloradosComponent {
   
    numerotalonario: number =0;
    postArray: any[] =[];
-   
+   intervaloID: any;
    contadorfilas:number =0;
    tipotalonario:number = 2; 
    botonBloqueado: boolean = false;
@@ -99,8 +99,13 @@ export class TalonariosprevaloradosComponent {
   posicionpuntoventa:any;
   tablas: any;
     ngOnInit(){
-      const datosEspecificos = {
-        idpuntoventaactividad:this.idpuntoventaactividad,
+      //this.iniciarIntervalo();
+      this.crearPosiciones();
+    }
+
+    async crearPosiciones(){
+      const datosEspecificos = {                                     //aqui me formo mi json con mis ids idmes y puntoactividad con el tipo y su talonario [] 
+        idpuntoventaactividad:this.idpuntoventaactividad,            //para tener almacenado en un array de servicio mis datos
         idmes:this.idmespuntoventasuma,
         tipo:2,
         talonario:[]
@@ -112,77 +117,65 @@ export class TalonariosprevaloradosComponent {
       );
       
       if (!existente) {    // Si no existe, agregar un nuevo objeto
-        this.matrizventaService.matrizLocalstorageidventatalonarioprevalorado.push({
+        this.matrizventaService.matrizLocalstorageidventatalonarioprevalorado.push({      ///aqui agrego mis json de posiciones
           idposicion: datosEspecificos,
         });
       } else {
         // Si existe
-       
       }
 
       this.posicionpuntoventa = this.matrizventaService.matrizLocalstorageidventatalonarioprevalorado.find((item:any) => item.idposicion.idmes === this.idmespuntoventasuma && item.idposicion.idpuntoventaactividad === this.idpuntoventaactividad);
-      
+       //con esto obtengo la posicion donde me encuentro
       console.log("que hay aquiiiiiiiiiesataaasd-----------------------------ES MI POSICION ",this.posicionpuntoventa) //este es mi posicion donde me encuentro
 
-       this.traerlocalstorage();
-       
+       await this.traerlocalstorage();
 
+    }
 
+    iniciarIntervalo() {
+    
+      this.intervaloID =  setInterval(() => {
+         this.pruebaactualizacvion(); 
+      }, 15000);
+    }
+    detenerIntervalo() {
+      
+      if (this.intervaloID) {
+        clearInterval(this.intervaloID);
+      }
     }
   
-   
+  
+    async traerlocalstorage(){   //con esto hago mi peticion de mis datos directo a la db 
 
-    async traerlocalstorage(){
-      const source$ = this.sumatalonarioService.getTalonariosuma(String(this.idmespuntoventasuma),2); //con esto traigo el id
-      const data:any = await lastValueFrom(source$);
-      console.log("esteeeeeeeeeeeeeee e smi data",data)
-      await this.dbLocal.SetVentas(data);
-      await this.traertablasventas();
+     await  this.dbLocal.traerventasPrevaloradaslocalstorage(String(this.idmespuntoventasuma),2);
+
+      await this.traertablasventas();   
     }
-      async traertablasventas(){
-    
-   // const source$ = this.sumatalonarioService.getTalonariosuma(String(this.idmespuntoventasuma)); //con esto traigo el id
-   // const data:any = await lastValueFrom(source$);
-    let datosdecompras=this.dbLocal.GetVentas()
-    
+
+
+    async traertablasventas(){     ///para evitar esto podria traer el conteo de talonario directo de la db 
+
+    let datosdecompras=this.dbLocal.GetVentasPrevaloradas()  
     this.datosTabla = datosdecompras;
-   // this.datosTabla = data;
-    console.log("MIS DATOS TABLA",this.datosTabla)
-    
-    console.log("MIS DATOS TABLA tamaniooooo",this.datosTabla.length)
-   
-   
+      console.log("ESTOS SON MIS DATOS DEL LOCALSTORAGE", this.datosTabla)
     for( let i=0; i< this.datosTabla.length;i++){
-   
-    //this.conteotalonarios=0;
       for( let j=0; j< this.datosTabla[i].length;j++){
-        console.log("aqui hay algooooo", this.datosTabla[i][j].idpuntoventaactividad);
       if( this.idpuntoventaactividad === this.datosTabla[i][j].idpuntoventaactividad && this.idmespuntoventasuma === this.datosTabla[i][j].idcentralizadormes){
          //estoy apartando segun idactividad y mes, para poner a cada input su propio valor ya que estoy traendo varios datos de una y tengo que separar   
-         this.conteotalonarios++;
-         this.idventatalonario= this.datosTabla[i][j].idventatalonario
-        this.factinicial[j]= this.datosTabla[i][j].factinicial;
-        this.factfinal[j]= this.datosTabla[i][j].factfinal;
-             
+         this.conteotalonarios++;     
       }
-      console.log("MI FACTURA INICIAL", this.factinicial[j]);
-     console.log("MI FACTURA FINAL", this.factfinal[j]);
     }
-    
      console.log("que hay aquiiiiii", this.conteotalonarios)
   }
-
   this.numberOfForms[this.index]=this.conteotalonarios
   console.log("CONTEOOOOOOOOOOOOOOOOOOOOOOOOOOOO", this.conteotalonarios);
-  await this.onNumberOfFormsChange();
-    // if(this.idpuntoventaactividad == data.idpuntoactividad && this.parametroDelPadreidcentralizadormes === data.idcentralizadormes){
-    //}
-   
-   
-       
+  await this.onNumberOfFormsChange();  
    }
 
-
+   async pruebaactualizacvion(){
+    console.log("TODOS MIS TALONARIOS",this.matrizventaService.matrizLocalstorageidventatalonarioprevalorado)
+   }
     
   
     async onNumberOfFormsChange() {
@@ -190,14 +183,12 @@ export class TalonariosprevaloradosComponent {
     }
     private actualizarFormularios() {
    
-      //const cantidadFormularios = this.numberOfForms;
+      //const cantidadFormularios = this.numberOfForms;      //aqui hago lo mismo que ventas normales, hago mi calculo de cuantos datos agregaria a mi array de handsontables
       //this.crearFormularios(cantidadFormularios );
       const cantidadFormularios = this.numberOfForms[this.index];
       const formulariosActuales = this.posicionpuntoventa.idposicion?.talonario?.length;
-      const ultimoValor = this.posicionpuntoventa.idposicion?.talonario?.length-1; 
-      
-      
-      
+     
+  
       if (cantidadFormularios > formulariosActuales) {
         this.crearFormularios(cantidadFormularios,formulariosActuales);
       }else if(cantidadFormularios< formulariosActuales){ //aqui quiere reducir 
@@ -213,66 +204,79 @@ export class TalonariosprevaloradosComponent {
     }
 
   
-   
-  
-    private crearFormularios(cantidad: number,valoaumentar:number) {
+    async  crearFormularios(cantidad: number,valoaumentar:number) {
       //if(this.hotRegisterer.getInstance('talonario'+index).getData()) ==)
       //this.hotSettingsArray =[];
       console.log("entra a crear fomulariooooooooooooooooooos",cantidad,valoaumentar)
       console.log("mnis cosas para verificar",this.idmespuntoventasuma ,this.matrizventaService.matrizLocalstorageidventatalonarioprevalorado)
       console.log("mnis cosas para verificar222222",this.idpuntoventaactividad ,this.matrizventaService.matrizLocalstorageidventatalonarioprevalorado)
-    
+      console.log("ESTOS SON MIS DATOS DEL LOCALSTORAGE QU TRAIGO DE LA DB TAMBIEN", this.datosTabla)
+      console.log("ESTA ES MI POSICIIOOOOOOOOON", this.posicionpuntoventa.idposicion?.talonario)
       for ( let i = valoaumentar; i < cantidad; i++) {
-       // const objetoEncontrado = this.matrizventaService.matrizLocalstorageidventatalonarioprevalorado.find((item:any) => item.idposicion.idmes === this.idmespuntoventasuma && item.idposicion.idpuntoventaactividad === this.idpuntoventaactividad);
-        //console.log("OBJETO ENCONTRADOODAOOSDOADAOSDASODAOS",objetoEncontrado)
-        //if(objetoEncontrado){
-          //console.log("OBJETO ENCONTRADOODAOOSDOADAOSDASODAOShay datooos ",objetoEncontrado)
-          const tablatalonariosprevalorados : FormularioPrevalorado = new FormularioPrevalorado(this.hotRegisterer);
-          this.posicionpuntoventa.idposicion?.talonario?.push(tablatalonariosprevalorados)
+       //aqui tendria que colocar los datos que ya tengo 
+        // if(this.datosTabla)    ///aqui falta tendria que recorrer todo mi array para buscar y poder rempplazar  todos mi datos 
+        if (this.posicionpuntoventa.idposicion?.talonario.length ===0) { //solo entra una vez
+        this.datosTabla.forEach(async (array) => { //aqui busca en el array que traje de mi db elresultado para que le coloque en el lugar donde es en la posicion donde se encuentra 
+          const talonario = array.find((item: any) => {
+            return item.idpuntoventaactividad === this.idpuntoventaactividad && item.idcentralizadormes === this.idmespuntoventasuma;
+          });
+        if(talonario){ //aqui tendria que crear todos los datos que tengo en mi db y mostrarlos en mis talonarios
+          console.log("asidjoiasdjaoisdhnaiosdjDONDE ESTOY TMR",talonario)
+          const tablatalonariosprevalorados : FormularioPrevalorado = new FormularioPrevalorado(this.hotRegisterer);  //aqui va lo importante  aqui creo mi objeto completo y le pongo a la posicion que le corresponde
+          tablatalonariosprevalorados.factinicial = talonario.factinicial;
+          tablatalonariosprevalorados.factfinal = talonario.factfinal;
+          tablatalonariosprevalorados.hotSettings.data = talonario.sumatalonarios;
+          this.posicionpuntoventa.idposicion?.talonario?.push(tablatalonariosprevalorados) //aqui tambien falta poner en que posicion colocare los datos 
           
           console.log("ESTO TENGO QUE ITERARAA WACHIIIN",this.posicionpuntoventa)
-          //console.log("sea gregoooooooo se agregaron cosas",this.matrizventaService.matrizLocalstorageidventatalonarioprevalorado)
-       // }
-      
-       //ya tengo mis datos, cuando creee que ya tengo su id y cada vez que cree, 
-       
-        //this.hotSettingsArray.push(hotSettings);
-
-    
-        
+        }else{
+          await this.creartalonarioVacio();
+        }
   
-  
-          
-        //console.log("AQUI TENDRIA QUE PONER MIS DATAS EN UN FOR O ALGO", this.hotSettingsArray[0].data)
+        });        //donde tendruas que segui this.datosTabla es igual al manejo de datos
+      }
+      else{   //esto funciona cuando no hay ningun dato pero cuando hya me retpite lo que comparo  
+       /* const tablatalonariosprevalorados : FormularioPrevalorado = new FormularioPrevalorado(this.hotRegisterer);  //aqui va lo importante  aqui creo mi objeto completo y le pongo a la posicion que le corresponde
+        tablatalonariosprevalorados.factinicial = 0;
+        tablatalonariosprevalorados.factfinal = 0;
+        this.posicionpuntoventa.idposicion?.talonario?.push(tablatalonariosprevalorados) 
+*/      
+        await this.creartalonarioVacio();
+      }
       }
        this.tablas =  this.posicionpuntoventa.idposicion?.talonario;
 
+      //aqui tendria que setear???/
        console.log("MIS TABLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAS", this.tablas)
-      for( let i=0; i< this.datosTabla.length;i++){
-        for( let j=0; j< this.datosTabla[i].length;j++){
-        if( this.idpuntoventaactividad === this.datosTabla[i][j].idpuntoventaactividad && this.idmespuntoventasuma === this.datosTabla[i][j].idcentralizadormes){
-         
-          this.hotSettingsArray[j].data = this.datosTabla[i][j].sumaventatalonario;
-          console.log("AQUI ESTA MI DONDE ESTARIA TODOooooooooooo????",i,  this.hotSettingsArray[i].data)   
-        }
-        
-      }
-  
-    }
-  
-      console.log("AQUI ESTA MI ARRAY", this.hotSettingsArray)
-      
+       console.log("TODOS MIS TALONARIOS",this.matrizventaService.matrizLocalstorageidventatalonarioprevalorado)
      
-      console.log("AQUI ESTA EL TAMANIO DE MI ARRAY", this.hotSettingsArray.length)
-      console.log("AQUI ESTA MI CANTIDAD", cantidad)
+      this.cdr.detectChanges();
+      
     }
  
+  
+   async creartalonarioVacio(){
+    const tablatalonariosprevalorados : FormularioPrevalorado = new FormularioPrevalorado(this.hotRegisterer);  //aqui va lo importante  aqui creo mi objeto completo y le pongo a la posicion que le corresponde
+        tablatalonariosprevalorados.factinicial = 0;
+        tablatalonariosprevalorados.factfinal = 0;
+       await this.posicionpuntoventa.idposicion?.talonario?.push(tablatalonariosprevalorados)
+   }
+
+
    async guardar(index:number){
     console.log("MIS TABLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAS", this.tablas)
     console.log("aquie esta mi matriz completaaaaaaa",   this.matrizventaService.matrizLocalstorageidventatalonarioprevalorado)
    }
 
+
+
+
+
+
+
+   //desde aqui viene aya fuardar en el LS/DB automaticamente 
     async guardarDatos(index:number){
+
       
     for (let i = 0; i< this.hotSettingsArray.length; i++) {
     const iduuid =uuidv4();
@@ -409,31 +413,29 @@ async crearTalonarios(arraytalonario:any,arraysumatalonario:any){
 
 
 
-anulacionChange(index:number){
-   //nos quedamos aqui
-   console.log("que aprametro llega?????",index)
-   console.log("que aprametro llegaeqweqweqw?????",this.index)
-  
-   if(this.agregarFilas[index]==true){
-   this.agregarFilas[index]=false;
-   this.rango = this.factfinal[index]-this.factinicial[index];
-   console.log("aqui estan mi rango",this.rango);
-  for (var i=0; i<= this.rango; i++) {
 
-    const fact=this.factinicial[index];
-    this.hotRegisterer.getInstance(this.index).alter('insert_row_below');   //esto crea las columnas que yo quiera
-    this.hotRegisterer.getInstance(this.index).setDataAtCell(i,0,this.factinicial[index]);
-    this.hotRegisterer.getInstance(this.index).setDataAtCell(i,1,this.montodinamico);//aqui pone los datos en la casillas
-    //this.datostalonarios.push({monto:this.montodinamico}); 
+
+
+
+
+
+anulacionChange(iduuid:string){
+  const tabla = this.tablas.find((tabla:any) => tabla.iduuid === iduuid);
+  if (tabla) {
+    if (tabla.agregarFilas) {
+      tabla.agregarFilas = false;
+      const rango = tabla.factfinal - tabla.factinicial;
+
+      for (let i = 0; i <= rango; i++) {
+        this.hotRegisterer.getInstance(iduuid).alter('insert_row_below');
+        this.hotRegisterer.getInstance(iduuid).setDataAtCell(i, 0, tabla.factinicial + i);
+        this.hotRegisterer.getInstance(iduuid).setDataAtCell(i, 1, tabla.montodinamico);
+      }
+    }
+
+    // Más lógica según sea necesario
   }
 
-  console.log("aqui estan mi checkbox",this.agregarFilas[index],0,this.factinicial[index]);
-  console.log("aqui estan mi checkbox",this.agregarFilas[index],1,this.montodinamico);
-  
-  
-  //aqui se tendria  que bloquear la tabla  
-
-}
 } 
 
 bloqueartabla(index:number){

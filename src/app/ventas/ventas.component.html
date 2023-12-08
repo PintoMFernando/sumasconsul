@@ -7,10 +7,10 @@
       <tr> 
         <td>
           <p-tabView >
-            <p-tabPanel header="{{actividad.nombreactividades}} " *ngFor="let actividad of sucursal.data ; let i = index"  > 
+            <p-tabPanel header="{{actividad.actividadess.nombre}} " *ngFor="let actividad of sucursal.puntoventaactividads ; let i = index"  > 
               <tr>
-                  <td> <app-talonariosventas [indexinterior]=i [indexexterior]=j  [posicion]="j * puntoventa3[0].data.length + i" [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.nombreactividades></app-talonariosventas></td>
-                  <td><app-talonariosprevalorados [index]=i [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.nombreactividades></app-talonariosprevalorados></td>
+                  <td> <app-talonariosventas [indexinterior]=i [indexexterior]=j   [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.nombreactividades [todotalonarios]=actividad.ventatalonariostipo1 ></app-talonariosventas></td>
+                  <td><app-talonariosprevalorados [index]=i [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.nombreactividades [todotalonarios]=actividad.ventatalonariostipo2></app-talonariosprevalorados></td>
                   <td><app-talonarioselectronicos [index]=i [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.nombreactividades></app-talonarioselectronicos></td>
                 
               </tr>

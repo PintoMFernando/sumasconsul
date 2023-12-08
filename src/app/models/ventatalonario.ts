@@ -8,11 +8,9 @@ export class ventataalonario{
   factfinal?:number;
   tipo?:number;
   montototal?:number;
-  idpuntoventaactividad?:string;
   idcentralizadormes?:string;
+  idpuntoventaactividad?:string;
   created_at?:Date;
   updated_at?:Date;
-  deletedAtobs?: Date | null;
- sumatalonario?:sumatalonario[];
-   
+  deletedAtobs?: Date | null;  
 }

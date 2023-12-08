@@ -1,0 +1,356 @@
+[
+    {
+        "idpuntoventa": 1589,
+        "direccion_suc": "AV.  CAMACHO 102",
+        "num_sucursall": 0,
+        "nombre": "Matriz",
+        "idempresa": 1593,
+        "puntoventaactividads": [
+            {
+                "idpuntoventaactividad": "aa821d1b-fdc9-48fe-aa03-c7fc07506899",
+                "idactividades": 3,
+                "idpuntoventa": 1589,
+                "estado": true,
+                "created_at": "2023-11-23T22:18:52.081Z",
+                "updated_at": "2023-11-23T22:18:52.081Z",
+                "ventatalonarios": [],
+                "actividadess": {
+                    "idactividades": 3,
+                    "nombre": "Cultivo de plantas no perennes",
+                    "seccion": "A",
+                    "division": 1,
+                    "grupo": 11,
+                    "created_at": "2023-11-09T13:28:03.255Z",
+                    "updated_at": "2023-11-09T13:28:03.255Z"
+                }
+            }
+        ]
+    },
+    {
+        "idpuntoventa": 1603,
+        "direccion_suc": "LA PAZ 125",
+        "num_sucursall": 1,
+        "nombre": "1",
+        "idempresa": 1593,
+        "puntoventaactividads": [
+            {
+                "idpuntoventaactividad": "a5736ce4-9e63-481b-a21b-d300a04f67a1",
+                "idactividades": 143,
+                "idpuntoventa": 1603,
+                "estado": true,
+                "created_at": "2023-11-23T22:19:00.907Z",
+                "updated_at": "2023-11-23T22:19:00.907Z",
+                "ventatalonariostipo1": [
+                    
+                    {
+                        "idventatalonario": "daa0b017-d01d-4db9-9e75-b5b29d739a8b",
+                        "numtalonario": 1,
+                        "factinicial": 1,
+                        "factfinal": 6,
+                        "tipo": 1,
+                        "montototal": "250.000",
+                        "idcentralizadormes": "608d959f-9da0-e6c1-bd17-70c521b35b4c",
+                        "idpuntoventaactividad": "a5736ce4-9e63-481b-a21b-d300a04f67a1",
+                        "created_at": "2023-12-04T19:51:38.807Z",
+                        "updated_at": "2023-12-04T19:51:38.807Z",
+                        "deletedAtobs": null,
+                        "sumatalonarios": [
+                            {
+                                "idsumatalonario": "35d484b5-c629-483b-b642-cebe853f8ee9",
+                                "numfactura": 1,
+                                "monto": "50.000",
+                                "estado": 0,
+                                "idventatalonario": "daa0b017-d01d-4db9-9e75-b5b29d739a8b",
+                                "created_at": "2023-12-04T19:52:17.871Z",
+                                "updated_at": "2023-12-04T19:52:17.871Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "0f4bb789-1a7e-4bd9-b450-4d3ce26bc331",
+                                "numfactura": 2,
+                                "monto": "50.000",
+                                "estado": 0,
+                                "idventatalonario": "daa0b017-d01d-4db9-9e75-b5b29d739a8b",
+                                "created_at": "2023-12-04T19:52:44.647Z",
+                                "updated_at": "2023-12-04T19:52:44.647Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "a696637e-e9b1-4aee-9f7b-2f61715b3d27",
+                                "numfactura": 3,
+                                "monto": "50.000",
+                                "estado": 0,
+                                "idventatalonario": "daa0b017-d01d-4db9-9e75-b5b29d739a8b",
+                                "created_at": "2023-12-04T19:53:04.744Z",
+                                "updated_at": "2023-12-04T19:53:04.744Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "7173410f-bf19-4aad-9b12-d36eec712b64",
+                                "numfactura": 4,
+                                "monto": "50.000",
+                                "estado": 0,
+                                "idventatalonario": "daa0b017-d01d-4db9-9e75-b5b29d739a8b",
+                                "created_at": "2023-12-04T19:53:31.077Z",
+                                "updated_at": "2023-12-04T19:53:31.077Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "58f5726d-3419-4215-bc64-8dce1d821772",
+                                "numfactura": 5,
+                                "monto": "50.000",
+                                "estado": 0,
+                                "idventatalonario": "daa0b017-d01d-4db9-9e75-b5b29d739a8b",
+                                "created_at": "2023-12-04T19:53:51.201Z",
+                                "updated_at": "2023-12-04T19:53:51.201Z",
+                                "deletedAtobs": null
+                            }
+                        ]
+                    },
+                    {
+                        "idventatalonario": "db524b4d-dcff-4c29-91e5-7fe37c758a83",
+                        "numtalonario": 2,
+                        "factinicial": 7,
+                        "factfinal": 10,
+                        "tipo": 1,
+                        "montototal": "242.000",
+                        "idcentralizadormes": "608d959f-9da0-e6c1-bd17-70c521b35b4c",
+                        "idpuntoventaactividad": "a5736ce4-9e63-481b-a21b-d300a04f67a1",
+                        "created_at": "2023-12-04T19:55:44.681Z",
+                        "updated_at": "2023-12-04T19:55:44.681Z",
+                        "deletedAtobs": null,
+                        "sumatalonarios": [
+                            {
+                                "idsumatalonario": "853a7bfc-fa88-44e1-83af-a39538a617ef",
+                                "numfactura": 6,
+                                "monto": "65.000",
+                                "estado": 0,
+                                "idventatalonario": "db524b4d-dcff-4c29-91e5-7fe37c758a83",
+                                "created_at": "2023-12-04T19:57:08.182Z",
+                                "updated_at": "2023-12-04T19:57:08.182Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "f8d6062c-518e-4004-bea7-8240cb7a63b5",
+                                "numfactura": 7,
+                                "monto": "65.000",
+                                "estado": 0,
+                                "idventatalonario": "db524b4d-dcff-4c29-91e5-7fe37c758a83",
+                                "created_at": "2023-12-04T19:57:25.927Z",
+                                "updated_at": "2023-12-04T19:57:25.927Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "5b37de1b-782e-4cdf-9302-1915b644d334",
+                                "numfactura": 8,
+                                "monto": "65.000",
+                                "estado": 0,
+                                "idventatalonario": "db524b4d-dcff-4c29-91e5-7fe37c758a83",
+                                "created_at": "2023-12-04T19:57:41.264Z",
+                                "updated_at": "2023-12-04T19:57:41.264Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "0d201aee-7ffc-4b19-b3ea-ecd8a61b893e",
+                                "numfactura": 9,
+                                "monto": "56.000",
+                                "estado": 0,
+                                "idventatalonario": "db524b4d-dcff-4c29-91e5-7fe37c758a83",
+                                "created_at": "2023-12-04T19:58:01.952Z",
+                                "updated_at": "2023-12-04T19:58:01.952Z",
+                                "deletedAtobs": null
+                            }
+                        ]
+                    }
+                ],
+                "ventatalonariostipo2": [
+                    {
+                        "idventatalonario": "4858909a-50db-4983-83b8-3b17a16652e8",
+                        "numtalonario": 1,
+                        "factinicial": 1,
+                        "factfinal": 5,
+                        "tipo": 2,
+                        "montototal": "250.000",
+                        "idcentralizadormes": "608d959f-9da0-e6c1-bd17-70c521b35b4c",
+                        "idpuntoventaactividad": "a5736ce4-9e63-481b-a21b-d300a04f67a1",
+                        "created_at": "2023-12-07T21:46:14.201Z",
+                        "updated_at": "2023-12-07T21:46:14.201Z",
+                        "deletedAtobs": null,
+                        "sumatalonarios": [
+                            {
+                                "idsumatalonario": "8cde3e61-0a33-41fc-9665-3c79763aecb6",
+                                "numfactura": 1,
+                                "monto": "50.000",
+                                "estado": 0,
+                                "idventatalonario": "4858909a-50db-4983-83b8-3b17a16652e8",
+                                "created_at": "2023-12-07T21:46:56.454Z",
+                                "updated_at": "2023-12-07T21:46:56.454Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "2e54f09f-e79c-44b6-b050-e47690c93fef",
+                                "numfactura": 2,
+                                "monto": "50.000",
+                                "estado": 0,
+                                "idventatalonario": "4858909a-50db-4983-83b8-3b17a16652e8",
+                                "created_at": "2023-12-07T21:47:26.162Z",
+                                "updated_at": "2023-12-07T21:47:26.162Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "fee20f44-e505-4312-a1ef-3866375342ac",
+                                "numfactura": 3,
+                                "monto": "50.000",
+                                "estado": 0,
+                                "idventatalonario": "4858909a-50db-4983-83b8-3b17a16652e8",
+                                "created_at": "2023-12-07T21:47:56.130Z",
+                                "updated_at": "2023-12-07T21:47:56.130Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "c0fc8ded-acdf-4b85-81b5-ebbc04dfa252",
+                                "numfactura": 4,
+                                "monto": "50.000",
+                                "estado": 0,
+                                "idventatalonario": "4858909a-50db-4983-83b8-3b17a16652e8",
+                                "created_at": "2023-12-07T21:48:25.067Z",
+                                "updated_at": "2023-12-07T21:48:25.067Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "f4c33ef7-fc3e-4367-9bd9-f66aa3d43978",
+                                "numfactura": 5,
+                                "monto": "50.000",
+                                "estado": 0,
+                                "idventatalonario": "4858909a-50db-4983-83b8-3b17a16652e8",
+                                "created_at": "2023-12-07T04:00:00.000Z",
+                                "updated_at": "2023-12-07T04:00:00.000Z",
+                                "deletedAtobs": null
+                            }
+                        ]
+                    }
+                    
+                   
+                ],
+                "actividadess": {
+                    "idactividades": 143,
+                    "nombre": "Extraccion de minerales metaliferos no ferrosos",
+                    "seccion": "B",
+                    "division": 7,
+                    "grupo": 72,
+                    "created_at": "2023-11-09T13:28:03.255Z",
+                    "updated_at": "2023-11-09T13:28:03.255Z"
+                }
+            },
+            {
+                "idpuntoventaactividad": "350e47c6-80c4-48b2-995e-62557e20231c",
+                "idactividades": 1165,
+                "idpuntoventa": 1603,
+                "estado": true,
+                "created_at": "2023-11-28T19:29:40.696Z",
+                "updated_at": "2023-11-28T19:29:40.696Z",
+                "ventatalonariostipo1": [
+                    {
+                        "idventatalonario": "23d35689-66cd-48d1-b91e-6f43d1c832a0",
+                        "numtalonario": 1,
+                        "factinicial": 1,
+                        "factfinal": 3,
+                        "tipo": 1,
+                        "montototal": "135.000",
+                        "idcentralizadormes": "608d959f-9da0-e6c1-bd17-70c521b35b4c",
+                        "idpuntoventaactividad": "350e47c6-80c4-48b2-995e-62557e20231c",
+                        "created_at": "2023-12-04T19:42:55.197Z",
+                        "updated_at": "2023-12-04T19:42:55.197Z",
+                        "deletedAtobs": null,
+                        "sumatalonarios": [
+                            {
+                                "idsumatalonario": "74fa581f-cf5c-4eb7-aa59-470a0cb6c73a",
+                                "numfactura": 1,
+                                "monto": "45.000",
+                                "estado": 0,
+                                "idventatalonario": "23d35689-66cd-48d1-b91e-6f43d1c832a0",
+                                "created_at": "2023-12-04T19:43:47.349Z",
+                                "updated_at": "2023-12-04T19:43:47.349Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "017b2305-622b-41d1-8859-57279c9bb0b9",
+                                "numfactura": 2,
+                                "monto": "45.000",
+                                "estado": 0,
+                                "idventatalonario": "23d35689-66cd-48d1-b91e-6f43d1c832a0",
+                                "created_at": "2023-12-04T19:44:09.976Z",
+                                "updated_at": "2023-12-04T19:44:09.976Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "880fb3f3-4624-448a-b76f-ea5cca512433",
+                                "numfactura": 3,
+                                "monto": "45.000",
+                                "estado": 0,
+                                "idventatalonario": "23d35689-66cd-48d1-b91e-6f43d1c832a0",
+                                "created_at": "2023-12-04T19:44:29.640Z",
+                                "updated_at": "2023-12-04T19:44:29.640Z",
+                                "deletedAtobs": null
+                            }
+                        ]
+                    },
+                    {
+                        "idventatalonario": "d072afaa-fbd1-4964-bb24-a793abf55efd",
+                        "numtalonario": 2,
+                        "factinicial": 4,
+                        "factfinal": 6,
+                        "tipo": 1,
+                        "montototal": "166.000",
+                        "idcentralizadormes": "608d959f-9da0-e6c1-bd17-70c521b35b4c",
+                        "idpuntoventaactividad": "350e47c6-80c4-48b2-995e-62557e20231c",
+                        "created_at": "2023-12-04T04:00:00.000Z",
+                        "updated_at": "2023-12-04T19:47:26.136Z",
+                        "deletedAtobs": null,
+                        "sumatalonarios": [
+                            {
+                                "idsumatalonario": "7a5c4558-f2a9-446b-bb8f-d9be43dc579a",
+                                "numfactura": 4,
+                                "monto": "56.000",
+                                "estado": 0,
+                                "idventatalonario": "d072afaa-fbd1-4964-bb24-a793abf55efd",
+                                "created_at": "2023-12-04T19:47:52.015Z",
+                                "updated_at": "2023-12-04T19:47:52.015Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "a7616da8-adf0-4450-bb85-c8f3d689b283",
+                                "numfactura": 5,
+                                "monto": "56.000",
+                                "estado": 0,
+                                "idventatalonario": "d072afaa-fbd1-4964-bb24-a793abf55efd",
+                                "created_at": "2023-12-04T04:00:00.000Z",
+                                "updated_at": "2023-12-04T19:50:29.933Z",
+                                "deletedAtobs": null
+                            },
+                            {
+                                "idsumatalonario": "d9e702fc-a4c8-4f51-953c-3cbf2c12ebd8",
+                                "numfactura": 6,
+                                "monto": "56.000",
+                                "estado": 0,
+                                "idventatalonario": "d072afaa-fbd1-4964-bb24-a793abf55efd",
+                                "created_at": "2023-12-04T19:50:53.285Z",
+                                "updated_at": "2023-12-04T19:50:53.285Z",
+                                "deletedAtobs": null
+                            }
+                        ]
+                    }
+                ],
+                "actividadess": {
+                    "idactividades": 1165,
+                    "nombre": "Servicios de telefonia movil e internet por conexion inalambrica",
+                    "seccion": "J",
+                    "division": 61,
+                    "grupo": 612,
+                    "created_at": "2023-11-09T13:28:03.255Z",
+                    "updated_at": "2023-11-09T13:28:03.255Z"
+                }
+            }
+        ]
+    }
+]

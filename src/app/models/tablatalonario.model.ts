@@ -7,6 +7,7 @@ export class Formulario {
     hyperformulaInstance = HyperFormula.buildEmpty({
         licenseKey: 'internal-use-in-handsontable',
       });
+    
 
     nombreactividad: string = '';
     numtalonario: number = 0;
@@ -15,7 +16,7 @@ export class Formulario {
     agregarFilas: boolean = false;
     montodinamico: string = '';
    // hotSettings: any;
-   
+
     hotSettings: Handsontable.GridSettings = {
         formulas: {
           engine: this.hyperformulaInstance,       //con esto funciona las formulas
