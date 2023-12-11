@@ -30,7 +30,7 @@ export class TalonariosprevaloradosComponent {
   @Input() nombreactividad: any;  
   @Input()  parametroDelPadreidcentralizadormes: string='';  
   @Input()  index: any;  
-  @Input() todotalonarios: any;
+ @Input() todotalonarios: any;
   
   numberOfFormss: number = 0;
   formArray2: FormGroup[] = [];

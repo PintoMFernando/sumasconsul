@@ -1,7 +1,10 @@
 import { LocalStorageService } from "../services/local-storage.service";
 import { TalonarioLogico } from "./tablatalonariologico.model";
-
+import { HotTableRegisterer } from '@handsontable/angular';
 import { Inject, Injectable } from '@angular/core';
+import { stringify } from "handsontable/helpers";
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -10,47 +13,68 @@ export class VentasMesOperaciones{
 
     //private localDb= Inject(LocalStorageService)
     
-    datosTabla:any = [];
+    
+   // datosTabla:any = [];
  
     constructor(
-        private localDb: LocalStorageService
+        //private localDb: LocalStorageService,
+      // private hotRegisterer: HotTableRegisterer
         ){  
        
        //      this.datosTabla=  this.localDb.GetVentas(); 
           
         }
-    agregarTalonario(idpuntoactividad:string, idmes:string){
-        console.log("que hay en primeeeeeeeeeer lugar en mi array????", this.datosTabla)
-            let talonarionuevo = new TalonarioLogico;
+    agregarTalonario(idpuntoactividad:string, idmes:string,hotRegisterer:any){
+        
+            let talonarionuevo = new TalonarioLogico(hotRegisterer);
             talonarionuevo.factfinal=0;
             talonarionuevo.factinicial =0;
             talonarionuevo.idcentralizadormes = idmes;
             talonarionuevo.idpuntoventaactividad = idpuntoactividad;
-            const existente = this.datosTabla.find((item:any) => //esto controla que no se repita datos en mi matriz 
-            item.idpuntoventaactividad === idpuntoactividad &&
-            item.idcentralizadormes === idmes
-             );
-           console.log("EXISTEEEEEEEEEEEEEEEEEEEEE", existente)
          
+            console.log("AQUI TENDIR AUE ESTAR MI NUEVO??????", talonarionuevo) 
+            return talonarionuevo
+           
+           
+          
+    }
+    transformarTalonario(arrayTalonarios:any,hotRegisterer:any){
+      console.log(arrayTalonarios,"aqui hay algooogogoasasasasasgogogo")
+      let arrayDeInstancias: any[] = arrayTalonarios.map((json:any) => {
+
+        let talonarioInstancia = new TalonarioLogico(hotRegisterer);
+        
+        
+       // talonarioInstancia.idventatalonario = json.idventatalonario;
+        talonarioInstancia.idcentralizadormes = json.idcentralizadormes;
+        talonarioInstancia.idpuntoventaactividad = json.idpuntoventaactividad;
+       
+        talonarioInstancia.factinicial = json.factinicial;
+        talonarioInstancia.factfinal = json.factfinal;
+       // talonarioInstancia.sumatalonarios = json.sumatalonarios;
+        talonarioInstancia.hotSettings.data = json.sumatalonarios;
+        //talonarioInstancia.suma = json.montototal;
+        //talonarioInstancia.hotSettings.iduuid = json.idventatalonario;
+       
 
 
-      
-            if (!existente) {    // Si no existe, agregar un nuevo objeto
-                console.log("no EXISTEEEEEEEEEEEEEEEEEEEEE ponemos nuevo dato al dfatosTABLAAA", existente)
-                this.datosTabla[0].push(talonarionuevo)
-              } else {
-                // Si existe
-               
-              }
-           // this.datosTabla.push(talonarionuevo)
+       
+       
+        
+        return talonarioInstancia;
+      })
+
+      console.log(arrayDeInstancias,"aqui hay MI ARRRAAAAAAAAAAAAAAAAAAAAAAAAAAAY")
+    return arrayDeInstancias
+
     }
     setNTalonario(idventatalonario:string,numerotalonario:number){
-          let talonario = this.datosTabla.find((item:TalonarioLogico) =>{
+    /*      let talonario = this.datosTabla.find((item:TalonarioLogico) =>{
             return item.idventatalonario = idventatalonario
           })
           if(talonario){
              talonario.numtalonario = numerotalonario
-          }
+              }*/
     }
     
 
@@ -59,5 +83,5 @@ export class VentasMesOperaciones{
     actualizar(){
 
     }
-          
+  
 }

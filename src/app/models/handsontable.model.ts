@@ -3,7 +3,8 @@ import Handsontable from "handsontable";
 import { ContextMenu } from "handsontable/plugins";
 import HyperFormula from 'hyperformula';
 import { v4 as uuidv4 } from 'uuid';
-export class FormularioPrevalorado {
+import { VentasMesOperaciones } from "./ventasMesOperaciones.model";
+export class HandsonTable {
 
 
 
@@ -12,39 +13,23 @@ export class FormularioPrevalorado {
       });
 
    
-    nombreactividad: string = '';
-    numtalonario: number = 0;
-    factinicial: number = 0;
-    factfinal: number = 0;
-    agregarFilas: boolean = false;
-    montodinamico: number = 0;
+  
+    factinicial: number = 0;   ///como are referecnia pero es esto tengo que mandarle como parametro mi id
     iduuid: string ='';
     suma :number =0;
+    public hotRegisterer: HotTableRegisterer;
     hotSettings: Handsontable.GridSettings = {
         
         formulas: {
           engine: this.hyperformulaInstance,       //con esto funciona las formulas
         },
-        
-        
-        data: [
-                     
-          
-        ],
+        data: [],
         afterFormulasValuesUpdate : (changes) => { //contiene el valor de la celda de las sumas
-          
-           this.suma = this.hotRegisterer.getInstance(this.iduuid).getDataAtCell(0,2 );
-         
-        
-        
-        
-        
+           this.suma = this.hotRegisterer.getInstance(this.iduuid).getDataAtCell(0,2 ); 
       },
        
         afterChange : (changes,source) =>{
      //       let settingFormula = true;
-
-     
            if (source === 'loadData') {
             // Configurar la fórmula después de cargar los datos
             this.hotRegisterer.getInstance(this.iduuid).setDataAtCell(0, 2, '=SUM(B:B)');
@@ -66,11 +51,6 @@ export class FormularioPrevalorado {
                 if (value) {
                     this.hotRegisterer.getInstance(this.iduuid).setDataAtCell(row, 0, this.factinicial + row); //con esto pone automaticamente numeros siempre y cuando ponga fact inicial
                   }
-
-
-               
-             
-            
             switch (value) {
               case 'I':
               case 'i':
@@ -151,21 +131,12 @@ export class FormularioPrevalorado {
    
     // Agrega más propiedades según sea necesario
   
-  
- 
 
 
-
-
-
-
-
-
-
-  constructor(
-    private hotRegisterer: HotTableRegisterer,
-   )
-   {   this.iduuid = FormularioPrevalorado.generateUUID();   
+  constructor()
+   { 
+    this.hotRegisterer = new HotTableRegisterer()  
+    this.iduuid = HandsonTable.generateUUID();   
     
 }
 private static generateUUID(): string {
