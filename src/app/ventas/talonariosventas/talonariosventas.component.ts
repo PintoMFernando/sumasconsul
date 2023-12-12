@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, SimpleChanges, ViewChild} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, Output, SimpleChanges, ViewChild} from '@angular/core';
 import { FormGroup, Validators,FormBuilder } from '@angular/forms';
 import { ContextMenu } from 'handsontable/plugins';
 import { CellMeta } from 'handsontable/settings';
@@ -37,7 +37,7 @@ export class TalonariosventasComponent   {
   @Input() todotalonarios: any;
 
  
-
+  @Output() actualizarDatos = new EventEmitter<any[]>();
 
   valorCelda: any; 
 
@@ -49,11 +49,12 @@ export class TalonariosventasComponent   {
               public ventastalonarioService: VentatalonarioService,
               public sumatalonarioService: SumatalonarioService,
               public messageService: MessageService,
-              public dbLocal: LocalStorageService,
+              public dblocal: LocalStorageService,
               private matrizventaService: MatrizventasService,
               private cdr: ChangeDetectorRef,
               private ventasMesOperaciones: VentasMesOperaciones,
-              private route: ActivatedRoute,
+              private route: ActivatedRoute
+             
              
              )
              { this.matrizventaService.matrizLocalstorage = [];
@@ -134,17 +135,22 @@ export class TalonariosventasComponent   {
   previousValue: number | null = null;
   previousValue2: number | null = null;
   idmespuntoventasuma: string ="";
-  mistalonarios: any;
-
+ // mistalonarios: any;
+  arrayencontrado :any;
+  arrayencontradoe:any;
+  ventastodo:any;
+  mistalonarios:any;
   ngOnInit(){
+     this.ventastodo= this.dblocal.GetVentasTodo()
     this.idmespuntoventasuma = String(this.route.snapshot.paramMap.get('idcentralizadormes'));
-    
+    console.log("MIS COSAS DEL DDBDBDBDB",this.dblocal.GetVentasTodo()[0])
     console.log("hola hay aglo aquiuiiuiuiiuuiuiuiu", this.indexinterior)
     console.log("aqui estan mis talonariooooos-------------------------------------------------------------???",this.todotalonarios)
-    this.mistalonarios = this.todotalonarios
+    
+    this.mistalonarios= this.todotalonarios
     
         
-     
+   this.buscarArrayTalonariols();
           this.traertablasventas();
     // this.iniciarIntervalo();
 
@@ -156,14 +162,14 @@ export class TalonariosventasComponent   {
      console.log("4444444", this.parametroDelPadreidcentralizadormes);
      console.log("55555 mi matrizzzzz", this.amtrizlocalstorage);
      console.log("666666 Mi matrizservice ",this.numberOfForms[this.indexinterior]);
-     this.numberOfForms[this.indexinterior]=this.mistalonarios.length 
+     this.numberOfForms[this.indexinterior]=this.todotalonarios.length 
    
    
   }
   @HostListener('window:popstate', ['$event']) //para caundo se vaya atras
   async onPopState(event: any) {
-    await this.guardarDatos();
-    await this.guardarTalonariosDB();
+    //await this.guardarDatos();
+    //await this.guardarTalonariosDB();
   }
 
   /* @HostListener('window:beforeunload', ['$event']) //para cuando cierre el navegador
@@ -192,7 +198,16 @@ export class TalonariosventasComponent   {
 
 
 
+ async buscarArrayTalonariols(){
+  this.arrayencontrado =this.dblocal.GetVentasTodo();
+     
+      this. arrayencontradoe =   this.arrayencontrado.find((puntoVenta:any) =>   //este contiene el array donde 
+      puntoVenta?.puntoventaactividads.some((actividad:any) =>  actividad.idpuntoventaactividad === this.idpuntoventaactividad) 
+      );
 
+    console.log("asmok aqui esta el pedazo para seterar mi local storage????" , this.arrayencontradoe.puntoventaactividads[0].ventatalonariostipo1)
+
+ }
  
 
 
@@ -200,11 +215,11 @@ export class TalonariosventasComponent   {
  
     
 
-    console.log("aquqwqwwq----------------------------------------ANTES DE SER TRANSFORMADOOOOOO ",this.mistalonarios)
-    this.mistalonarios =await this.ventasMesOperaciones.transformarTalonario(this.mistalonarios,this.hotRegisterer)
-  this.numberOfForms[this.indexinterior]=this.mistalonarios.length  /// con esto contaba los talonarios de mi datos que traia de mi db y le asignaba esa valor a numberofForms
+    console.log("aquqwqwwq----------------------------------------ANTES DE SER TRANSFORMADOOOOOO ",this.todotalonarios)
+    this.todotalonarios =await this.ventasMesOperaciones.transformarTalonario(this.todotalonarios,this.hotRegisterer)
+  this.numberOfForms[this.indexinterior]=this.todotalonarios.length  /// con esto contaba los talonarios de mi datos que traia de mi db y le asignaba esa valor a numberofForms
                                                                 ///numberforms es el input con el cual creo mis talonarios
-    console.log("aquqwqwwq----------------------------------------despues DE SER TRANSFORMADOOOOOO ",this.mistalonarios)
+    console.log("aquqwqwwq----------------------------------------despues DE SER TRANSFORMADOOOOOO ",this.todotalonarios)
   
   await this.actualizarFormularios();
  
@@ -237,17 +252,17 @@ export class TalonariosventasComponent   {
        
     
     const aumento = this.numberOfForms[this.indexinterior];  
-    const catidadTotal = this.mistalonarios.length
+    const catidadTotal = this.todotalonarios.length
    // const catidadTotal = this.hotSettingsArray.length
   ///ese el numero de mi forms de mi db
     
    // const cantidadFormularios = this.numberOfForms[this.index];
    // const formulariosActuales = this.posicionpuntoventa.idposicion?.talonario?.length;
    
-   console.log('MI blavblablald,ada aquie stan todas mis cosas:', this.mistalonarios
+   console.log('MI blavblablald,ada aquie stan todas mis cosas:', this.todotalonarios
    );
     if (aumento === catidadTotal) {
-       let catidadTotal = this.mistalonarios.length;
+       let catidadTotal = this.todotalonarios.length;
 
       this.crearFormularios(aumento,catidadTotal);
     }else{
@@ -283,9 +298,9 @@ export class TalonariosventasComponent   {
      
      
   }
-  private crearFormularios(cantidad: number,valoaumentar:number) {
+  async crearFormularios(cantidad: number,valoaumentar:number) {
     
-    console.log('MI blavblablald,ada aquie stan todas mis cosas: ENTRA A CREAR TALONARIOO????', this.mistalonarios)
+    console.log('MI blavblablald,ada aquie stan todas mis cosas: ENTRA A CREAR TALONARIOO????', this.todotalonarios)
      console.log("cantidad y valor a aaumentar ",cantidad,valoaumentar)
      
     // console.log("tamanio", this.ventasMesOperaciones.datosTabla.length)
@@ -295,31 +310,66 @@ export class TalonariosventasComponent   {
      console.log("mi messsssssssssssssssssssssssssssssssssssssssssssss",this.idmespuntoventasuma)
      let  talonario = this.ventasMesOperaciones.agregarTalonario(this.idpuntoventaactividad, this.idmespuntoventasuma,this.hotRegisterer)
      console.log("mi messsssssssssssssssssssssssssssssssssssssssssssss9989899989898989889",talonario)
-     this.mistalonarios.push(talonario); 
-    
+     //this.todotalonarios.push(talonario); 
+     await  this.mistalonarios.push(talonario)
+     for (let i = 0; i < this.ventastodo.length; i++) {
+      const puntoVenta = this.ventastodo[i];
      
+      if (puntoVenta?.puntoventaactividads.some((actividad: any) => actividad.idpuntoventaactividad === this.idpuntoventaactividad)) {
+       // console.log("ppppppppppppp----------------------ooooooooooooooooooooo--",ventastodo[i].puntoventaactividads[0].ventatalonariostipo1)
+      
+     //   console.log("ppppppppppppp----------------------asaaaaasdewef21313131313--",talonario)
+     
+  
+    // this.ventastodo[i].puntoventaactividads[0].ventatalonariostipo1.push(talonario)
+        console.log("ppppppppppppp----------------------asaaaaasdewef21313131313--ABAJOOOOOpppppppppppppp",this.dblocal.GetVentasTodo()[i].puntoventaactividads[0].ventatalonariostipo1)
+        console.log("ppppppppppppp----------------------asaaaaasdewef21313131313--",this.ventastodo[i].puntoventaactividads[0].ventatalonariostipo1)
+        console.log("ppppppppppppp----------------------asaaaaasdewef21313131313--ABAJOOOOO",this.ventastodo)
+       
+        break;
+      }
+    }
+
+    // this.arrayencontrado.push(talonario);
+    //this.actualizarDatos.emit(this.todotalonarios);  //esto podria servirme 
+    //console.log("MI ARRAY TA;LONOPNOINOINONONONONONONONONONONONONONONONONONONONO", this.arrayencontradoe)
+    //console.log("MI ARRAY TA;LONOPNOINOINONONONONONONONONONONONONONONONONONONONO-----------------------", this.arrayencontrado.puntoventaactividads[0]?.ventatalonariostipo1)
+    //this.arrayencontradoe.puntoventaactividads[0].ventatalonariostipo1.push(talonario)//me quede aquiiiiiiiiiiiiiiiii  no se como setearlo lo haria todo pero no es lo crecto creo  
+        
+    // this.dbLocal.SetVentasTodo(this.arrayencontradoe)
+    
+     //console.log("MI ARRAY TA;LONOPNOINOINONONONONONONONONONONONONONONONONONONONO-----------", this.arrayencontradoe)
     
     }
-    console.log("MI VENTAMESOPERACIONESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS??",this.mistalonarios)  //AQUI ESTARIA MIS DATOS SUPONGO EN EL ARRAY 
-    console.log("mi hotsettingsarrray", this.hotSettingsArray)
-   
+    await this.dblocal.guardarsumasventasTodolocalstorage(this.ventastodo);
+    await this.dblocal.guardarsumasventaslocalstorage(this.mistalonarios,this.idpuntoventaactividad)
+    //console.log("ppppppppppppp------------------------", this.dblocal.GetVentasTodo())
+    console.log("MI VENTAMESOPERACIONESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS??",this.todotalonarios)  //AQUI ESTARIA MIS DATOS SUPONGO EN EL ARRAY 
+    
+    //this.dbLocal.GetVentasTodo()[0].puntoventaactividads[0];
 
    
   }
 
 
-  
+ 
 
 
 
-  
    
   
 
  async guardarDatos(){
-  
-           
-        /*    switch (miarrayprincipal[i][j][k]?.monto) {
+  await this.dblocal.guardarsumasventaslocalstorage(this.mistalonarios,this.idpuntoventaactividad)
+  await this.dblocal.guardarsumasventasTodolocalstorage(this.ventastodo); 
+ // await this.dblocal.guardarsumasventasTodoDBlocalstorage();
+      // await this.dblocal.guardarsumasventasTodolocalstorage(this.ventastodo);
+          // console.log("mis cambiosss", this.todotalonarios[0].hotSettings.data)
+          // if(this.idpuntoventaactividad === this.dbLocal.GetVentasTodo()[])
+          // this.dbLocal.SetVentasTodo
+        
+        
+          /*    switch (miarrayprincipal[i][j][k]?.monto) {
               case 'A':
               case 'a':
                 
@@ -368,7 +418,7 @@ export class TalonariosventasComponent   {
 
   async guardarTalonarioslocalstorage(arrayTalonarios:any){
   
-   await this.dbLocal.guardarsumasventaslocalstorage(arrayTalonarios)
+   await this.dblocal.guardarsumasventaslocalstorage(arrayTalonarios,this.idpuntoventaactividad)
 
  }
  
@@ -381,7 +431,7 @@ export class TalonariosventasComponent   {
   async guardarTalonariosDB(){
 
     
-    await this.dbLocal.guardarsumasventasDBlocalstorage();
+   // await this.dblocal.guardarsumasventasDBlocalstorage();
 
   
   }
@@ -391,7 +441,7 @@ export class TalonariosventasComponent   {
  
  
 anulacionChange(iduuid:string){
-  const tabla = this.mistalonarios.find((tabla:any) => tabla.iduuid === iduuid);
+  const tabla = this.todotalonarios.find((tabla:any) => tabla.iduuid === iduuid);
   if (tabla) {
     if (tabla.agregarFilas) {
       tabla.agregarFilas = false;
@@ -408,6 +458,8 @@ anulacionChange(iduuid:string){
   }
 
 } 
+
+
 
 bloqueartabla(index:number){
   this.hotSettingsArray[index].bloqueada=true;

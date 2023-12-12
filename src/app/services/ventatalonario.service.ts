@@ -67,6 +67,20 @@ async createdelteVentasSumas( jsondatosventas:any) {
   }
 
 
+  async createVentasTodo( arraytoddo:any) {
+
+  
+    try{
+    return  await firstValueFrom(this.http.post(`${this.baseUrl}/venatatalonario/buscarborraractualizar`, arraytoddo, { headers: this.headers }))
+    }catch(e){
+    return e
+    }
+    
+    
+    
+    }
+
+
 
 
 

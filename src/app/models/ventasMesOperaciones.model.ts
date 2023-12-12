@@ -3,7 +3,7 @@ import { TalonarioLogico } from "./tablatalonariologico.model";
 import { HotTableRegisterer } from '@handsontable/angular';
 import { Inject, Injectable } from '@angular/core';
 import { stringify } from "handsontable/helpers";
-
+import { v4 as uuidv4 } from 'uuid';
 
 
 @Injectable({
@@ -17,7 +17,7 @@ export class VentasMesOperaciones{
    // datosTabla:any = [];
  
     constructor(
-        //private localDb: LocalStorageService,
+        private localDb: LocalStorageService,
       // private hotRegisterer: HotTableRegisterer
         ){  
        
@@ -29,8 +29,12 @@ export class VentasMesOperaciones{
             let talonarionuevo = new TalonarioLogico(hotRegisterer);
             talonarionuevo.factfinal=0;
             talonarionuevo.factinicial =0;
+            talonarionuevo.idventatalonario= talonarionuevo.iduuid;
             talonarionuevo.idcentralizadormes = idmes;
             talonarionuevo.idpuntoventaactividad = idpuntoactividad;
+            talonarionuevo.sumatalonarios = talonarionuevo.hotSettings.data;
+           // talonarionuevo.sumatalonarios.id=
+           // talonarionuevo.sumatalonarios.i = talonarionuevo.hotSettings.data;
          
             console.log("AQUI TENDIR AUE ESTAR MI NUEVO??????", talonarionuevo) 
             return talonarionuevo
@@ -44,14 +48,15 @@ export class VentasMesOperaciones{
 
         let talonarioInstancia = new TalonarioLogico(hotRegisterer);
         
+    
         
-       // talonarioInstancia.idventatalonario = json.idventatalonario;
+        talonarioInstancia.idventatalonario = json.idventatalonario;
         talonarioInstancia.idcentralizadormes = json.idcentralizadormes;
         talonarioInstancia.idpuntoventaactividad = json.idpuntoventaactividad;
        
         talonarioInstancia.factinicial = json.factinicial;
         talonarioInstancia.factfinal = json.factfinal;
-       // talonarioInstancia.sumatalonarios = json.sumatalonarios;
+        talonarioInstancia.sumatalonarios = json.sumatalonarios;
         talonarioInstancia.hotSettings.data = json.sumatalonarios;
         //talonarioInstancia.suma = json.montototal;
         //talonarioInstancia.hotSettings.iduuid = json.idventatalonario;
@@ -69,13 +74,15 @@ export class VentasMesOperaciones{
 
     }
     setNTalonario(idventatalonario:string,numerotalonario:number){
-    /*      let talonario = this.datosTabla.find((item:TalonarioLogico) =>{
+           
+          /*let talonario = this.datosTabla.find((item:TalonarioLogico) =>{
             return item.idventatalonario = idventatalonario
           })
           if(talonario){
              talonario.numtalonario = numerotalonario
-              }*/
-    }
+              }
+    */
+            }
     
 
     borrar(id:string,numerotalonario:number){

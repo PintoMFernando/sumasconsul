@@ -82,15 +82,55 @@ export class VentasComponent {
     
   }
   async traerdatos(){
-     
-    const source$ =this.puntoventaService.getPuntoVentaTodo(this.idempresaglobal,this.parametroDelPadreidcentralizadormes); //esto tengo nque mover al local storage 
-    
-    const data:any = await lastValueFrom(source$);
-    this.puntoventa3=data;
-    console.log("mis datos data de mi this ***************************************************************4",this.puntoventa3)
+    await this.dblocal.traerventasTodolocalstorage(this.idempresaglobal,this.parametroDelPadreidcentralizadormes)
+   
+   this.puntoventa3= this.dblocal.GetVentasTodo();
+    console.log("actualizar mi local storaregeeeeeee PUNTOVENTA3333", this.puntoventa3)
 
   }
 
+  async manejarActualizacion(datosActualizadosTalonariosTipo1: any[]) {                       //aqui actualiza mis datos del hijo al padreeee
+
+       // await this.dblocal.guardarsumasventaslocalstorage(datosActualizadosTalonariosTipo1)
+    console.log("ESTO PODRIA HACER O SERVIRMEMEEEEEEEE?????",datosActualizadosTalonariosTipo1)
+    const idpuntoventaactividad=datosActualizadosTalonariosTipo1[0].idpuntoventaactividad;
+  
+    console.log("sapodkaspodkaspodkaposdasdkpaoskdpoappooooooo0000000000",idpuntoventaactividad)
+    let datos= this.dblocal.GetVentasTodo();
+   
+    let elementoEncontrado = datos.find(puntoVenta => 
+      puntoVenta?.puntoventaactividads.some((actividad:any) =>  actividad.idpuntoventaactividad === idpuntoventaactividad)
+       
+      
+    );
+    for (let i = 0; i < this.dblocal.GetVentasTodo().length; i++) {
+      const puntoVenta = this.dblocal.GetVentasTodo()[i];
+      console.log("ppppppppppppp----------------------ooooooooooooooooooooo--",this.dblocal.GetVentasTodo()[i].puntoventaactividads[0].ventatalonariostipo1)
+      if (puntoVenta?.puntoventaactividads.some((actividad: any) => actividad.idpuntoventaactividad === idpuntoventaactividad)) {
+        this.dblocal.GetVentasTodo()[i].puntoventaactividads[0].ventatalonariostipo1=datosActualizadosTalonariosTipo1
+        break;
+      }
+    }
+    
+   
+  
+
+    if (elementoEncontrado) {
+      console.log('Elemento encontrado:', elementoEncontrado);
+      console.log("sapodkaspodkaspodkaposdasdkpaoskdpoappooooooo0000000000------------",elementoEncontrado?.puntoventaactividads[0]?.ventatalonariostipo1)
+      // elementoEncontrado?.puntoventaactividads[0]?.ventatalonariostipo1 = datosActualizadosTalonariosTipo1
+       elementoEncontrado.puntoventaactividads[0].ventatalonariostipo1=datosActualizadosTalonariosTipo1
+       console.log('Elemento encontrado DEPSUES DE CAMBIO:', elementoEncontrado);
+       console.log('Elemento encontrado DEPSUES DE CAMBIOOOOOOOOOOO:', datos);
+       //this.dblocal.guardarsumasventasTodolocalstorage(datos);
+    } else {
+      console.log('Elemento no encontrado');
+    }
+
+    console.log('Datos actualizados en el componente padre:', datosActualizadosTalonariosTipo1);//trae los datos actualizados me faltaria setear no mas creo  pero tendria que buscar por??
+    
+    // Realiza acciones adicionales según tus necesidades
+  }
 
   observaciones(){
      this.callObservaciones(this.parametroDelPadreidcentralizadormes);

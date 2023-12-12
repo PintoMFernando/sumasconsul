@@ -28,6 +28,7 @@ export class TalonarioLogico {
     agregarFilas?: boolean = false;
     montodinamico?: string = '';
     sumatalonarios?: any = [] ;
+    //sumatalonarios?: sumatalonario[];
     iduuid: string ='';
     suma :number = 0 ;
     hotSettings: Handsontable.GridSettings = {
@@ -66,19 +67,23 @@ export class TalonarioLogico {
         changes!.forEach((changes, index, array) => {
           const oldValue = changes[2]
           const row = changes[0];
+          
           const value = changes[3]  //aqui esta el valor de las casillas
           const col =changes[1];
-          const factinicial = 1;
+          const idsumatalonario = uuidv4();
           const rowCount = this.hotRegisterer.getInstance(this.iduuid).countRows();
             if (col === 'monto') {
-              console.log("este es mi valoooooooooooooooooooooooooooooooor",value);
+              console.log("este es mi valoooooooooooooooooooooooooooooooor",value, "Y este mi id de mi tabla",this.iduuid);
               //const numero = parseInt(value, 10);
+              
               if (value) {
                
                 
                 
                   this.hotRegisterer.getInstance(this.iduuid).setDataAtCell(row, 0, this.factinicial + row); //con esto pone automaticamente numeros siempre y cuando ponga fact inicial
-                
+                  this.hotRegisterer.getInstance(this.iduuid).setDataAtCell(row, 3, idsumatalonario );
+                  this.hotRegisterer.getInstance(this.iduuid).setDataAtCell(row, 4, this.idventatalonario );
+                  
                 }
 
 
@@ -115,7 +120,7 @@ export class TalonarioLogico {
   
     
      // colHeaders: ['Nº Factura', 'Monto Bs','SUMA TOTAL'], //aqui se coloca lo nombres de columnas
-     colHeaders: ['numfactura', 'monto','Total'],  
+     colHeaders: ['numfactura', 'monto','Total','idsumatalonario','idventatalonario'],  
      rowHeaders: false, //Aqui se coloca la numeracion de filas
       minSpareRows: 1,  //esto crea automaticamente las filas
       fillHandle: true, //esto crea celdas al jalar desde una esquinita
@@ -154,9 +159,17 @@ export class TalonarioLogico {
           readOnly: true,
           className: 'bg-read-only',  
         },
+        {
+          data: 'idsumatalonario',
+          readOnly: true,  
+        },
+        {
+          data: 'idventatalonario',
+          readOnly: true,  
+        },
       ],
       hiddenColumns: {
-          columns: [2], // Esto oculta las columnas 
+          columns: [2,3,4], // Esto oculta las columnas 
       }, 
 
       licenseKey: 'non-commercial-and-evaluation'
