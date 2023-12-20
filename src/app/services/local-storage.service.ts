@@ -171,9 +171,9 @@ async guardarsumasventaslocalstorage(jsondatoventas:any,idpuntoventaactividad:st
 
 
 //guarde en el la db 
-async guardarsumasventasDBlocalstorage(){
+async guardarsumasventasDBlocalstorage(id:string){
   //await this.ClearVentas();
-  const enviar= await this.GetVentas()
+  const enviar= await this.GetVentas(id)
   console.log("estos son mi datos a guardaaaaaaaaaaaaaardadoooooHOLOS enserio entras mas de una vez?????",enviar)
   await this.ventastalonarioService.createdelteVentasSumas(enviar); //aqui reducimos codigo solo enviando el json y el id
   //let data:any = await lastValueFrom(source$); 
@@ -190,7 +190,7 @@ async traerventasPrevaloradaslocalstorage(idmespuntoventasuma:string,idtipo:numb
  //await this.ClearVentas();
  let source$ = this.sumatalonarioService.getTalonariosuma(String(idmespuntoventasuma),idtipo); //con esto traigo el id
   let data:any = [await lastValueFrom(source$)];
- await this.SetVentasPrevaloradas(data);
+ //await this.SetVentasPrevaloradas(data);
  console.log("asdipojsajf oi;sjoi;jsiorsjurjiojhfisjfsd",data)
  /*if( localStorage.getItem('ventas')){  //el ls estavacio
   console.log('Datos después de almacenar: HOLOOOS ESTA VACIO PREGUNTAR EL DB ESTA VACIO????????');
@@ -219,18 +219,17 @@ async traerventasPrevaloradaslocalstorage(idmespuntoventasuma:string,idtipo:numb
 }
 
 //esto guarda en el localstorage 
-async guardarsumasventasPrevaloradaslocalstorage(jsondatoventasprevaloradas:any){
+async guardarsumasventasPrevaloradaslocalstorage(jsondatoventasprevaloradas:any,idpuntoventaactividad:string){
   console.log('Datos anteeees de almacenar:', jsondatoventasprevaloradas);
-  await this.ClearVentasPrevaloradas();
- 
-  await this.SetVentasPrevaloradas(jsondatoventasprevaloradas);  //esto guarda los datos en el ls
+  await this.ClearVentasPrevaloradas(idpuntoventaactividad);
+  await this.SetVentasPrevaloradas(jsondatoventasprevaloradas,idpuntoventaactividad);  //esto guarda los datos en el ls
  
 }
 
 //guarde en el la db 
-async guardarsumasventasPrevaloradasDBlocalstorage(){   //esto verificar
+async guardarsumasventasPrevaloradasDBlocalstorage(id:string){   //esto verificar
   //await this.ClearVentas();
-  const enviar= await this.GetVentasPrevaloradas()
+  const enviar= await this.GetVentasPrevaloradas(id)
   console.log("estos son mi datos a guardaaaaaaaaaaaaaardadoooooHOLOS enserio entras mas de una vez?????",enviar)
   await this.ventastalonarioService.createdelteVentasSumas(enviar); //aqui reducimos codigo solo enviando el json y el id
   //let data:any = await lastValueFrom(source$); 
@@ -445,7 +444,11 @@ async guardarsumasventasTodoDBlocalstorage(){   //esto verificar
 
 
 
-
+ /* SetVentas(ventas: any,id:string){
+    const palabraBase = "ventas";
+    const resultado =palabraBase+id ;
+    localStorage.setItem(resultado,JSON.stringify(ventas));
+  }*/
 
 
   SetVentas(ventas: any,id:string) {
@@ -455,9 +458,11 @@ async guardarsumasventasTodoDBlocalstorage(){   //esto verificar
     localStorage.setItem(resultado, serializedVentas);
  
   }
-  GetVentas():any[]{
-    if(localStorage.getItem("ventas")){
-      let ventas = localStorage.getItem("ventas")??'';
+  GetVentas(id:string):any[]{
+    const palabraBase = "ventas";
+    const resultado =palabraBase+id ;
+    if(localStorage.getItem(resultado)){
+      let ventas = localStorage.getItem(resultado)??'';
       return ventas ? JSON.parse(ventas) : [];
     }
     else
@@ -468,7 +473,7 @@ async guardarsumasventasTodoDBlocalstorage(){   //esto verificar
     return localStorage.getItem("ventas")!==null;
   }
   ClearVentas(id:string) {
-    console.log("entra par borrara2222",id)
+    
     const palabraBase = "ventas";
     const resultado =palabraBase+id ;
     localStorage.removeItem(resultado);
@@ -478,21 +483,35 @@ async guardarsumasventasTodoDBlocalstorage(){   //esto verificar
 
   static serializeWithoutCircular2(obj: any): string {
     const seen = new WeakSet();
-
+  
     function replacer(key: string, value: any) {
-      if (key === 'hotRegisterer' || key === 'hyperformulaInstance') {
+      if (key === 'hotRegisterer' || key === 'hyperformulaInstance'|| key === 'hotSettings'|| key === 'comunicacionService') {
         return undefined; // Excluir propiedades específicas que puedan causar referencias circulares
       }
-
+  
       if (typeof value === 'object' && value !== null) {
         if (seen.has(value)) {
           return undefined; // Evitar referencias circulares
         }
         seen.add(value);
       }
+  
+      if (key === 'sumatalonarios' && Array.isArray(value)) {
+        // Preservar las propiedades 'idventatalonario' y 'numfactura' en cada objeto de 'sumatalonarios'
+        return value.map((item: any) => ({
+          
+          idsumatalonario: item.idsumatalonario, 
+          numfactura: item.numfactura,
+          monto: item.monto,
+          idventatalonario: item.idventatalonario,
+          estado: item.estado,
+
+        }));
+      }
+  
       return value;
     }
-
+  
     return JSON.stringify(obj, replacer);
   }
 
@@ -502,13 +521,18 @@ async guardarsumasventasTodoDBlocalstorage(){   //esto verificar
 
 
 
-
-  SetVentasPrevaloradas(ventasprevaloradas: any) {
-    localStorage.setItem("ventasprevaloradas",JSON.stringify(ventasprevaloradas));
+  SetVentasPrevaloradas(ventasprevaloradas: any,id:string) {
+    const serializedVentas = LocalStorageService.serializeWithoutCircular2(ventasprevaloradas);
+    const palabraBase = "ventasprevaloradas";
+    const resultado =palabraBase+id ;
+    localStorage.setItem(resultado, serializedVentas);
+    
   }
-  GetVentasPrevaloradas():any[]{
-    if(localStorage.getItem("ventasprevaloradas")){
-      let ventasprevaloradas = localStorage.getItem("ventasprevaloradas")??'';
+  GetVentasPrevaloradas(id:string):any[]{
+    const palabraBase = "ventasprevaloradas";
+    const resultado =palabraBase+id ;
+    if(localStorage.getItem(resultado)){
+      let ventasprevaloradas = localStorage.getItem(resultado)??'';
       return ventasprevaloradas ? JSON.parse(ventasprevaloradas) : [];
     }
     else
@@ -517,8 +541,10 @@ async guardarsumasventasTodoDBlocalstorage(){   //esto verificar
   StateVentasPrevaloradas():boolean{
     return localStorage.getItem("ventasprevaloradas")!==null;
   }
-  ClearVentasPrevaloradas() {
-    localStorage.removeItem("ventasprevaloradas");
+  ClearVentasPrevaloradas(id:string) {
+    const palabraBase = "ventas";
+    const resultado =palabraBase+id ;
+    localStorage.removeItem(resultado);
   }
 
 
@@ -579,22 +605,61 @@ async guardarsumasventasTodoDBlocalstorage(){   //esto verificar
   
   static serializeWithoutCircular(obj: any): string {
     const seen = new WeakSet();
-
+  
     function replacer(key: string, value: any) {
-      if (key === 'hotRegisterer' || key === 'hyperformulaInstance') {
+      if (key === 'hotRegisterer' || key === 'hyperformulaInstance') { //podriamos borraar hotsettings array
         return undefined; // Excluir propiedades específicas que puedan causar referencias circulares
       }
-
+  
       if (typeof value === 'object' && value !== null) {
         if (seen.has(value)) {
           return undefined; // Evitar referencias circulares
         }
         seen.add(value);
       }
+  
+      if (key === 'sumatalonarios' && Array.isArray(value)) {
+        // Preservar las propiedades 'idventatalonario' y 'numfactura' en cada objeto de 'sumatalonarios'
+        return value.map((item: any) => ({
+          idventatalonario: item.idventatalonario,
+          numfactura: item.numfactura,
+          monto: item.monto,
+          idsumatalonario: item.idsumatalonario, 
+          estado: item.estado,
+
+        }));
+      }
+  
       return value;
     }
-
+  
     return JSON.stringify(obj, replacer);
   }
+
+
+  SetIdpuntoventaactividad(idpuntoventaactividad:any){
+    localStorage.setItem("idpuntoventaactividad",JSON.stringify(idpuntoventaactividad));
+  }
+  GetIdpuntoventaactividad():any{
+    if(localStorage.getItem("idpuntoventaactividad")){
+      let idpuntoventaactividad = localStorage.getItem("idpuntoventaactividad")??'';
+      return JSON.parse(idpuntoventaactividad);
+    }
+    else
+    return [];
+  }
+ 
+  ClearIdpuntoventaactividad() {
+    localStorage.removeItem("idpuntoventaactividad");
+  }
+
+
+  async idPuntoVentaActividad(idpuntoventaactividad:string){
+    await this.ClearIdpuntoventaactividad();
+    await this.SetIdpuntoventaactividad(idpuntoventaactividad);
+
+  }
+
+
 
 }

@@ -1,29 +1,21 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, ViewChild, inject } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { sumatalonario } from '../models/sumatalonario';
+import { VentasMesOperaciones } from '../models/ventasMesOperaciones.model';
+import { VentasComponent } from '../ventas/ventas.component';
+
+import { AgregarSumas } from '../models/agregarsumas.model';
+import { LocalStorageService } from './local-storage.service';
+import { TalonariosventasComponent } from '../ventas/talonariosventas/talonariosventas.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MatrizventasService {
-  matrizLocalstorage: any[][] = [];
-   matrizLocalstorageidventatalonario: any = []; //este estoy mqanejadno con su id de mimes y puntoventaactividad
-   matrizLocalstorageidventatalonarioprevalorado: any = [];
-  datosencabezados:any [] =[1,1];
+ 
+ 
 
-  datosencabezadoscrear:any [][] =[[1,2],[1,2]];
-
-
-
-
-   arraycabecera:any =[];
-   arraycabeceratodo:any =[1,1];
-   misencabezados:any = [];
-
-  jsonDatosArray:any = [];
-  jsonDatossumasArray:any = [];
-  arrayTabla :any[]=[];
-  conteo:number=0;
-
-  constructor() { this.conteo=0; }
+ 
 
  
 }

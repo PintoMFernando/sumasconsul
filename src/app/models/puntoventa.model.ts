@@ -7,7 +7,7 @@ export class Puntoventa{
     num_sucursall?:number
     nombre?:string
     idempresa?: number
-    puntoventaactividads?: puntoventaactividad
+    puntoventaactividads?: puntoventaactividad[];
 
     
 }

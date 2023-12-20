@@ -3,16 +3,16 @@
   <p-tabView >
     <button pButton type="button" icon="pi pi-plus" class="p-button-text" (click)="observaciones()">Observaciones</button>
     
-    <p-tabPanel header="Nombre {{sucursal.nombrepuntoventa}} Nº{{sucursal.num_sucursall}} " *ngFor="let sucursal of puntoventa3 ; let j = index"  >
+    <p-tabPanel header="Nombre {{sucursal.nombrepuntoventa}} Nº{{sucursal.num_sucursall}} " *ngFor="let sucursal of TempVentas.getPuntoVentas() ; let j = index"  >
       <tr> 
         <td>
           <p-tabView >
             <p-tabPanel header="{{actividad.actividadess.nombre}} " *ngFor="let actividad of sucursal.puntoventaactividads ; let i = index"  > 
               <tr>
-                <td> <app-talonariosventas [indexinterior]=i [indexexterior]=j  [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.actividadess.nombre [todotalonarios]=actividad.ventatalonariostipo1 (actualizarDatos)="manejarActualizacion($event)"></app-talonariosventas></td>
+                <td> <app-talonariosventas [indexinterior]=i [indexexterior]=j [actividad]="actividad"  [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.actividadess.nombre [todotalonarios]=actividad.ventatalonariostipo1 ></app-talonariosventas></td>
                 
-                  <td><app-talonariosprevalorados [index]=i [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.nombreactividades [todotalonarios]=actividad.ventatalonariostipo2></app-talonariosprevalorados></td>
-                  <td><app-talonarioselectronicos [index]=i [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.nombreactividades></app-talonarioselectronicos></td>
+                  <td><app-talonariosprevalorados [indexinterior]=i [indexexterior]=j   [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.actividadess.nombre [todotalonarios]=actividad.ventatalonariostipo2></app-talonariosprevalorados></td>
+                  <td><app-talonarioselectronicos [index]=i [indexexterior]=j  [idmespuntoventasuma]=parametroDelPadreidcentralizadormes [idpuntoventaactividad]=actividad.idpuntoventaactividad [nombreactividad]=actividad.actividadess.nombre [todotalonarios]=actividad.ventatalonariostipo2></app-talonarioselectronicos></td>
                 
               </tr>
 

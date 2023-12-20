@@ -9,8 +9,12 @@ export class puntoventaactividad{
     idpuntoventa?: number;
     estado?:true;
     actividadess?: actividadess;
+
     created_at?: Date;
     updated_at?:Date;
-    ventatalonarios?: ventataalonario;
+    ventatalonariostipo1?: any[]; 
+    ventatalonariostipo2?: any[]; 
+    ventatalonariostipo3?: any[];
+    //ventatalonarios?: ventataalonario;
     
 }

@@ -19,8 +19,9 @@ export class TalonarioselectronicosComponent {
   @Input() idpuntoventaactividad: any;  
   @Input() nombreactividad: any;  
   @Input()  parametroDelPadreidcentralizadormes: string='';  
-  @Input()  index: any; 
-
+  @Input()  index: any;  
+  @Input()  indexexterior: any; 
+  @Input() todotalonarios: any;
   constructor(private formBuilder: FormBuilder,
               public ventatalonarioService: VentatalonarioService,
               public archivoelectronicoService:TalonarioselectronicosService,
