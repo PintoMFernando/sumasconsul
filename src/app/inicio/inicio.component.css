@@ -1,0 +1,86 @@
+
+  .cuadro {
+    display: flex;
+    width: 250px; /* Ancho del cuadro */
+    height: 150px; /* Altura del cuadro */
+    border: 1px solid #948b8b59; /* Borde del cuadro */
+  }
+  
+  .mitad {
+    flex: 1;
+    height: 100%;
+    display: flex;
+  align-items: center;
+  justify-content: center;
+  }
+  
+  .verde {
+    background-color: #3bb46a; /* Color verde */
+  }
+
+  .celeste {
+    background-color: #4c84b8; /* Color verde */
+  }
+  
+  .amarillo {
+    background-color: #d2e96f; /* Color verde */
+  }
+  
+  
+  .rojo {
+    background-color: #ffffff; /* Color rojo */
+  }
+  
+
+  .icono {
+    font-size: 40px; /* Tamaño del icono */
+    color: white; /* Color blanco */
+  }
+
+  .numero {
+    font-size: 40px; 
+    
+  }
+
+  .nombre {
+    font-size: 16px; /* Tamaño de la fuente del nombre */
+   
+    
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrar elementos horizontalmente */
+  }
+  .contenido {
+    text-align: center; /* Centrar texto horizontalmente */
+    display: flex; /* Convertir el contenedor en un flexbox */
+    flex-direction: column; /* Establecer dirección de los elementos como columna */
+    align-items: center; /* Centrar verticalmente los elementos */
+  }
+  
+  .numero {
+    display: block; /* Convertir el número en un bloque */
+    font-size: 24px; /* Tamaño de la fuente del número */
+    color: #000; /* Color del texto */
+  }
+  
+  .nombre {
+    display: block; /* Convertir el nombre en un bloque */
+    font-size: 20px; /* Tamaño de la fuente del nombre */
+    color: #000; /* Color del texto */
+  }
+
+
+
+
+  .layout2 {
+    width: 1100px;
+    
+  
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }

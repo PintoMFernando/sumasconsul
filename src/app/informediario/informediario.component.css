@@ -1,0 +1,16 @@
+.button-imprimir {
+    
+    margin-right: 900px;
+  }
+
+
+
+  .input-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-container p-dropdown {
+    margin-right: 10px; /* Ajusta el margen derecho según sea necesario */
+  }
+  

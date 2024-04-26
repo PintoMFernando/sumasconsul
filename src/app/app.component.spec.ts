@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'sumaconsultora'`, () => {
+  it(`should have as title 'angular-nest-example'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('sumaconsultora');
+    expect(app.title).toEqual('angular-nest-example');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('sumaconsultora app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('angular-nest-example app is running!');
   });
 });

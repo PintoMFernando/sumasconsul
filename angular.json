@@ -68,6 +68,10 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "poll": 1000
+            
+          },
           "configurations": {
             "production": {
               "browserTarget": "sumaconsultora:build:production"
@@ -99,7 +103,8 @@
             "styles": [
               "src/styles.css",
               "node_modules/ag-grid-community/styles/ag-grid.css",
-              "node_modules/ag-grid-community/styles/ag-theme-alpine.css"
+              "node_modules/ag-grid-community/styles/ag-theme-alpine.css",
+              "node_modules/ngx-spinner/animations/ball-scale-multiple.css"
 
             ],
             "scripts": [

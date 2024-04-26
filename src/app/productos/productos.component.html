@@ -1,0 +1,70 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+
+<p-table #dt1 [value]="allproductos" [tableStyle]="{ 'min-width': '68rem' }"
+[paginator]="true"
+[rows]="8"
+[globalFilterFields]="['nombre','codigo']"
+
+>
+<ng-template pTemplate="caption">
+    <tr>
+      
+    <th>
+        
+        <button (click)="agregarProducto()" style="margin-right: 10px;">Agregar Producto</button>
+    </th>   
+
+    
+     <th style="flex-grow: 1; display: flex; justify-content: flex-end;">   
+        <span class="p-input-icon-right" style="margin-left: 700px;">
+            <i class="pi pi-search" style="margin:3px 3px 100" ></i>
+            <input  pInputText type="text" (input)="dt1.filterGlobal(
+                $any($event.target).value, 'contains')"placeholder="Busqueda" />
+        </span>
+    </th>
+ </tr>
+
+</ng-template>
+
+
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th>N°</th>
+            <th pSortableColumn="nombre">Nombre</th>
+            <th>Imagen</th>
+            <th pSortableColumn="codigo">Codigo</th>
+            <th >Precio</th>
+            <th >Stock</th>
+            <th>Estado</th>
+            <th>Opciones</th>
+
+            
+        </tr>
+    </ng-template>
+   
+    <ng-template pTemplate="body" let-producto let-i="rowIndex">
+        <tr >
+            <td>{{ (allproductos && allproductos.length) ? i + 1 : '' }}</td>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.imagen }}</td>
+            <td>{{ producto.codigo }}</td>
+            <td>{{ producto.precio }}</td>
+            <td>{{ producto.stock }}</td>
+            <td><p-tag [value]="allproductos.status" [severity]="getSeverity(allproductos.status)"></p-tag></td>
+            <td>
+                <span class="icon">
+                    <i class="pi pi-eye" style="font-size: 1rem;color: rgb(63, 216, 132); margin-right: 5px;" title="Ver" (click)="verProducto(producto.idproducto)"></i>
+                    <i class="pi pi-pencil" style="font-size: 1rem;color: rgb(157, 216, 63); margin-right: 5px;" (click)="editarProducto(producto.idproducto)" title="Editar"></i>
+                    <i class="pi pi-trash" style="font-size: 1rem;color: rgb(216, 63, 63); margin-right: 5px;" (click)="eliminar($event)" title="Eliminar"></i>
+                </span>
+            </td>
+            
+            
+        </tr>
+    </ng-template>
+    
+</p-table>
+

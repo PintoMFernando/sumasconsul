@@ -1,0 +1,29 @@
+<div class="panel">
+    <h3>Fecha: 04/03/2024</h3>
+   
+    <hr>
+    <ul>
+      <li *ngFor="let item of panelItems">{{ item }}</li>
+    </ul>
+  </div>
+  
+
+
+
+
+
+    <tr>
+        <div class="input-container">
+    Anio:<p-dropdown [options]="anios" [(ngModel)]="selectedAnio" optionLabel="anio"  placeholder="Seleccione Anio"></p-dropdown>
+    Mes:<p-dropdown [options]="mes" [(ngModel)]="selectedMes" optionLabel="mes"  placeholder="Seleccione Mes"></p-dropdown>
+    <p-button label="Generar Reporte"> <i class="pi pi-print" style="font-size: 1rem"></i> </p-button>
+    
+</div>
+    
+ </tr>
+
+
+
+
+
+

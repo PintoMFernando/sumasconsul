@@ -1,34 +1,28 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
+import { WelcomeComponent } from './welcome/welcome.component';
 import { PrincipalComponent } from './principal/principal.component';
-import { AppComponent } from './app.component';
-import { CentralizadorComponent } from './centralizador/centralizador.component';
-import { MoadalCobroContentComponent } from './moadal-cobro-content/moadal-cobro-content.component';
-import { ActividadesComponent } from './actividades/actividades.component';
+import { ProductosComponent } from './productos/productos.component';
+import { EntradasalidaComponent } from './entradasalida/entradasalida.component';
+import { InformeComponent } from './informe/informe.component';
+import { NewproductComponent } from './newproduct/newproduct.component';
 
 
 
 
-const routes: Routes = [{
-  path:'',
-  component:AppComponent,
-  children:[
-  { path: '', redirectTo: '/centralizador', pathMatch: 'full' }, // Redireccionar a la página de inicio
-  { path: 'centralizador/:id', component: CentralizadorComponent },
-  { path: 'principal/:idempresa/:anioActual/:mes/:idcentralizadormes', component: PrincipalComponent },
-  { path: 'actividad', component: ActividadesComponent },
-  
-  
- 
-  
-  ]
-}];
+const routes: Routes = [
+  // Ingreso
+  { path: 'login', component: WelcomeComponent },
+  { path: 'principal', component: PrincipalComponent },
+  { path: 'productos', component: ProductosComponent },
+  { path: 'entradasalida', component: EntradasalidaComponent },
+  { path: 'informe', component: InformeComponent },
+  { path: 'newproduct', component: NewproductComponent },
+ // { path: '', redirectTo: '/login', pathMatch: 'full' },
+ { path: '**', redirectTo: '' } // Redirecciona cualquier otra ruta a la principal
 
-
-
-
-
-
+ // { path: '**', redirectTo: '/login' }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

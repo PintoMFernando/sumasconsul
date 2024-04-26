@@ -1,0 +1,97 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+<p-table #dt1 [value]="products" [tableStyle]="{ 'min-width': '68rem' }"
+[paginator]="true"
+[rows]="1"
+[globalFilterFields]="['nombre','codigo']"
+[scrollable]="true" 
+
+
+>
+<ng-template pTemplate="caption">
+    <tr>
+        <th>
+            <span>FECHA: 2/3/2023</span>
+        </th>   
+    
+        <th style="flex-grow: 1; display: flex; justify-content: center; font-size: 40px;">
+ 
+            SALIDAS
+        </th>
+    
+        <th style="flex-grow: 1; display: flex; justify-content: flex-end;">   
+            <span class="p-input-icon-right" style="margin-left: 800px;">
+                <i class="pi pi-search" style="margin:1px 1px 80"></i>
+                <input pInputText type="text" (input)="dt1.filterGlobal(
+                    $any($event.target).value, 'contains')" placeholder="Busqueda" />
+            </span>
+        </th>
+    </tr>
+    
+
+</ng-template>
+
+
+
+    <ng-template pTemplate="body" let-product>
+     
+           
+            <table class="center">
+                <tr>
+                    <td>NOMBRE Producto {{ product.id }}</td> 
+                </tr>
+                <tr>
+                  <td>Cantidad: <input type="text" style="width: 100px;"></td>
+                </tr>
+                <tr>
+                  <td align="center" ><button (click)="agregarSalida($event)" >Agregar</button></td>
+                </tr>
+              </table>
+       
+        
+    </ng-template>
+    
+</p-table>
+
+
+
+
+
+<p-table #dt2 [value]="salidas" [tableStyle]="{ 'min-width': '68rem' }"
+[paginator]="true"
+[rows]="3"
+[globalFilterFields]="['nombre','codigo']"
+
+>
+
+
+
+
+<ng-template pTemplate="header">
+    <tr>
+        <th>Codigo</th>
+        <th pSortableColumn="nombre">Nombre</th>
+        <th >Precio</th>
+        <th>Fecha</th>
+        <th>Cantidad</th>
+
+        
+    </tr>
+</ng-template>
+
+<ng-template pTemplate="body" let-salidas>
+    <tr>
+        <td>{{ salidas.codigo }}</td>
+        <td>{{ salidas.nombre }}</td>
+        <td>{{ salidas.precio }}</td>
+        <td>{{ salidas.fecha }}</td>
+        <td>{{ salidas.cantidad }}</td>
+       
+        
+        
+    </tr>
+</ng-template>
+    
+</p-table>
+
+

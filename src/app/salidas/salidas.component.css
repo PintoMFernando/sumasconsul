@@ -1,0 +1,30 @@
+table.center {
+    margin: 20px auto;
+    border-collapse: collapse;
+  }
+  
+  table.center td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  table.center input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  table.center button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  table.center button:hover {
+    background-color: #45a049;
+  }
+  
+ 
+  

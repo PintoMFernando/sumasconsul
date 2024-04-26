@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="product-details">
+      <div   *ngFor="let dat of miProducto; let i = index">
+        <p><strong>Nombre:</strong>{{dat.nombre}} </p>
+        <p><strong>Código:</strong> {{dat.codigo}}  </p>
+        <p><strong>Descripción:</strong> {{dat.descripcion}}  </p>
+        <p><strong>Fecha de Creación:</strong> {{dat.created_at}}  </p>
+        <p><strong>Precio:</strong> {{dat.precio}}  </p>
+      </div>
+      <div class="product-image">
+        <img [src]="urlImage" alt="Imagen del Producto" width="100" class="imagen-con-contorno">
+        
+      </div>
+    </div>
+  </div>
+  

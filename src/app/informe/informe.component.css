@@ -1,0 +1,88 @@
+.container-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh; /* Ajusta la altura al 100% de la ventana */
+    
+    
+   
+  }
+
+  .inner-container {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    /*background-color: rgb(207, 207, 214);*/
+    border-style: ridge;
+    width: 50%; /* Ancho del inner-container */
+    height: 45%; /* Altura del inner-container */
+    border-radius: 3%;
+  }
+
+
+  .custom-button {
+    margin-top: 10px; /* Ajusta el margen superior según sea necesario */
+    padding: 10px 20px; /* Ajusta el espaciado interno del botón */
+    background-color: #007bff; /* Cambia el color de fondo del botón */
+    color: #fff; /* Cambia el color del texto del botón */
+    border: none; /* Elimina el borde del botón */
+    border-radius: 5px; /* Añade bordes redondeados al botón */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+  }
+  .box-button {
+    margin-top: -40px; /* Ajusta el margen superior negativo para moverlo hacia arriba */
+    margin-right: -280px;
+  }
+  .box {
+    margin-bottom: -15px; /* Ajusta el margen superior negativo para moverlo hacia arriba */
+   
+  }
+
+
+  
+  .panel{
+    width: 1085px;
+
+}
+  
+  .container {
+    width: 490px; /* Ajusta el ancho del contenedor según sea necesario */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  
+  
+  .header {
+    font-weight: bold;
+  }
+  
+  .button-box {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    margin-top: 20px; /* Agrega un margen superior */
+  }
+  
+
+
+  .layout {
+    width: 500px;
+    height: 250px;
+  
+    display: flex;
+    gap: 5px;
+  
+    justify-content: space-evenly;
+  }
+
+
+
+
+  
